@@ -5,7 +5,7 @@ CS1C Group Project
 
 Run the following command to make a copy of this repository on your computer:
 ```bash
-git clone git@github.com:ChrisJAllan/ModelBois.git
+git clone https://github.com/CS1C-BitB/ModelBois.git
 ```
 
 Before making changes, first make a branch for the feature you will be working on. 
