@@ -6,7 +6,7 @@
 class Polygon : public Shape
 {
 public:
-	Polygon(std::vector<QPoint> points, const QBrush &brush = QBrush{}, const QPen &pen = QPen{});
+	Polygon(std::vector<QPoint> points = {}, const QBrush &brush = {}, const QPen &pen = {});
 	~Polygon() override;
 	
 	void draw(QPaintDevice* device) override;

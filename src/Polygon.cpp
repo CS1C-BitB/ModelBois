@@ -9,7 +9,10 @@ Polygon::Polygon(std::vector<QPoint> points, const QBrush &brush, const QPen &pe
 	for (QPoint &p : points) {
 		mid += p;
 	}
-	mid /= points.size();
+	
+	if (!points.empty()) {
+		mid /= points.size();
+	}
 	
 	setPos(mid);
 	

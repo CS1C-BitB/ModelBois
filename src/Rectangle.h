@@ -6,7 +6,7 @@
 class Rectangle : public Shape
 {
 public:
-	Rectangle(int width = 0, int height = 0, const QPoint& pos = QPoint{}, const QBrush &brush = QBrush{}, const QPen &pen = QPen{});
+	Rectangle(int width = 0, int height = 0, const QPoint& pos = {}, const QBrush &brush = {}, const QPen &pen = {});
 	~Rectangle() override;
 	
 	void draw(QPaintDevice* device) override;

@@ -6,7 +6,7 @@
 class Line : public Shape
 {
 public:
-	Line(const QPoint& A, const QPoint& B, const QBrush &brush = QBrush{}, const QPen &pen = QPen{});
+	Line(const QPoint& A = {}, const QPoint& B = {}, const QBrush &brush = {}, const QPen &pen = {});
 	~Line() override;
 	
 	void draw(QPaintDevice* device) override;

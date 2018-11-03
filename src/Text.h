@@ -8,7 +8,7 @@
 class Text : public Shape
 {
 public:
-	Text(const std::string &str, const QPoint &pos = QPoint{}, const QBrush &brush = QBrush{}, const QPen &pen = QPen{});
+	Text(const std::string &str = "", const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {});
 	~Text() override;
 	
 	void draw(QPaintDevice* device) override;

@@ -17,7 +17,7 @@ enum class ShapeType {
 class Shape
 {
 public:
-	Shape(const QPoint& pos = QPoint{}, const QBrush &brush = QBrush{}, const QPen &pen = QPen{});
+	Shape(const QPoint& pos = {}, const QBrush &brush = {}, const QPen &pen = {});
 	virtual ~Shape();
 	
 	virtual void draw(QPaintDevice* device) = 0;

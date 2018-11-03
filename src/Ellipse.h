@@ -6,7 +6,7 @@
 class Ellipse : public Shape
 {
 public:
-	Ellipse(int width = 0, int height = 0, const QPoint& pos = QPoint{}, const QBrush &brush = QBrush{}, const QPen &pen = QPen{});
+	Ellipse(int width = 0, int height = 0, const QPoint& pos = {}, const QBrush &brush = {}, const QPen &pen = {});
 	~Ellipse() override;
 	
 	void draw(QPaintDevice* device) override;
