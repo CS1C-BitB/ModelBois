@@ -17,8 +17,22 @@ enum class ShapeType {
 class Shape
 {
 public:
-	Shape(const QPoint& pos = {}, const QBrush &brush = {}, const QPen &pen = {});
+	Shape(const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {});
+	/**
+	 * @brief Shape Creates a copy of a given shape.
+	 * @param copy Shape to copy.
+	 */
+	Shape(const Shape &copy);
+	/**
+	 * @brief Shape Moves a given shape.
+	 * @param move Shape to move from.
+	 * 
+	 * Moved object is left in a default-initialised state.
+	 */
+	Shape(Shape &&move) noexcept;
 	virtual ~Shape();
+	
+	Shape& operator=(const Shape &copy);
 	
 	virtual void draw(QPaintDevice* device) = 0;
 	/**
@@ -57,6 +71,9 @@ public:
 	void setPos(const QPoint& pos);
 	void setBrush(const QBrush&);
 	void setPen(const QPen&);
+	
+protected:
+	void swap(Shape &other) noexcept;
 	
 private:
 	QPoint pos;

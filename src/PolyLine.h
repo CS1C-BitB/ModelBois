@@ -9,7 +9,12 @@ class PolyLine : public Shape
 {
 public:
 	PolyLine(std::vector<QPoint> points = {}, const QBrush &brush = {}, const QPen &pen = {});
+	PolyLine(const PolyLine &copy);
+	PolyLine(PolyLine &&move) noexcept;
 	~PolyLine() override;
+	
+	PolyLine& operator=(const PolyLine &copy);
+	PolyLine& operator=(PolyLine &&move) noexcept;
 	
 	void draw(QPaintDevice* device) override;
 	

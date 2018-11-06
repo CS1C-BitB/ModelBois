@@ -1,5 +1,7 @@
 #include "Line.h"
 
+#include <algorithm>
+
 Line::Line(const QPoint& A, const QPoint& B, const QBrush &brush, const QPen &pen)
     : Shape{(A + B) / 2, brush, pen}
 {
@@ -8,7 +10,28 @@ Line::Line(const QPoint& A, const QPoint& B, const QBrush &brush, const QPen &pe
 	this->B = A - mid;
 }
 
+Line::Line(const Line &copy) = default;
+
+Line::Line(Line &&move) noexcept
+    : Line{}
+{
+	swap(move);
+	std::swap(A, move.A);
+	std::swap(B, move.B);
+}
+
 Line::~Line() = default;
+
+Line& Line::operator=(const Line &other) = default;
+
+Line& Line::operator=(Line &&other) noexcept
+{
+	Line move{std::move(other)};
+	swap(move);
+	std::swap(A, move.A);
+	std::swap(B, move.B);
+	return *this;
+}
 
 void Line::draw(QPaintDevice* device)
 {

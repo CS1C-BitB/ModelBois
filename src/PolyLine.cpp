@@ -1,5 +1,7 @@
 #include "PolyLine.h"
 
+#include <algorithm>
+
 PolyLine::PolyLine(std::vector<QPoint> points, const QBrush &brush, const QPen &pen)
     : Shape{QPoint{}, brush, pen}, points{points}
 {
@@ -16,7 +18,26 @@ PolyLine::PolyLine(std::vector<QPoint> points, const QBrush &brush, const QPen &
 	}
 }
 
+PolyLine::PolyLine(const PolyLine &copy) = default;
+
+PolyLine::PolyLine(PolyLine &&move) noexcept
+    : PolyLine{}
+{
+	swap(move);
+	std::swap(points, move.points);
+}
+
 PolyLine::~PolyLine() = default;
+
+PolyLine& PolyLine::operator=(const PolyLine &other) = default;
+
+PolyLine& PolyLine::operator=(PolyLine &&other) noexcept
+{
+	PolyLine move{std::move(other)};
+	swap(move);
+	std::swap(points, move.points);
+	return *this;
+}
 
 void PolyLine::draw(QPaintDevice* device)
 {

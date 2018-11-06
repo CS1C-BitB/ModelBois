@@ -1,5 +1,6 @@
 #include "Polygon.h"
 
+#include <algorithm>
 #include <cmath>
 
 Polygon::Polygon(std::vector<QPoint> points, const QBrush &brush, const QPen &pen)
@@ -21,7 +22,26 @@ Polygon::Polygon(std::vector<QPoint> points, const QBrush &brush, const QPen &pe
 	}
 }
 
+Polygon::Polygon(const Polygon &copy) = default;
+
+Polygon::Polygon(Polygon &&move) noexcept
+    : Polygon{}
+{
+	swap(move);
+	std::swap(points, move.points);
+}
+
 Polygon::~Polygon() = default;
+
+Polygon& Polygon::operator=(const Polygon &other) = default;
+
+Polygon& Polygon::operator=(Polygon &&other) noexcept
+{
+	Polygon move{other};
+	swap(move);
+	std::swap(points, move.points);
+	return *this;
+}
 
 void Polygon::draw(QPaintDevice* device)
 {
