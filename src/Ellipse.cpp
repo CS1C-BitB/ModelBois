@@ -1,6 +1,7 @@
 #include "Ellipse.h"
 
 #include <algorithm>
+#include <cmath>
 
 Ellipse::Ellipse(int width, int height, const QPoint& pos, const QBrush &brush, const QPen &pen)
     : Shape{pos, brush, pen}, w{width}, h{height}
@@ -37,14 +38,24 @@ void Ellipse::draw(QPaintDevice* device)
 ShapeType Ellipse::getType() const
 { return ShapeType::ELLIPSE; }
 
+const double pi = std::acos(-1);
 double Ellipse::getPerimeter() const
 {
-	// TODO
-	return 0;
+	// https://www.mathsisfun.com/geometry/ellipse-perimeter.html
+	// Approximation 3
+	
+	double a = w / 2.0;
+	double b = h / 2.0;
+	
+	double h = ((a - b) * (a - b)) / ((a + b) * (a + b));
+	
+	return pi * (a + b) * (1 + (3 * h) / (10 + std::sqrt(4 - 3 * h)));
 }
 
 double Ellipse::getArea() const
 {
-	// TODO
-	return 0;
+	double a = w / 2.0;
+	double b = h / 2.0;
+	
+	return pi * a * b;
 }

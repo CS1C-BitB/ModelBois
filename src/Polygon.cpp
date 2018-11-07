@@ -55,13 +55,26 @@ double Polygon::getPerimeter() const
 {
 	double perimeter = 0;
 	
-	// TODO
+	for (auto it = points.begin(); it != points.end(); ++it) {
+		const QPoint &start = *it;
+		const QPoint &end = (it+1 != points.end() ? *(it+1) : points.front());
+		QPoint dist = start - end;
+		perimeter += std::sqrt(QPoint::dotProduct(dist, dist));
+	}
 	
 	return perimeter;
 }
 
 double Polygon::getArea() const
 {
-	// TODO
-	return 0;
+	// https://brilliant.org/wiki/irregular-polygons/#area-coordinate-geometry
+	double area = 0;
+	
+	for (auto it = points.begin(); it != points.end(); ++it) {
+		const QPoint &start = *it;
+		const QPoint &end = (it+1 != points.end() ? *(it+1) : points.front());
+		area += (start.x() * end.y()) - (start.y() * end.x());
+	}
+	
+	return area / 2;
 }
