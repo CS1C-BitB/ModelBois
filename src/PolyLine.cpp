@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-PolyLine::PolyLine(std::vector<QPoint> points, const QBrush &brush, const QPen &pen)
-    : Shape{QPoint{}, brush, pen}, points{points}
+PolyLine::PolyLine(std::vector<QPoint> points, const QBrush &brush, const QPen &pen, id_t id)
+    : Shape{QPoint{}, brush, pen, id}, points{points}
 {
 	QPoint mid;
 	for (QPoint &p : points) {

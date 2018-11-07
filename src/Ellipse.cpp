@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <cmath>
 
-Ellipse::Ellipse(int width, int height, const QPoint& pos, const QBrush &brush, const QPen &pen)
-    : Shape{pos, brush, pen}, w{width}, h{height}
+Ellipse::Ellipse(unsigned int width, unsigned int height, const QPoint& pos, const QBrush &brush, const QPen &pen, id_t id)
+    : Shape{pos, brush, pen, id}, w{width}, h{height}
 { }
 
 Ellipse::Ellipse(const Ellipse &copy) = default;

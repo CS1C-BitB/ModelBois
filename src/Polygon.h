@@ -6,7 +6,7 @@
 class Polygon : public Shape
 {
 public:
-	Polygon(std::vector<QPoint> points = {}, const QBrush &brush = {}, const QPen &pen = {});
+	Polygon(std::vector<QPoint> points = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
 	Polygon(const Polygon &copy);
 	Polygon(Polygon &&move) noexcept;
 	~Polygon() override;

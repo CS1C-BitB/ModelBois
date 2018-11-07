@@ -8,7 +8,7 @@
 class PolyLine : public Shape
 {
 public:
-	PolyLine(std::vector<QPoint> points = {}, const QBrush &brush = {}, const QPen &pen = {});
+	PolyLine(std::vector<QPoint> points = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
 	PolyLine(const PolyLine &copy);
 	PolyLine(PolyLine &&move) noexcept;
 	~PolyLine() override;

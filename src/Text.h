@@ -8,7 +8,7 @@
 class Text : public Shape
 {
 public:
-	Text(const std::string &str = "", const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {});
+	Text(const std::string &str = "", const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
 	Text(const Text &copy);
 	Text(Text &&move) noexcept;
 	~Text() override;

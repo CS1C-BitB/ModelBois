@@ -17,7 +17,9 @@ enum class ShapeType {
 class Shape
 {
 public:
-	Shape(const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {});
+	using id_t = unsigned int;
+	
+	Shape(const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
 	/**
 	 * @brief Shape Creates a copy of a given shape.
 	 * @param copy Shape to copy.
@@ -33,6 +35,8 @@ public:
 	virtual ~Shape();
 	
 	Shape& operator=(const Shape &copy);
+	
+	bool operator==(const Shape &other) const;
 	
 	virtual void draw(QPaintDevice* device) = 0;
 	/**
@@ -58,6 +62,8 @@ public:
 	const QBrush& getBrush() const;
 	const QPen& getPen() const;
 	
+	id_t getID() const;
+	
 	/**
 	 * @brief setPos Sets the shape's position.
 	 * @param x New x.
@@ -79,6 +85,8 @@ private:
 	QPoint pos;
 	QBrush brush;
 	QPen pen;
+	
+	id_t id;
 };
 
 #endif // SHAPE_H

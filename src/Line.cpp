@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-Line::Line(const QPoint& A, const QPoint& B, const QBrush &brush, const QPen &pen)
-    : Shape{(A + B) / 2, brush, pen}
+Line::Line(const QPoint& A, const QPoint& B, const QBrush &brush, const QPen &pen, id_t id)
+    : Shape{(A + B) / 2, brush, pen, id}
 {
 	QPoint mid = getPos();
 	this->A = A - mid;

@@ -6,7 +6,7 @@
 class Ellipse : public Shape
 {
 public:
-	Ellipse(int width = 0, int height = 0, const QPoint& pos = {}, const QBrush &brush = {}, const QPen &pen = {});
+	Ellipse(unsigned int width = 0, unsigned int height = 0, const QPoint& pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
 	Ellipse(const Ellipse &copy);
 	Ellipse(Ellipse &&move) noexcept;
 	~Ellipse() override;
@@ -21,7 +21,7 @@ public:
 	double getArea() const override;
 	
 private:
-	int w, h;
+	unsigned int w, h;
 };
 
 #endif // ELLIPSE_H

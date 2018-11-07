@@ -3,12 +3,22 @@
 #include <algorithm>
 #include <QPainter>
 
-Shape::Shape(const QPoint& pos, const QBrush &brush, const QPen &pen)
-    : pos{pos}, brush{brush}, pen{pen}
-{ }
+static unsigned int shape_id = 0;
+
+Shape::Shape(const QPoint& pos, const QBrush &brush, const QPen &pen, id_t id)
+    : pos{pos}, brush{brush}, pen{pen}, id{id}
+{
+	if (id == 0) {
+		this->id = ++shape_id;
+	}
+	else if (id > shape_id) {
+		shape_id = id;
+	}
+}
 
 Shape::Shape(const Shape &copy) = default;
 
+// This never happens :/
 Shape::Shape(Shape &&move) noexcept
     : Shape{}
 {
@@ -18,6 +28,9 @@ Shape::Shape(Shape &&move) noexcept
 Shape::~Shape() = default;
 
 Shape& Shape::operator=(const Shape &copy) = default;
+
+bool Shape::operator==(const Shape &other) const
+{ return id == other.id; }
 
 void Shape::move(int dx, int dy)
 {
@@ -54,5 +67,6 @@ void Shape::swap(Shape &other) noexcept
 	std::swap(pos, other.pos);
 	std::swap(brush, other.brush);
 	std::swap(pen, other.pen);
+	std::swap(id, other.id);
 }
 
