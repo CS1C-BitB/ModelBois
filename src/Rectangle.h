@@ -6,7 +6,7 @@
 class Rectangle : public Shape
 {
 public:
-	Rectangle(int width = 0, int height = 0, const QPoint& pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
+	Rectangle(unsigned int width = 0, unsigned int height = 0, const QPoint& pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
 	Rectangle(const Rectangle &copy);
 	Rectangle(Rectangle &&move) noexcept;
 	~Rectangle() override;
@@ -20,8 +20,14 @@ public:
 	double getPerimeter() const override;
 	double getArea() const override;
 	
+	unsigned int getWidth() const;
+	unsigned int getHeight() const;
+	
+	void setWidth(unsigned int w);
+	void setHeight(unsigned int h);
+	
 private:
-	int w, h;
+	unsigned int w, h;
 };
 
 #endif // RECTANGLE_H

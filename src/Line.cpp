@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-Line::Line(const QPoint& A, const QPoint& B, const QBrush &brush, const QPen &pen, id_t id)
+Line::Line(const QPoint &A, const QPoint &B, const QBrush &brush, const QPen &pen, id_t id)
     : Shape{(A + B) / 2, brush, pen, id}
 {
 	QPoint mid = getPos();
@@ -46,4 +46,16 @@ double Line::getPerimeter() const
 
 double Line::getArea() const
 { return -1; }
+
+const QPoint& Line::getStart() const
+{ return A; }
+
+const QPoint& Line::getEnd() const
+{ return B; }
+
+void Line::setStart(const QPoint &start)
+{ A = start; }
+
+void Line::setEnd(const QPoint &end)
+{ B = end; }
 

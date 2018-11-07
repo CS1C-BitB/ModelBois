@@ -53,3 +53,6 @@ double PolyLine::getPerimeter() const
 double PolyLine::getArea() const
 { return -1; }
 
+QPoint& PolyLine::operator[](std::size_t i)
+{ return points[i]; }
+

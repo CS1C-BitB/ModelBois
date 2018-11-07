@@ -78,3 +78,6 @@ double Polygon::getArea() const
 	
 	return area / 2;
 }
+
+QPoint& Polygon::operator[](std::size_t i)
+{ return points[i]; }

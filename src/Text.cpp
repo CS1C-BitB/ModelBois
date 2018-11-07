@@ -40,3 +40,10 @@ double Text::getPerimeter() const
 
 double Text::getArea() const
 { return -1; }
+
+const std::string& Text::getString() const
+{ return str; }
+
+void Text::setString(const std::string& string)
+{ str = string; }
+

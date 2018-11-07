@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-Rectangle::Rectangle(int width, int height, const QPoint& pos, const QBrush &brush, const QPen &pen, id_t id)
+Rectangle::Rectangle(unsigned int width, unsigned int height, const QPoint& pos, const QBrush &brush, const QPen &pen, id_t id)
     : Shape{pos, brush, pen, id}, w{width}, h{height}
 { }
 
@@ -42,3 +42,16 @@ double Rectangle::getPerimeter() const
 
 double Rectangle::getArea() const
 { return w * h; }
+
+unsigned int Rectangle::getWidth() const
+{ return w; }
+
+unsigned int Rectangle::getHeight() const
+{ return h; }
+
+void Rectangle::setWidth(unsigned int width)
+{ w = width; }
+
+void Rectangle::setHeight(unsigned int height)
+{ h = height; }
+

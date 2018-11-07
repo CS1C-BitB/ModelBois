@@ -20,6 +20,12 @@ public:
 	double getPerimeter() const override;
 	double getArea() const override;
 	
+	unsigned int getWidth() const;
+	unsigned int getHeight() const;
+	
+	void setWidth(unsigned int w);
+	void setHeight(unsigned int h);
+	
 private:
 	unsigned int w, h;
 };

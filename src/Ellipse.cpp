@@ -59,3 +59,15 @@ double Ellipse::getArea() const
 	
 	return pi * a * b;
 }
+
+unsigned int Ellipse::getWidth() const
+{ return w; }
+
+unsigned int Ellipse::getHeight() const
+{ return h; }
+
+void Ellipse::setWidth(unsigned int width)
+{ w = width; }
+
+void Ellipse::setHeight(unsigned int height)
+{ h = height; }

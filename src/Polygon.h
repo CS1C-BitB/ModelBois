@@ -20,6 +20,8 @@ public:
 	double getPerimeter() const override;
 	double getArea() const override;
 	
+	QPoint& operator[](std::size_t i);
+	
 private:
 	std::vector<QPoint> points;
 };

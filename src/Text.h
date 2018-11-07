@@ -22,6 +22,9 @@ public:
 	double getPerimeter() const override;
 	double getArea() const override;
 	
+	const std::string& getString() const;
+	void setString(const std::string&);
+	
 private:
 	std::string str;
 };
