@@ -30,7 +30,7 @@ Polygon::Polygon(std::vector<QPoint> points, const QBrush &brush, const QPen &pe
 Polygon::Polygon(const Polygon &copy) = default;
 
 Polygon::Polygon(Polygon &&move) noexcept
-    : Polygon{}
+    : Shape{id_t(-1)}
 {
 	swap(move);
 	std::swap(points, move.points);

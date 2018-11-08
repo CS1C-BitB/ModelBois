@@ -10,7 +10,7 @@ Ellipse::Ellipse(unsigned int width, unsigned int height, const QPoint& pos, con
 Ellipse::Ellipse(const Ellipse &copy) = default;
 
 Ellipse::Ellipse(Ellipse &&move) noexcept
-    : Ellipse{}
+    : Shape{id_t(-1)}, w{0}, h{0}
 {
 	swap(move);
 	std::swap(w, move.w);

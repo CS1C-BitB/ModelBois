@@ -12,7 +12,7 @@ Shape::Shape(const QPoint& pos, const QBrush &brush, QPen pen, id_t id)
 	if (id == 0) {
 		this->id = ++shape_id;
 	}
-	else if (id > shape_id) {
+	else if (id != id_t(-1) && id > shape_id) {
 		shape_id = id;
 	}
 }
@@ -21,10 +21,14 @@ Shape::Shape(const Shape &copy) = default;
 
 // This never happens :/
 Shape::Shape(Shape &&move) noexcept
-    : Shape{}
+    : Shape{id_t(-1)}
 {
 	swap(move);
 }
+
+Shape::Shape(id_t id)
+    : Shape{QPoint{}, QBrush{}, QPen{}, id}
+{ }
 
 Shape::~Shape() = default;
 
@@ -47,6 +51,9 @@ const QBrush& Shape::getBrush() const
 
 const QPen& Shape::getPen() const
 { return pen; }
+
+auto Shape::getID() const -> id_t
+{ return id; }
 
 void Shape::setPos(int x, int y)
 {

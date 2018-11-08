@@ -30,7 +30,7 @@ PolyLine::PolyLine(std::vector<QPoint> points, const QBrush &brush, const QPen &
 PolyLine::PolyLine(const PolyLine &copy) = default;
 
 PolyLine::PolyLine(PolyLine &&move) noexcept
-    : PolyLine{}
+    : Shape{id_t(-1)}
 {
 	swap(move);
 	std::swap(points, move.points);

@@ -10,7 +10,7 @@ Text::Text(std::string str, const QPoint &pos, const QBrush &brush, const QPen &
 Text::Text(const Text &copy) = default;
 
 Text::Text(Text &&move) noexcept
-    : Text{}
+    : Shape{id_t(-1)}
 {
 	swap(move);
 	std::swap(str, move.str);

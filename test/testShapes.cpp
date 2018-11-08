@@ -118,6 +118,8 @@ int testShapes()
 		
 		RUN_TEST(testCopyMove(elli));
 		
+		COMPARE(elli.getID(), 1);
+		
 		TEST(value_within(elli.getArea(), 39.27, .01));
 		TEST(value_within(elli.getPerimeter(), 24.22, .01));
 	}
@@ -126,6 +128,8 @@ int testShapes()
 		Line line {QPoint{1, 2}, QPoint{3, 4}};
 		
 		RUN_TEST(testCopyMove(line));
+		
+		COMPARE(line.getID(), 2);
 		
 		TEST(value_within(line.getArea(), -1, .0001));
 		TEST(value_within(line.getPerimeter(), -1, .0001));
@@ -152,6 +156,8 @@ int testShapes()
 		Polygon poly {std::vector<QPoint>{QPoint{low, low}, QPoint{high, low}, QPoint{high, high}, QPoint{low, high}}};
 		
 		RUN_TEST(testCopyMove(poly));
+		
+		COMPARE(poly.getID(), 3);
 		
 		COMPARE(poly.getCount(), 4);
 		
@@ -188,6 +194,8 @@ int testShapes()
 		
 		RUN_TEST(testCopyMove(poly));
 		
+		COMPARE(poly.getID(), 4);
+		
 		TEST(value_within(poly.getArea(), -1, .0001));
 		TEST(value_within(poly.getPerimeter(), -1, .0001));
 		
@@ -222,6 +230,8 @@ int testShapes()
 		
 		RUN_TEST(testCopyMove(rect));
 		
+		COMPARE(rect.getID(), 5);
+		
 		TEST(value_within(rect.getArea(), 50, .0001));
 		TEST(value_within(rect.getPerimeter(), 30, .0001));
 	}
@@ -230,6 +240,8 @@ int testShapes()
 		Text text{"Hello world!"};
 		
 		RUN_TEST(testCopyMove(text));
+		
+		COMPARE(text.getID(), 6);
 		
 		TEST(value_within(text.getArea(), -1, .0001));
 		TEST(value_within(text.getPerimeter(), -1, .0001));
