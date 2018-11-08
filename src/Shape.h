@@ -19,7 +19,7 @@ class Shape
 public:
 	using id_t = unsigned int;
 	
-	Shape(const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
+	Shape(const QPoint &pos = {}, const QBrush &brush = {}, QPen pen = {}, id_t id = 0);
 	/**
 	 * @brief Shape Creates a copy of a given shape.
 	 * @param copy Shape to copy.
@@ -86,7 +86,7 @@ private:
 	QBrush brush;
 	QPen pen;
 	
-	id_t id;
+	id_t id{0};
 };
 
 #endif // SHAPE_H

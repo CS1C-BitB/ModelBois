@@ -1,9 +1,10 @@
 #include "Text.h"
 
 #include <algorithm>
+#include <utility>
 
-Text::Text(const std::string &str, const QPoint &pos, const QBrush &brush, const QPen &pen, id_t id)
-    : Shape{pos, brush, pen, id}, str{str}
+Text::Text(std::string str, const QPoint &pos, const QBrush &brush, const QPen &pen, id_t id)
+    : Shape{pos, brush, pen, id}, str{std::move(str)}
 { }
 
 Text::Text(const Text &copy) = default;

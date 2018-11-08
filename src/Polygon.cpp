@@ -79,5 +79,15 @@ double Polygon::getArea() const
 	return area / 2;
 }
 
-QPoint& Polygon::operator[](std::size_t i)
-{ return points[i]; }
+std::size_t Polygon::getCount() const
+{ return points.size(); }
+
+QPoint Polygon::getPoint(std::size_t i) const
+{ return points[i] + getPos(); }
+
+void Polygon::setPoint(std::size_t i, const QPoint &point)
+{
+	points[i] = point - getPos();
+	// TODO: Re-center pos
+}
+

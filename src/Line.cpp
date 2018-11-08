@@ -47,6 +47,8 @@ double Line::getPerimeter() const
 double Line::getArea() const
 { return -1; }
 
+// TODO: global coords
+
 const QPoint& Line::getStart() const
 { return A; }
 

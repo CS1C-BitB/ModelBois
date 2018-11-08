@@ -53,6 +53,15 @@ double PolyLine::getPerimeter() const
 double PolyLine::getArea() const
 { return -1; }
 
-QPoint& PolyLine::operator[](std::size_t i)
-{ return points[i]; }
+std::size_t PolyLine::getCount() const
+{ return points.size(); }
+
+QPoint PolyLine::getPoint(std::size_t i) const
+{ return points[i] + getPos(); }
+
+void PolyLine::setPoint(std::size_t i, const QPoint &point)
+{
+	points[i] = point - getPos();
+	// TODO: Re-center pos
+}
 

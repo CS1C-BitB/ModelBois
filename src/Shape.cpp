@@ -2,11 +2,12 @@
 
 #include <algorithm>
 #include <QPainter>
+#include <utility>
 
 static unsigned int shape_id = 0;
 
-Shape::Shape(const QPoint& pos, const QBrush &brush, const QPen &pen, id_t id)
-    : pos{pos}, brush{brush}, pen{pen}, id{id}
+Shape::Shape(const QPoint& pos, const QBrush &brush, QPen pen, id_t id)
+    : pos{pos}, brush{brush}, pen{std::move(pen)}, id{id}
 {
 	if (id == 0) {
 		this->id = ++shape_id;
