@@ -44,3 +44,5 @@ target_wrapper.*
 CMakeLists.txt.user*
 
 *.DS_Store*
+*.app
+*.app/*

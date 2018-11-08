@@ -36,6 +36,9 @@ int main(int argc, char *argv[])
 	return a.exec();
 }
 */
+
+// This is going to be for testing the shape text parser
+
 #include "modelheader.h"
 
 int main()
@@ -51,6 +54,4 @@ int main()
 }
 
 //#endif
-
-// This is going to be for testing the shape text parser
 

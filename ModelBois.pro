@@ -91,4 +91,4 @@ RESOURCES += \
     res/icons.qrc
 
 DISTFILES += \
-    src/test.txt
+    ModelBois/myshapes.txt
