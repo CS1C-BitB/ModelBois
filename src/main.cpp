@@ -1,3 +1,4 @@
+#if 0
 #include "MainWindow.h"
 #include <QApplication>
 
@@ -36,5 +37,4 @@ int main(int argc, char *argv[])
 }
 
 #endif
-
-// Testing
+#endif
