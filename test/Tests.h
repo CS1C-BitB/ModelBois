@@ -10,7 +10,7 @@
 	? void(0) \
 	: ( \
 		++result, \
-		std::printf("Test failed file %s line %i: %s\n", __FILE__, __LINE__, #expr), \
+		std::printf("Test failed at %s:%i: %s\n", __FILE__, __LINE__, #expr), \
 		void(0) \
 	) \
 )
@@ -21,7 +21,7 @@
 	? void(0) \
 	: ( \
 		++result, \
-		std::printf("Test failed file %s line %i: %s\n", __FILE__, __LINE__, msg), \
+		std::printf("Test failed at %s:%i: %s\n", __FILE__, __LINE__, msg), \
 		void(0) \
 	) \
 )
@@ -32,7 +32,7 @@
 	? void(0) \
 	: ( \
 		++result, \
-		std::printf("Test failed file %s line %i:", __FILE__, __LINE__, std::to_string(expected), std::to_string(expr)), \
+		std::printf("Test failed at %s:%i: `%s` expected %s, recieved %s\n", __FILE__, __LINE__, #expr, std::to_string(expected).c_str(), std::to_string(expr).c_str()), \
 		void(0) \
 	) \
 )

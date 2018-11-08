@@ -10,6 +10,13 @@
 
 #include <cmath>
 
+namespace std {
+string to_string(const QPoint &point)
+{
+	return "(" + to_string(point.x()) + ", " + to_string(point.y()) + ")";
+}
+}
+
 bool value_within(double val, double target, double margin)
 {
 	return std::abs(val - target) < margin;
@@ -123,21 +130,21 @@ int testShapes()
 		TEST(value_within(line.getArea(), -1, .0001));
 		TEST(value_within(line.getPerimeter(), -1, .0001));
 		
-		TEST((line.getStart() == QPoint{1, 2}));
-		TEST((line.getPos() == QPoint{2, 3}));
-		TEST((line.getEnd() == QPoint{3, 4}));
+		COMPARE(line.getStart(), (QPoint{1, 2}));
+		COMPARE(line.getPos(), (QPoint{2, 3}));
+		COMPARE(line.getEnd(), (QPoint{3, 4}));
 		
 		line.setEnd(QPoint{5, 6});
 		
-		TEST((line.getStart() == QPoint{1, 2}));
-		TEST((line.getPos() == QPoint{3, 4}));
-		TEST((line.getEnd() == QPoint{5, 6}));
+		COMPARE(line.getStart(), (QPoint{1, 2}));
+		COMPARE(line.getPos(), (QPoint{3, 4}));
+		COMPARE(line.getEnd(), (QPoint{5, 6}));
 		
 		line.move(1, 1);
 		
-		TEST((line.getStart() == QPoint{2, 3}));
-		TEST((line.getPos() == QPoint{4, 5}));
-		TEST((line.getEnd() == QPoint{6, 7}));
+		COMPARE(line.getStart(), (QPoint{2, 3}));
+		COMPARE(line.getPos(), (QPoint{4, 5}));
+		COMPARE(line.getEnd(), (QPoint{6, 7}));
 	}
 	
 	{
@@ -146,31 +153,33 @@ int testShapes()
 		
 		RUN_TEST(testCopyMove(poly));
 		
-		TEST(poly.getCount() == 4);
+		COMPARE(poly.getCount(), 4);
 		
 		TEST(value_within(poly.getArea(), 4, .001));
 		TEST(value_within(poly.getPerimeter(), 8, .001));
 		
-		TEST((poly.getPos() == QPoint{1, 1}));
-		TEST((poly.getPoint(0) == QPoint{0, 0}));
-		TEST((poly.getPoint(3) == QPoint{0, 2}));
+		COMPARE(poly.getPos(), (QPoint{1, 1}));
+		COMPARE(poly.getPoint(0), (QPoint{0, 0}));
+		COMPARE(poly.getPoint(3), (QPoint{0, 2}));
 		
 		poly.setPos(0, 0);
 		
-		TEST((poly.getPoint(0) == QPoint{-1, -1}));
-		TEST((poly.getPoint(3) == QPoint{-1, 1}));
+		COMPARE(poly.getPoint(0), (QPoint{-1, -1}));
+		COMPARE(poly.getPoint(3), (QPoint{-1, 1}));
 		
 		poly.clearPoints();
+		COMPARE(poly.getPos(), (QPoint{}));
+		
 		poly.pushPoint(QPoint{low, low});
 		poly.pushPoint(QPoint{high, low});
 		poly.pushPoint(QPoint{high, high});
 		poly.pushPoint(QPoint{low, high});
 		
-		TEST(poly.getCount() == 4);
+		COMPARE(poly.getCount(), 4);
 		
-		TEST((poly.getPos() == QPoint{1, 1}));
-		TEST((poly.getPoint(0) == QPoint{0, 0}));
-		TEST((poly.getPoint(3) == QPoint{0, 2}));
+		COMPARE(poly.getPos(), (QPoint{1, 1}));
+		COMPARE(poly.getPoint(0), (QPoint{0, 0}));
+		COMPARE(poly.getPoint(3), (QPoint{0, 2}));
 	}
 	
 	{
@@ -182,28 +191,30 @@ int testShapes()
 		TEST(value_within(poly.getArea(), -1, .0001));
 		TEST(value_within(poly.getPerimeter(), -1, .0001));
 		
-		TEST(poly.getCount() == 4);
+		COMPARE(poly.getCount(), 4);
 		
-		TEST((poly.getPos() == QPoint{1, 1}));
-		TEST((poly.getPoint(0) == QPoint{0, 0}));
-		TEST((poly.getPoint(3) == QPoint{0, 2}));
+		COMPARE(poly.getPos(), (QPoint{1, 1}));
+		COMPARE(poly.getPoint(0), (QPoint{0, 0}));
+		COMPARE(poly.getPoint(3), (QPoint{0, 2}));
 		
 		poly.setPos(0, 0);
 		
-		TEST((poly.getPoint(0) == QPoint{-1, -1}));
-		TEST((poly.getPoint(3) == QPoint{-1, 1}));
+		COMPARE(poly.getPoint(0), (QPoint{-1, -1}));
+		COMPARE(poly.getPoint(3), (QPoint{-1, 1}));
 		
 		poly.clearPoints();
+		COMPARE(poly.getPos(), (QPoint{}));
+		
 		poly.pushPoint(QPoint{low, low});
 		poly.pushPoint(QPoint{high, low});
 		poly.pushPoint(QPoint{high, high});
 		poly.pushPoint(QPoint{low, high});
 		
-		TEST(poly.getCount() == 4);
+		COMPARE(poly.getCount(), 4);
 		
-		TEST((poly.getPos() == QPoint{1, 1}));
-		TEST((poly.getPoint(0) == QPoint{0, 0}));
-		TEST((poly.getPoint(3) == QPoint{0, 2}));
+		COMPARE(poly.getPos(), (QPoint{1, 1}));
+		COMPARE(poly.getPoint(0), (QPoint{0, 0}));
+		COMPARE(poly.getPoint(3), (QPoint{0, 2}));
 	}
 	
 	{
