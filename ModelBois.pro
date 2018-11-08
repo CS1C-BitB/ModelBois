@@ -33,7 +33,8 @@ SOURCES += \
     src/Rectangle.cpp \
     src/Polygon.cpp \
     src/Ellipse.cpp \
-    src/Text.cpp
+    src/Text.cpp \
+    src/functions.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -43,7 +44,8 @@ HEADERS += \
     src/Rectangle.h \
     src/Polygon.h \
     src/Ellipse.h \
-    src/Text.h
+    src/Text.h \
+    src/modelheader.h
 
 FORMS += \
     src/MainWindow.ui
@@ -52,3 +54,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    src/test.txt
