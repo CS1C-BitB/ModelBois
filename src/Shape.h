@@ -58,6 +58,12 @@ public:
 	 */
 	virtual double getArea() const = 0;
 	
+	/**
+	 * @brief getPos Gets the position of the shape.
+	 * @return Position
+	 * 
+	 * For point-based shapes (line, polygon, polyline), position is the center of the shape.
+	 */
 	const QPoint& getPos() const;
 	const QBrush& getBrush() const;
 	const QPen& getPen() const;
