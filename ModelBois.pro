@@ -39,6 +39,7 @@ SOURCES += \
     src/Ellipse.cpp \
     src/Text.cpp \
     test/testShapes.cpp \
+    src/functions.cpp
 
 
 HEADERS += \
@@ -51,6 +52,7 @@ HEADERS += \
     src/Ellipse.h \
     src/Text.h \
     test/Tests.h \
+    src/modelheader.h
 
 FORMS += \
     src/MainWindow.ui
@@ -61,4 +63,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    src/test.txt
+    ModelBois/myshapes.txt

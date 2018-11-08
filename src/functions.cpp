@@ -1,12 +1,16 @@
 #include "modelheader.h"
 
+
+
 void LoadShapes()
 {
     std::ofstream out;
 
-    out.open("test.txt");
 
-    out << "Works";
+    out.open("LakersLife.txt");
+
+
+
 
     out.close();
 }
