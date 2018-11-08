@@ -38,7 +38,7 @@ SOURCES += \
     src/Polygon.cpp \
     src/Ellipse.cpp \
     src/Text.cpp \
-    test/testShapes.cpp
+    test/testShapes.cpp \
 
 
 HEADERS += \
@@ -50,7 +50,7 @@ HEADERS += \
     src/Polygon.h \
     src/Ellipse.h \
     src/Text.h \
-    test/Tests.h
+    test/Tests.h \
 
 FORMS += \
     src/MainWindow.ui
