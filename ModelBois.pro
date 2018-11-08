@@ -25,14 +25,28 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        src/main.cpp \
-        src/MainWindow.cpp
+    src/main.cpp \
+    src/MainWindow.cpp \
+    src/Shape.cpp \
+    src/Line.cpp \
+    src/PolyLine.cpp \
+    src/Rectangle.cpp \
+    src/Polygon.cpp \
+    src/Ellipse.cpp \
+    src/Text.cpp
 
 HEADERS += \
-        src/MainWindow.h
+    src/MainWindow.h \
+    src/Shape.h \
+    src/Line.h \
+    src/PolyLine.h \
+    src/Rectangle.h \
+    src/Polygon.h \
+    src/Ellipse.h \
+    src/Text.h
 
 FORMS += \
-        src/MainWindow.ui
+    src/MainWindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

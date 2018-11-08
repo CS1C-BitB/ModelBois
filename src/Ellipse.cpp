@@ -1,0 +1,73 @@
+#include "Ellipse.h"
+
+#include <algorithm>
+#include <cmath>
+
+Ellipse::Ellipse(unsigned int width, unsigned int height, const QPoint& pos, const QBrush &brush, const QPen &pen, id_t id)
+    : Shape{pos, brush, pen, id}, w{width}, h{height}
+{ }
+
+Ellipse::Ellipse(const Ellipse &copy) = default;
+
+Ellipse::Ellipse(Ellipse &&move) noexcept
+    : Ellipse{}
+{
+	swap(move);
+	std::swap(w, move.w);
+	std::swap(h, move.h);
+}
+
+Ellipse::~Ellipse() = default;
+
+Ellipse& Ellipse::operator=(const Ellipse &other) = default;
+
+Ellipse& Ellipse::operator=(Ellipse &&other) noexcept
+{
+	Ellipse move{std::move(other)};
+	swap(move);
+	std::swap(w, move.w);
+	std::swap(h, move.h);
+	return *this;
+}
+
+void Ellipse::draw(QPaintDevice* device)
+{
+	// TODO
+}
+
+ShapeType Ellipse::getType() const
+{ return ShapeType::ELLIPSE; }
+
+const double pi = std::acos(-1);
+double Ellipse::getPerimeter() const
+{
+	// https://www.mathsisfun.com/geometry/ellipse-perimeter.html
+	// Approximation 3
+	
+	double a = w / 2.0;
+	double b = h / 2.0;
+	
+	double h = ((a - b) * (a - b)) / ((a + b) * (a + b));
+	
+	return pi * (a + b) * (1 + (3 * h) / (10 + std::sqrt(4 - 3 * h)));
+}
+
+double Ellipse::getArea() const
+{
+	double a = w / 2.0;
+	double b = h / 2.0;
+	
+	return pi * a * b;
+}
+
+unsigned int Ellipse::getWidth() const
+{ return w; }
+
+unsigned int Ellipse::getHeight() const
+{ return h; }
+
+void Ellipse::setWidth(unsigned int width)
+{ w = width; }
+
+void Ellipse::setHeight(unsigned int height)
+{ h = height; }
