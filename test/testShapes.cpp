@@ -160,10 +160,13 @@ int testShapes()
 		TEST((poly.getPoint(0) == QPoint{-1, -1}));
 		TEST((poly.getPoint(3) == QPoint{-1, 1}));
 		
-		poly.setPoint(0, QPoint{low, low});
-		poly.setPoint(1, QPoint{high, low});
-		poly.setPoint(2, QPoint{high, high});
-		poly.setPoint(3, QPoint{low, high});
+		poly.clearPoints();
+		poly.pushPoint(QPoint{low, low});
+		poly.pushPoint(QPoint{high, low});
+		poly.pushPoint(QPoint{high, high});
+		poly.pushPoint(QPoint{low, high});
+		
+		TEST(poly.getCount() == 4);
 		
 		TEST((poly.getPos() == QPoint{1, 1}));
 		TEST((poly.getPoint(0) == QPoint{0, 0}));
@@ -190,10 +193,13 @@ int testShapes()
 		TEST((poly.getPoint(0) == QPoint{-1, -1}));
 		TEST((poly.getPoint(3) == QPoint{-1, 1}));
 		
-		poly.setPoint(0, QPoint{low, low});
-		poly.setPoint(1, QPoint{high, low});
-		poly.setPoint(2, QPoint{high, high});
-		poly.setPoint(3, QPoint{low, high});
+		poly.clearPoints();
+		poly.pushPoint(QPoint{low, low});
+		poly.pushPoint(QPoint{high, low});
+		poly.pushPoint(QPoint{high, high});
+		poly.pushPoint(QPoint{low, high});
+		
+		TEST(poly.getCount() == 4);
 		
 		TEST((poly.getPos() == QPoint{1, 1}));
 		TEST((poly.getPoint(0) == QPoint{0, 0}));

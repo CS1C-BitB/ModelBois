@@ -93,6 +93,18 @@ QPoint Polygon::getPoint(std::size_t i) const
 void Polygon::setPoint(std::size_t i, const QPoint &point)
 {
 	points[i] = point - getPos();
-	setPos(center(this->points, getPos()));
+	setPos(center(points, getPos()));
+}
+
+void Polygon::pushPoint(const QPoint &point)
+{
+	points.push_back(point - getPos());
+	setPos(center(points, getPos()));
+}
+
+void Polygon::clearPoints()
+{
+	points.clear();
+	setPos(center(points, getPos()));
 }
 
