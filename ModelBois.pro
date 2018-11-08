@@ -24,6 +24,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+test: DEFINES += UNITTEST
+
+INCLUDEPATH += $$PWD/src
+
 SOURCES += \
     src/main.cpp \
     src/MainWindow.cpp \
@@ -34,7 +38,8 @@ SOURCES += \
     src/Polygon.cpp \
     src/Ellipse.cpp \
     src/Text.cpp \
-    src/functions.cpp
+    test/testShapes.cpp
+
 
 HEADERS += \
     src/MainWindow.h \
@@ -45,7 +50,7 @@ HEADERS += \
     src/Polygon.h \
     src/Ellipse.h \
     src/Text.h \
-    src/modelheader.h
+    test/Tests.h
 
 FORMS += \
     src/MainWindow.ui

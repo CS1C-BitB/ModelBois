@@ -20,8 +20,8 @@ public:
 	double getPerimeter() const override;
 	double getArea() const override;
 	
-	const QPoint& getStart() const;
-	const QPoint& getEnd() const;
+	QPoint getStart() const;
+	QPoint getEnd() const;
 	
 	void setStart(const QPoint&);
 	void setEnd(const QPoint&);

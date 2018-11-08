@@ -19,7 +19,7 @@ class Shape
 public:
 	using id_t = unsigned int;
 	
-	Shape(const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
+	Shape(const QPoint &pos = {}, const QBrush &brush = {}, QPen pen = {}, id_t id = 0);
 	/**
 	 * @brief Shape Creates a copy of a given shape.
 	 * @param copy Shape to copy.
@@ -58,6 +58,12 @@ public:
 	 */
 	virtual double getArea() const = 0;
 	
+	/**
+	 * @brief getPos Gets the position of the shape.
+	 * @return Position
+	 * 
+	 * For point-based shapes (line, polygon, polyline), position is the center of the shape.
+	 */
 	const QPoint& getPos() const;
 	const QBrush& getBrush() const;
 	const QPen& getPen() const;
@@ -86,7 +92,7 @@ private:
 	QBrush brush;
 	QPen pen;
 	
-	id_t id;
+	id_t id{0};
 };
 
 #endif // SHAPE_H

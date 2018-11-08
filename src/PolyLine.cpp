@@ -1,21 +1,30 @@
 #include "PolyLine.h"
 
 #include <algorithm>
+#include <utility>
+#include <utility>
 
-PolyLine::PolyLine(std::vector<QPoint> points, const QBrush &brush, const QPen &pen, id_t id)
-    : Shape{QPoint{}, brush, pen, id}, points{points}
+static QPoint center(std::vector<QPoint> &points, const QPoint &offset)
 {
 	QPoint mid;
 	for (QPoint &p : points) {
-		mid += p;
+		mid += p + offset;
 	}
-	mid /= points.size();
-	
-	setPos(mid);
-	
-	for (QPoint &p : this->points) {
-		p -= mid;
+	if (!points.empty()) {
+		mid /= points.size();
 	}
+	
+	for (QPoint &p : points) {
+		p += offset - mid;
+	}
+	
+	return mid;
+}
+
+PolyLine::PolyLine(std::vector<QPoint> points, const QBrush &brush, const QPen &pen, id_t id)
+    : Shape{QPoint{}, brush, pen, id}, points{std::move(points)}
+{
+	setPos(center(this->points, getPos()));
 }
 
 PolyLine::PolyLine(const PolyLine &copy) = default;
@@ -53,6 +62,15 @@ double PolyLine::getPerimeter() const
 double PolyLine::getArea() const
 { return -1; }
 
-QPoint& PolyLine::operator[](std::size_t i)
-{ return points[i]; }
+std::size_t PolyLine::getCount() const
+{ return points.size(); }
+
+QPoint PolyLine::getPoint(std::size_t i) const
+{ return points[i] + getPos(); }
+
+void PolyLine::setPoint(std::size_t i, const QPoint &point)
+{
+	points[i] = point - getPos();
+	setPos(center(this->points, getPos()));
+}
 

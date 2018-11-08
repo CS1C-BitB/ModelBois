@@ -27,7 +27,7 @@ public:
 	void setHeight(unsigned int h);
 	
 private:
-	unsigned int w, h;
+	unsigned int w{0}, h{0};
 };
 
 #endif // ELLIPSE_H

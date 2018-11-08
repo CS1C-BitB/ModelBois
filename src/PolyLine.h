@@ -22,7 +22,9 @@ public:
 	double getPerimeter() const override;
 	double getArea() const override;
 	
-	QPoint& operator[](std::size_t i);
+	std::size_t getCount() const;
+	QPoint getPoint(std::size_t i) const;
+	void setPoint(std::size_t i, const QPoint &point);
 	
 private:
 	std::vector<QPoint> points;
