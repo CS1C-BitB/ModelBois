@@ -2,7 +2,6 @@
 #define TESTS_H
 
 #include <cstdio>
-#include <iostream>
 
 /// Standard test, outputs expr on failure
 #define TEST(expr) ( \
@@ -33,6 +32,17 @@
 	: ( \
 		++result, \
 		std::printf("Test failed at %s:%i: `%s` expected %s, recieved %s\n", __FILE__, __LINE__, #expr, std::to_string(expected).c_str(), std::to_string(expr).c_str()), \
+		void(0) \
+	) \
+)
+
+/// Compares a floating point within a margin.
+#define COMPARE_WITHIN(expr, expected, margin) ( \
+	(std::abs(expr - expected) < margin) \
+	? void(0) \
+	: ( \
+		++result, \
+		std::printf("Test failed at %s:%i: `%s` expected %g±%g, recieved %g\n", __FILE__, __LINE__, #expr, expected, margin, expr), \
 		void(0) \
 	) \
 )

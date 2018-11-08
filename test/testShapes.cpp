@@ -17,11 +17,6 @@ string to_string(const QPoint &point)
 }
 }
 
-bool value_within(double val, double target, double margin)
-{
-	return std::abs(val - target) < margin;
-}
-
 template<class Shape_T>
 bool compare(const Shape_T &first, const Shape_T &second);
 
@@ -120,8 +115,8 @@ int testShapes()
 		
 		COMPARE(elli.getID(), 1);
 		
-		TEST(value_within(elli.getArea(), 39.27, .01));
-		TEST(value_within(elli.getPerimeter(), 24.22, .01));
+		COMPARE_WITHIN(elli.getArea(), 39.27, .01);
+		COMPARE_WITHIN(elli.getPerimeter(), 24.22, .01);
 	}
 	
 	{
@@ -131,8 +126,8 @@ int testShapes()
 		
 		COMPARE(line.getID(), 2);
 		
-		TEST(value_within(line.getArea(), -1, .0001));
-		TEST(value_within(line.getPerimeter(), -1, .0001));
+		COMPARE_WITHIN(line.getArea(), -1.0, .0001);
+		COMPARE_WITHIN(line.getPerimeter(), -1.0, .0001);
 		
 		COMPARE(line.getStart(), (QPoint{1, 2}));
 		COMPARE(line.getPos(), (QPoint{2, 3}));
@@ -161,8 +156,8 @@ int testShapes()
 		
 		COMPARE(poly.getCount(), 4);
 		
-		TEST(value_within(poly.getArea(), 4, .001));
-		TEST(value_within(poly.getPerimeter(), 8, .001));
+		COMPARE_WITHIN(poly.getArea(), 4.0, .001);
+		COMPARE_WITHIN(poly.getPerimeter(), 8.0, .001);
 		
 		COMPARE(poly.getPos(), (QPoint{1, 1}));
 		COMPARE(poly.getPoint(0), (QPoint{0, 0}));
@@ -196,8 +191,8 @@ int testShapes()
 		
 		COMPARE(poly.getID(), 4);
 		
-		TEST(value_within(poly.getArea(), -1, .0001));
-		TEST(value_within(poly.getPerimeter(), -1, .0001));
+		COMPARE_WITHIN(poly.getArea(), -1.0, .0001);
+		COMPARE_WITHIN(poly.getPerimeter(), -1.0, .0001);
 		
 		COMPARE(poly.getCount(), 4);
 		
@@ -232,8 +227,8 @@ int testShapes()
 		
 		COMPARE(rect.getID(), 5);
 		
-		TEST(value_within(rect.getArea(), 50, .0001));
-		TEST(value_within(rect.getPerimeter(), 30, .0001));
+		COMPARE_WITHIN(rect.getArea(), 50.0, .0001);
+		COMPARE_WITHIN(rect.getPerimeter(), 30.0, .0001);
 	}
 	
 	{
@@ -243,8 +238,8 @@ int testShapes()
 		
 		COMPARE(text.getID(), 6);
 		
-		TEST(value_within(text.getArea(), -1, .0001));
-		TEST(value_within(text.getPerimeter(), -1, .0001));
+		COMPARE_WITHIN(text.getArea(), -1.0, .0001);
+		COMPARE_WITHIN(text.getPerimeter(), -1.0, .0001);
 	}
 	
 	return result;
