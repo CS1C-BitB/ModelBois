@@ -47,7 +47,8 @@ SOURCES += \
     src/ListButtons.cpp \
     src/PosButton.cpp \
     src/Sort.cpp \
-    src/DetailView.cpp
+    src/DetailView.cpp \
+    src/functions.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -72,7 +73,8 @@ HEADERS += \
     src/VectorNode.h \
     src/vector.h \
     src/Sort.h \
-    src/DetailView.h
+    src/DetailView.h \
+    src/modelheader.h
 
 FORMS += \
     src/MainWindow.ui \
@@ -88,3 +90,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     res/icons.qrc
 
+DISTFILES += \
+    src/test.txt

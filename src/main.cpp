@@ -1,3 +1,4 @@
+/*
 #include "MainWindow.h"
 #include <QApplication>
 
@@ -34,5 +35,19 @@ int main(int argc, char *argv[])
 	
 	return a.exec();
 }
+*/
+#include "modelheader.h"
 
-#endif
+int main()
+{
+
+    std::cout << "\n\nTesting the QT std lib\n\n";
+
+    LoadShapes();
+
+    std::cout << std::endl;
+
+    return 0;
+}
+
+//#endif
