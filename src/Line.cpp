@@ -2,12 +2,18 @@
 
 #include <algorithm>
 
-Line::Line(const QPoint &A, const QPoint &B, const QBrush &brush, const QPen &pen, id_t id)
-    : Shape{(A + B) / 2, brush, pen, id}
+static QPoint center(QPoint &A, QPoint &B, const QPoint &offset)
 {
-	QPoint mid = getPos();
-	this->A = A - mid;
-	this->B = A - mid;
+	QPoint center = (A + offset + B + offset) / 2;
+	A += offset - center;
+	B += offset - center;
+	return center;
+}
+
+Line::Line(const QPoint &a, const QPoint &b, const QBrush &brush, const QPen &pen, id_t id)
+    : Shape{QPoint{}, brush, pen, id}, A{a}, B{b}
+{
+	setPos(center(A, B, getPos()));
 }
 
 Line::Line(const Line &copy) = default;
@@ -49,15 +55,21 @@ double Line::getArea() const
 
 // TODO: global coords
 
-const QPoint& Line::getStart() const
-{ return A; }
+QPoint Line::getStart() const
+{ return A + getPos(); }
 
-const QPoint& Line::getEnd() const
-{ return B; }
+QPoint Line::getEnd() const
+{ return B + getPos(); }
 
 void Line::setStart(const QPoint &start)
-{ A = start; }
+{
+	A = start - getPos();
+	setPos(center(A, B, getPos()));
+}
 
 void Line::setEnd(const QPoint &end)
-{ B = end; }
+{
+	B = end - getPos();
+	setPos(center(A, B, getPos()));
+}
 
