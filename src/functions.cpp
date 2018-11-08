@@ -4,13 +4,21 @@
 
 void LoadShapes()
 {
-    std::ofstream out;
+    std::ifstream inFile;
+    int id; // used to get the shape id
 
 
-    out.open("LakersLife.txt");
+    inFile.open("myshapes.txt");
+
+    while(inFile.good())
+    {
+        inFile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        inFile.ignore(std::numeric_limits<std::streamsize>::max(), ' ');
+        inFile >> id;
 
 
+    }
 
 
-    out.close();
+    inFile.close();
 }
