@@ -30,7 +30,7 @@ Polygon::Polygon(std::vector<QPoint> points, const QBrush &brush, const QPen &pe
 Polygon::Polygon(const Polygon &copy) = default;
 
 Polygon::Polygon(Polygon &&move) noexcept
-    : Polygon{}
+    : Shape{id_t(-1)}
 {
 	swap(move);
 	std::swap(points, move.points);
@@ -93,6 +93,18 @@ QPoint Polygon::getPoint(std::size_t i) const
 void Polygon::setPoint(std::size_t i, const QPoint &point)
 {
 	points[i] = point - getPos();
-	setPos(center(this->points, getPos()));
+	setPos(center(points, getPos()));
+}
+
+void Polygon::pushPoint(const QPoint &point)
+{
+	points.push_back(point - getPos());
+	setPos(center(points, getPos()));
+}
+
+void Polygon::clearPoints()
+{
+	points.clear();
+	setPos(center(points, getPos()));
 }
 

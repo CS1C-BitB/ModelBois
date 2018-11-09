@@ -30,7 +30,7 @@ PolyLine::PolyLine(std::vector<QPoint> points, const QBrush &brush, const QPen &
 PolyLine::PolyLine(const PolyLine &copy) = default;
 
 PolyLine::PolyLine(PolyLine &&move) noexcept
-    : PolyLine{}
+    : Shape{id_t(-1)}
 {
 	swap(move);
 	std::swap(points, move.points);
@@ -71,6 +71,18 @@ QPoint PolyLine::getPoint(std::size_t i) const
 void PolyLine::setPoint(std::size_t i, const QPoint &point)
 {
 	points[i] = point - getPos();
-	setPos(center(this->points, getPos()));
+	setPos(center(points, getPos()));
+}
+
+void PolyLine::pushPoint(const QPoint &point)
+{
+	points.push_back(point - getPos());
+	setPos(center(points, getPos()));
+}
+
+void PolyLine::clearPoints()
+{
+	points.clear();
+	setPos(center(points, getPos()));
 }
 

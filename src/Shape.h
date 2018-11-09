@@ -29,7 +29,7 @@ public:
 	 * @brief Shape Moves a given shape.
 	 * @param move Shape to move from.
 	 * 
-	 * Moved object is left in a default-initialised state.
+	 * Moved from object is left in a invalid state.
 	 */
 	Shape(Shape &&move) noexcept;
 	virtual ~Shape();
@@ -85,6 +85,7 @@ public:
 	void setPen(const QPen&);
 	
 protected:
+	Shape(id_t id);
 	void swap(Shape &other) noexcept;
 	
 private:

@@ -9,7 +9,7 @@ Rectangle::Rectangle(unsigned int width, unsigned int height, const QPoint& pos,
 Rectangle::Rectangle(const Rectangle &copy) = default;
 
 Rectangle::Rectangle(Rectangle &&move) noexcept
-    : Rectangle{}
+    : Shape{id_t(-1)}, w{0}, h{0}
 {
 	swap(move);
 	std::swap(w, move.w);

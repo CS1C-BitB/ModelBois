@@ -19,7 +19,7 @@ Line::Line(const QPoint &a, const QPoint &b, const QBrush &brush, const QPen &pe
 Line::Line(const Line &copy) = default;
 
 Line::Line(Line &&move) noexcept
-    : Line{}
+    : Shape{id_t(-1)}
 {
 	swap(move);
 	std::swap(A, move.A);
