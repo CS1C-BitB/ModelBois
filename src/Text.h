@@ -4,6 +4,7 @@
 #include "Shape.h"
 
 #include <QFont>
+#include <QMap>
 #include <QString>
 
 extern const QMap<Qt::AlignmentFlag, QString> ALIGNMENT_NAMES;

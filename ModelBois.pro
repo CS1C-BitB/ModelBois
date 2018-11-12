@@ -47,7 +47,8 @@ SOURCES += \
     src/ListButtons.cpp \
     src/PosButton.cpp \
     src/Sort.cpp \
-    src/DetailView.cpp
+    src/DetailView.cpp \
+    src/fileparser.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -73,7 +74,7 @@ HEADERS += \
     src/vector.h \
     src/Sort.h \
     src/DetailView.h \
-    src/modelheader.h
+    src/fileparser.h
 
 FORMS += \
     src/MainWindow.ui \
