@@ -47,8 +47,7 @@ SOURCES += \
     src/ListButtons.cpp \
     src/PosButton.cpp \
     src/Sort.cpp \
-    src/DetailView.cpp \
-    src/functions.cpp
+    src/DetailView.cpp
 
 HEADERS += \
     src/MainWindow.h \
