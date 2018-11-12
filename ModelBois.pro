@@ -38,8 +38,7 @@ SOURCES += \
     src/Polygon.cpp \
     src/Ellipse.cpp \
     src/Text.cpp \
-    test/testShapes.cpp \
-    src/functions.cpp
+    test/testShapes.cpp
 
 
 HEADERS += \

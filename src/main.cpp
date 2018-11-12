@@ -39,14 +39,15 @@ int main(int argc, char *argv[])
 #endif
 #endif
 
-// This is going to be for testing the shape text parser
-
+ // This is going to be for testing the shape text parser
 #include "modelheader.h"
 
 int main()
 {
-    LoadShapes();
+    Vector<Line> line;
+    LoadShapes(line);
 
     return 0;
 }
+
 
