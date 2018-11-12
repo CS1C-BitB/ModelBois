@@ -39,15 +39,16 @@ int main(int argc, char *argv[])
 #endif
 #endif
 
- // This is going to be for testing the shape text parser
-#include "modelheader.h"
+#include "fileparser.h"
 
 int main()
 {
-    Vector<Line> line;
-    LoadShapes(line);
+
+    std::vector<Shape*> shape = LoadFile();
+    std::cout << "\n\n\nSIZE: " << shape.size() << std::endl;
 
     return 0;
 }
+
 
 
