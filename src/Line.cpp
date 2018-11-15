@@ -41,7 +41,10 @@ Line& Line::operator=(Line &&other) noexcept
 
 void Line::draw(QPaintDevice* device)
 {
-	// TODO
+	QPoint corner {std::min(A.x(), B.x()), std::min(A.y(), B.y())};
+	auto paint = getPainter(device, corner);
+	
+	paint->drawLine(A, B);
 }
 
 ShapeType Line::getType() const

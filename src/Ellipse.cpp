@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-Ellipse::Ellipse(unsigned int width, unsigned int height, const QPoint& pos, const QBrush &brush, const QPen &pen, id_t id)
+Ellipse::Ellipse(int width, int height, const QPoint& pos, const QBrush &brush, const QPen &pen, id_t id)
     : Shape{pos, brush, pen, id}, w{width}, h{height}
 { }
 
@@ -32,7 +32,10 @@ Ellipse& Ellipse::operator=(Ellipse &&other) noexcept
 
 void Ellipse::draw(QPaintDevice* device)
 {
-	// TODO
+	QPoint corner {-w / 2, -h / 2};
+	auto paint = getPainter(device, corner);
+	
+	paint->drawEllipse(QPoint{}, w / 2, h / 2);
 }
 
 ShapeType Ellipse::getType() const
@@ -44,8 +47,8 @@ double Ellipse::getPerimeter() const
 	// https://www.mathsisfun.com/geometry/ellipse-perimeter.html
 	// Approximation 3
 	
-	double a = w / 2.0;
-	double b = h / 2.0;
+	double a = std::abs(w) / 2.0;
+	double b = std::abs(h) / 2.0;
 	
 	double h = ((a - b) * (a - b)) / ((a + b) * (a + b));
 	
@@ -54,20 +57,20 @@ double Ellipse::getPerimeter() const
 
 double Ellipse::getArea() const
 {
-	double a = w / 2.0;
-	double b = h / 2.0;
+	double a = std::abs(w) / 2.0;
+	double b = std::abs(h) / 2.0;
 	
 	return pi * a * b;
 }
 
-unsigned int Ellipse::getWidth() const
+int Ellipse::getWidth() const
 { return w; }
 
-unsigned int Ellipse::getHeight() const
+int Ellipse::getHeight() const
 { return h; }
 
-void Ellipse::setWidth(unsigned int width)
+void Ellipse::setWidth(int width)
 { w = width; }
 
-void Ellipse::setHeight(unsigned int height)
+void Ellipse::setHeight(int height)
 { h = height; }

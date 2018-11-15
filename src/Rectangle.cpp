@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-Rectangle::Rectangle(unsigned int width, unsigned int height, const QPoint& pos, const QBrush &brush, const QPen &pen, id_t id)
+Rectangle::Rectangle(int width, int height, const QPoint& pos, const QBrush &brush, const QPen &pen, id_t id)
     : Shape{pos, brush, pen, id}, w{width}, h{height}
 { }
 
@@ -31,27 +31,30 @@ Rectangle& Rectangle::operator=(Rectangle &&other) noexcept
 
 void Rectangle::draw(QPaintDevice* device)
 {
-	// TODO
+	QPoint corner = QPoint{-w / 2, -h / 2};
+	auto paint = getPainter(device, corner);
+	
+	paint->drawRect(corner.x(), corner.y(), w, h);
 }
 
 ShapeType Rectangle::getType() const
 { return ShapeType::RECTANGLE; }
 
 double Rectangle::getPerimeter() const
-{ return 2 * w + 2 * h; }
+{ return std::abs(2 * w) + std::abs(2 * h); }
 
 double Rectangle::getArea() const
-{ return w * h; }
+{ return std::abs(w * h); }
 
-unsigned int Rectangle::getWidth() const
+int Rectangle::getWidth() const
 { return w; }
 
-unsigned int Rectangle::getHeight() const
+int Rectangle::getHeight() const
 { return h; }
 
-void Rectangle::setWidth(unsigned int width)
+void Rectangle::setWidth(int width)
 { w = width; }
 
-void Rectangle::setHeight(unsigned int height)
+void Rectangle::setHeight(int height)
 { h = height; }
 

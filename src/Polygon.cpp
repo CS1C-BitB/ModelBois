@@ -50,7 +50,14 @@ Polygon& Polygon::operator=(Polygon &&other) noexcept
 
 void Polygon::draw(QPaintDevice* device)
 {
-	// TODO
+	QPoint corner;
+	for (auto p : points) {
+		corner.setX(std::min(corner.x(), p.x()));
+		corner.setY(std::min(corner.y(), p.y()));
+	}
+	auto paint = getPainter(device, corner);
+	
+	paint->drawPolygon(points.data(), points.size());
 }
 
 ShapeType Polygon::getType() const

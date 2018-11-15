@@ -1,7 +1,6 @@
 #include "Shape.h"
 
 #include <algorithm>
-#include <QPainter>
 #include <utility>
 
 static unsigned int shape_id = 0;
@@ -76,5 +75,24 @@ void Shape::swap(Shape &other) noexcept
 	std::swap(brush, other.brush);
 	std::swap(pen, other.pen);
 	std::swap(id, other.id);
+}
+
+// TODO
+QPen Shape::id_pen{};
+QFont Shape::id_font{};
+
+std::unique_ptr<QPainter> Shape::getPainter(QPaintDevice* device, QPoint corner) const
+{
+	std::unique_ptr<QPainter> paint{new QPainter{device}};
+	paint->translate(pos);
+	
+	paint->setPen(id_pen);
+	paint->setFont(id_font);
+	paint->drawText(corner, QString("ID: %1").arg(getID()));
+	
+	paint->setBrush(brush);
+	paint->setPen(pen);
+	
+	return paint;
 }
 
