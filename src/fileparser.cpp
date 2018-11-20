@@ -21,6 +21,8 @@ Qt::PenStyle     getPenStyle(const std::string);
 Qt::PenCapStyle  getCapStyle(const std::string);
 Qt::PenJoinStyle getPenJoinStyle(const std::string);
 Qt::BrushStyle   getBrushStyle(const std::string);
+QFont::Weight    getFontWeight(const std::string);
+
 
 std::vector<Shape*> LoadFile()
 {
@@ -41,6 +43,10 @@ std::vector<Shape*> LoadFile()
         inFile >> id;
         std::cout << "ID " << id << std::endl;
         inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
+
+        //if(inFile.eof())
+        //{ break;}
+
         switch(id)
         {
         case LINE:
@@ -521,7 +527,7 @@ Shape* ReadText(std::ifstream& inFile)
 {
     int x, y, pointSize;
     id_t l, w;
-    std::string color, style, cap, join, brushStyle, brushColor, textStr, textAlign, fontFam, weight;
+    std::string color, style, fontStyle, join, brushStyle, brushColor, textStr, textAlign, fontFam, weight;
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     inFile >> x;
@@ -561,20 +567,24 @@ Shape* ReadText(std::ifstream& inFile)
     // TEXT FONT FAMILY
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     getline(inFile, fontFam);
+    QString famStr(fontFam.c_str());
 
-    // TEXT CAP STYLE
+    // TEXT FONT STYLE
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
-    getline(inFile, cap);
+    getline(inFile, fontStyle);
 
     // TEXT WEIGHT
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     getline(inFile, weight);
 
-    QBrush brush(getBrushStyle(brushStyle));
-    QBrush tColor(textColor);
-    QPen   pen(textColor, w, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
+    QBrush brush(textColor);
+    QPen   pen(textColor);
+    QFont  font(famStr, pointSize, getFontWeight(weight), false);
+    pen.setCapStyle(getCapStyle(fontStyle));
 
-	Text *text = new Text(QString::fromStdString(textStr), QFont{}, l, w, ALIGNMENT_NAMES.key(QString::fromStdString(textAlign)), point, brush, pen, 8);
+
+
+	Text *text = new Text(QString::fromStdString(textStr), font, l, w, ALIGNMENT_NAMES.key(QString::fromStdString(textAlign)), point, brush, pen, 8);
     return text;
 }
 
@@ -803,3 +813,30 @@ Qt::BrushStyle   getBrushStyle(const std::string brushStyle)
         return Qt::NoBrush;
     }
 }
+
+QFont::Weight getFontWeight(const std::string fontWeight)
+{
+    switch(fontWeight[1])
+    {
+    case 'L':
+        return QFont::Light;
+    case 'N':
+        std::cout << "Font Weight:" << fontWeight << std::endl;
+        return QFont::Normal;
+    case 'D':
+        return QFont::DemiBold;
+    case 'B':
+        if(fontWeight[2] == 'o')
+        {
+            return QFont::Bold;
+        }
+        else
+        {
+            return QFont::Black;
+        }
+   default:
+        std::cout << "Font Weight: Normal (Default)" << std::endl;
+        return QFont::Normal;
+    }
+}
+
