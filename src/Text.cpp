@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <utility>
 
-Text::Text(const std::string &str, const QFont &font, const QPoint &pos, const QBrush &brush, const QPen &pen, id_t id)
-    : Shape{pos, brush, pen, id}, font{font}, str{str.data()}
+Text::Text(QString str, const QFont &font, const QPoint &pos, const QBrush &brush, const QPen &pen, id_t id)
+    : Shape{pos, brush, pen, id}, font{font}, str{std::move(str)}
 { }
 
 Text::Text(const Text &copy) = default;
@@ -48,9 +48,9 @@ double Text::getPerimeter() const
 double Text::getArea() const
 { return -1; }
 
-std::string Text::getString() const
-{ return str.toStdString(); }
+const QString& Text::getString() const
+{ return str; }
 
-void Text::setString(const std::string& string)
-{ str = string.c_str(); }
+void Text::setString(QString string)
+{ str = std::move(string); }
 

@@ -38,9 +38,9 @@ SOURCES += \
     src/Polygon.cpp \
     src/Ellipse.cpp \
     src/Text.cpp \
-    test/testShapes.cpp \
     src/Canvas.cpp \
-    src/Storage.cpp
+    src/Storage.cpp \
+    test/testShapes.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -51,9 +51,9 @@ HEADERS += \
     src/Polygon.h \
     src/Ellipse.h \
     src/Text.h \
-    test/Tests.h \
     src/Canvas.h \
-    src/Storage.h
+    src/Storage.h \
+    test/Tests.h
 
 FORMS += \
     src/MainWindow.ui

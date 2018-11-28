@@ -6,12 +6,10 @@
 #include <QFont>
 #include <QString>
 
-#include <string>
-
 class Text : public Shape
 {
 public:
-	Text(const std::string &str = "", const QFont &font = {}, const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
+	Text(QString str = "", const QFont &font = {}, const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
 	Text(const Text &copy);
 	Text(Text &&move) noexcept;
 	~Text() override;
@@ -25,8 +23,8 @@ public:
 	double getPerimeter() const override;
 	double getArea() const override;
 	
-	std::string getString() const;
-	void setString(const std::string&);
+	const QString& getString() const;
+	void setString(QString);
 	
 private:
 	QFont font;
