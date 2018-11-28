@@ -40,6 +40,8 @@ SOURCES += \
     src/Text.cpp \
     src/Canvas.cpp \
     src/Storage.cpp \
+    src/ShapeListModel.cpp \
+    src/PropItem.cpp
     test/testShapes.cpp
 
 HEADERS += \
@@ -53,6 +55,8 @@ HEADERS += \
     src/Text.h \
     src/Canvas.h \
     src/Storage.h \
+    src/ShapeListModel.h \
+    src/PropItem.h
     test/Tests.h
 
 FORMS += \

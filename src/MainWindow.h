@@ -17,6 +17,9 @@ public:
 	explicit MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 	
+private slots:
+	void on_ShapeList_currentIndexChanged(int index);
+	
 private:
 	Storage store;
 	Ui::MainWindow *ui;

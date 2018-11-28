@@ -5,6 +5,15 @@
 
 static unsigned int shape_id = 0;
 
+std::map<ShapeType, QString> SHAPE_NAMES {
+	{ShapeType::LINE, "Line"},
+	{ShapeType::POLYLINE, "Polyline"},
+	{ShapeType::POLYGON, "Polygon"},
+	{ShapeType::RECTANGLE, "Rectangle"},
+	{ShapeType::ELLIPSE, "Ellipse"},
+	{ShapeType::TEXT, "Text"}
+};
+
 Shape::Shape(const QPoint& pos, const QBrush &brush, QPen pen, id_t id)
     : pos{pos}, brush{brush}, pen{std::move(pen)}, id{id}
 {
