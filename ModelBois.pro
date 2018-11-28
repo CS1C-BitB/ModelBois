@@ -39,7 +39,8 @@ SOURCES += \
     src/Ellipse.cpp \
     src/Text.cpp \
     test/testShapes.cpp \
-    src/Canvas.cpp
+    src/Canvas.cpp \
+    src/Storage.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -51,7 +52,8 @@ HEADERS += \
     src/Ellipse.h \
     src/Text.h \
     test/Tests.h \
-    src/Canvas.h
+    src/Canvas.h \
+    src/Storage.h
 
 FORMS += \
     src/MainWindow.ui

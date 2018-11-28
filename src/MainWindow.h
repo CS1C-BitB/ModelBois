@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "Storage.h"
+
 #include <QMainWindow>
 
 namespace Ui {
@@ -16,6 +18,7 @@ public:
 	~MainWindow();
 	
 private:
+	Storage store;
 	Ui::MainWindow *ui;
 };
 

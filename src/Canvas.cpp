@@ -1,34 +1,22 @@
 #include "Canvas.h"
 
-#include "Ellipse.h"
-#include "Line.h"
-#include "Polygon.h"
-#include "PolyLine.h"
-#include "Rectangle.h"
-#include "Text.h"
-
-Canvas::Canvas(QWidget *parent) : QWidget(parent)
+Canvas::Canvas(QWidget *parent) : QWidget(parent), shapes{nullptr}
 {
 	setBackgroundRole(QPalette::Base);
-    setAutoFillBackground(true);
-	
-	// TODO: Testing shapes, replace with file loader
-	shapes.push_back(new Ellipse{50, 25, QPoint{50, 100}, QBrush{QColor{255, 0, 0}}});
-	shapes.push_back(new Line{QPoint{100, 150}, QPoint{300, 100}, QBrush{QColor{255, 0, 0}}});
-	shapes.push_back(new Polygon{std::vector<QPoint>{
-	                                 QPoint{400, 200}, QPoint{450, 200}, QPoint{500, 300}, QPoint{400, 300}
-	                             }, QBrush{QColor{255, 0, 0}}});
-	shapes.push_back(new PolyLine{std::vector<QPoint>{
-	                                 QPoint{600, 200}, QPoint{650, 200}, QPoint{700, 300}, QPoint{600, 300}
-	                             }, QBrush{QColor{255, 0, 0}}});
-	shapes.push_back(new Rectangle{40, 50, QPoint{100, 200}, QBrush{QColor{255, 0, 0}}});
-	shapes.push_back(new Text{"Hello world!", QFont{}, QPoint{400, 400}, QBrush{QColor{255, 0, 0}}});
+	setAutoFillBackground(true);
+}
+
+void Canvas::set_storage(const Storage &store)
+{
+	shapes = &store.shapes;
 }
 
 void Canvas::paintEvent(QPaintEvent */*event*/)
 {
-	for (Shape* shape : shapes) {
-		shape->draw(this);
+	if (shapes) {
+		for (Shape* shape : *shapes) {
+			shape->draw(this);
+		}
 	}
 }
 
