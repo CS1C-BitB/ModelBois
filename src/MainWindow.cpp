@@ -10,6 +10,8 @@
 #include "Text.h"
 // /TEMP
 
+#include "PropItem.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -29,9 +31,26 @@ MainWindow::MainWindow(QWidget *parent) :
 	store.shapes.push_back(new Text{"Hello world!", QFont{}, QPoint{400, 400}});
 	
 	ui->canvas->set_storage(store);
+	
+	ui->ShapeList->setModel(&store.model);
+	
+	ui->PropTree->setHeaderLabels({"Property", "Value"});
 }
 
 MainWindow::~MainWindow()
 {
 	delete ui;
+}
+
+void MainWindow::on_ShapeList_currentIndexChanged(int index)
+{
+	Shape* s = store.shapes.at(index);
+	
+	QTreeWidgetItem* old = ui->PropTree->topLevelItem(0);
+	if (old) {
+		ui->PropTree->removeItemWidget(old, 0);
+		delete old;
+	}
+	
+	new PropItem<Shape>(ui->PropTree, *s);
 }

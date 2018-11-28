@@ -6,6 +6,7 @@
 #include <QPen>
 #include <QPoint>
 
+#include <map>
 #include <memory>
 
 enum class ShapeType {
@@ -16,6 +17,8 @@ enum class ShapeType {
 	ELLIPSE,
 	TEXT
 };
+
+extern std::map<ShapeType, QString> SHAPE_NAMES;
 
 class Shape
 {
