@@ -7,6 +7,29 @@
 
 static unsigned int shape_id = 0;
 
+#define COLOR_DEF(name) {#name, QColor{Qt::name}}
+const QMap<QString, QColor> COLOR_NAMES {
+	COLOR_DEF(white),
+	COLOR_DEF(black),
+	COLOR_DEF(red),
+	COLOR_DEF(darkRed),
+	COLOR_DEF(green),
+	COLOR_DEF(darkGreen),
+	COLOR_DEF(blue),
+	COLOR_DEF(darkBlue),
+	COLOR_DEF(cyan),
+	COLOR_DEF(darkCyan),
+	COLOR_DEF(magenta),
+	COLOR_DEF(darkMagenta),
+	COLOR_DEF(yellow),
+	COLOR_DEF(darkYellow),
+	COLOR_DEF(gray),
+	COLOR_DEF(darkGray),
+	COLOR_DEF(lightGray),
+	COLOR_DEF(transparent),
+};
+#undef COLOR_DEF
+
 const QMap<ShapeType, QString> SHAPE_NAMES {
 	{ShapeType::LINE, "Line"},
 	{ShapeType::POLYLINE, "Polyline"},

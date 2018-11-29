@@ -16,6 +16,12 @@ PropertyItem<Shape>::PropertyItem(QTreeWidget* parent, Shape& s)
 	            [&s]() { return s.getPos(); },
 	            [&s](QPoint p) { s.setPos(p); }
 	);
+	new PropertyItem<QPen>(
+	            this,
+	            "Line",
+	            [&s]() { return s.getPen(); },
+	            [&s](QPen p) { s.setPen(p);}
+	);
 	new PropertyItem<QBrush>(
 	            this,
 	            "Fill",
@@ -80,6 +86,37 @@ QVariant PropertyItem<QPoint>::data(int column, int role) const
 
 /******************************************************************************
  * 
+ * QPen specialization
+ * 
+ *****************************************************************************/
+
+PropertyItem<QPen>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
+    : QTreeWidgetItem(parent, PropPen), name{std::move(name)}, getter{std::move(getter_in)}
+{
+	new PropertyItem<QString>(
+	            this,
+	            "Color",
+	            [this]() { return COLOR_NAMES.key(getter().color()); },
+	            [this, setter](QString s) { auto v = getter(); v.setColor(COLOR_NAMES[s]); setter(v); },
+	            PropColor
+	);
+}
+
+QVariant PropertyItem<QPen>::data(int column, int role) const
+{
+	switch (role) {
+	case Qt::DisplayRole:
+		if (column == 0) {
+			return name;
+		}
+		break;
+	}
+	
+	return QVariant{};
+}
+
+/******************************************************************************
+ * 
  * QBrush specialization
  * 
  *****************************************************************************/
@@ -87,17 +124,19 @@ QVariant PropertyItem<QPoint>::data(int column, int role) const
 PropertyItem<QBrush>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
     : QTreeWidgetItem(parent, PropBrush), name{std::move(name)}, getter{std::move(getter_in)}
 {
-	new PropertyItem<QColor>(
+	new PropertyItem<QString>(
 	            this,
 	            "Color",
-	            [this]() { return getter().color(); },
-	            [this, setter](QColor c) { auto v = getter(); v.setColor(c); setter(v); }
+	            [this]() { return COLOR_NAMES.key(getter().color()); },
+	            [this, setter](QString s) { auto v = getter(); v.setColor(COLOR_NAMES[s]); setter(v); },
+	            PropColor
 	);
 	new PropertyItem<QString>(
 	            this,
 	            "Style",
 	            [this]() { return BRUSH_STYLE_NAMES[getter().style()]; },
-	            [this, setter](QString s) { auto v = getter(); v.setStyle(BRUSH_STYLE_NAMES.key(s, Qt::NoBrush)); setter(v); }
+	            [this, setter](QString s) { auto v = getter(); v.setStyle(BRUSH_STYLE_NAMES.key(s)); setter(v); },
+	            PropBrushStyle
 	);
 }
 
@@ -113,57 +152,4 @@ QVariant PropertyItem<QBrush>::data(int column, int role) const
 	
 	return QVariant{};
 }
-
-/******************************************************************************
- * 
- * QColor specialization
- * 
- *****************************************************************************/
-
-PropertyItem<QColor>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
-    : QTreeWidgetItem(parent, PropColor), name{std::move(name)}, getter{std::move(getter_in)}
-{
-	new PropertyItem<int>(
-	            this,
-	            "R",
-	            [this]() -> int { return getter().red(); },
-	            [this, setter](int r) { QColor c = getter(); c.setRed(r); setter(c); }
-	);
-	new PropertyItem<int>(
-	            this,
-	            "G",
-	            [this]() -> int { return getter().green(); },
-	            [this, setter](int g) { QColor c = getter(); c.setGreen(g); setter(c); }
-	);
-	new PropertyItem<int>(
-	            this,
-	            "B",
-	            [this]() -> int { return getter().blue(); },
-	            [this, setter](int b) { QColor c = getter(); c.setBlue(b); setter(c); }
-	);
-	new PropertyItem<int>(
-	            this,
-	            "A",
-	            [this]() -> int { return getter().alpha(); },
-	            [this, setter](int a) { QColor c = getter(); c.setAlpha(a); setter(c); }
-	);
-}
-
-QVariant PropertyItem<QColor>::data(int column, int role) const
-{
-	switch (role) {
-	case Qt::DisplayRole:
-		if (column == 0) {
-			return name;
-		}
-		else {
-			return getter().name();
-		}
-		break;
-	}
-	
-	return QVariant{};
-}
-
-#undef QPOINT_PROP_DEF
 
