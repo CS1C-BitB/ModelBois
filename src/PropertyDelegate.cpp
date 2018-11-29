@@ -8,12 +8,18 @@
 
 PropertyDelegate::PropertyDelegate(QObject *parent)
     : QStyledItemDelegate{parent}
-{ }
+{
+	connect(this, &PropertyDelegate::valueChanged, this, &PropertyDelegate::commitData);
+}
 
 const char* QOBJ_PROP_NAME = "DataType";
 
-QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
+QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex& index) const
 {
+	if (index.column() == 0) {
+		return nullptr;
+	}
+	
 	int type = getType(parent);
 	
 #define TEXT_SELECTION(source) do { \
@@ -52,6 +58,7 @@ void PropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 		QString value = index.model()->data(index, Qt::EditRole).value<QString>();
 		
 		comboBox->setCurrentText(value);
+		connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
 		break;
 	}
 	default:
@@ -59,6 +66,7 @@ void PropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 		int value = index.model()->data(index, Qt::EditRole).toInt();
 		
 		spinBox->setValue(value);
+		connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
 	}
 }
 

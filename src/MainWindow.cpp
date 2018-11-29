@@ -36,11 +36,13 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->ShapeList->setModel(&store.model);
 	
 	ui->PropTree->setHeaderLabels({"Property", "Value"});
-	ui->PropTree->setItemDelegateForColumn(1, new PropertyDelegate());
+	ui->PropTree->setItemDelegate(new PropertyDelegate());
+	ui->PropTree->setEditTriggers(QAbstractItemView::AllEditTriggers);
 }
 
 MainWindow::~MainWindow()
 {
+	delete ui->PropTree->itemDelegate();
 	delete ui;
 }
 

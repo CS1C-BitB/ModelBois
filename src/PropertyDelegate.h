@@ -18,6 +18,8 @@ public:
 	void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 	
 private:
+	Q_SIGNAL void valueChanged(QWidget*) const;
+	
 	int getType(QWidget* parent) const;
 };
 #endif // PROPERTYDELEGATE_H
