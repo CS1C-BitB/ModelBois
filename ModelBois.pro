@@ -48,7 +48,8 @@ SOURCES += \
     src/PosButton.cpp \
     src/Sort.cpp \
     src/DetailView.cpp \
-    src/fileparser.cpp
+    src/fileparser.cpp \
+    src/login.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -74,13 +75,15 @@ HEADERS += \
     src/vector.h \
     src/Sort.h \
     src/DetailView.h \
-    src/fileparser.h
+    src/fileparser.h \
+    src/login.h
 
 FORMS += \
     src/MainWindow.ui \
     src/ListButtons.ui \
     src/PosButton.ui \
-    src/DetailView.ui
+    src/DetailView.ui \
+    src/login.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -4,6 +4,7 @@
 #include <QPen>
 #include <QColor>
 #include <QFont>
+#include <QMap>
 
 const int SHAPES_IN_FILE = 8;
 
@@ -24,13 +25,13 @@ Qt::BrushStyle   getBrushStyle(const std::string);
 QFont::Weight    getFontWeight(const std::string);
 
 
-std::vector<Shape*> LoadFile()
+cs1c::vector<Shape*> LoadFile()
 {
 
     std::ifstream inFile;
     inFile.open("myShapes.txt");
 
-    std::vector<Shape*> myShapes;
+    cs1c::vector<Shape*> myShapes;
     int id;
     std::string sName;
 
@@ -602,96 +603,61 @@ TextFontWeight: Normal
 
 Qt::GlobalColor getColor(const std::string color)
 {
-      if(color == " white")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::white;
-      }
-      else if(color == " black")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::black;
-      }
-      else if(color == " cyan")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::cyan;
-      }
-      else if(color == " darkCyan")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::darkCyan;
-      }
-      else if(color == " red")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::red;
-      }
-      else if(color == " darkRed")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::darkRed;
-      }
-      else if(color == " magenta")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::magenta;
-      }
-      else if(color == " darkMagenta")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::darkMagenta;
-      }
-      else if(color == " green")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::green;
-      }
-      else if(color == " darkGreen")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::darkGreen;
-      }
-      else if(color == " yellow")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::yellow;
-      }
-      else if(color == " darkYellow")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::darkYellow;
-      }
-      else if(color == " blue")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::blue;
-      }
-      else if(color == " darkBlue")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::darkBlue;
-      }
-      else if(color == " gray")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::gray;
-      }
-      else if(color == " darkGray")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::darkGray;
-      }
-      else if(color == " lightGray")
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::lightGray;
-      }
-      else
-      {
-//          std::cout << "Color:" << color;
-          return Qt::GlobalColor::black;
-      }
+    switch(color[1])
+    {
+    case 'w':
+        return Qt::GlobalColor::white;
+    case 'b':
+        if(color[3] == 'u')
+        {
+            return Qt::GlobalColor::blue;
+        }
+        return Qt::black;
+    case 'r':
+        return Qt::GlobalColor::red;
+    case 'd':
+        switch(color[5])
+        {
+            case 'R':
+                 return Qt::GlobalColor::darkRed;
+            case 'G':
+                if(color[7] == 'e')
+                {
+                    return Qt::GlobalColor::darkGreen;
+                }
+                else
+                {
+                    return Qt::GlobalColor::darkGray;
+                }
+          case 'B':
+            return Qt::GlobalColor::darkBlue;
+          case 'C':
+            return Qt::GlobalColor::darkCyan;
+         case 'M':
+            return Qt::GlobalColor::darkMagenta;
+         case 'Y':
+            return Qt::GlobalColor::darkYellow;
+        default:
+            return Qt::GlobalColor::black;
+        }
+    case 'g':
+        if(color[3] == 'e')
+        {
+            return Qt::GlobalColor::green;
+        }
+        else
+        {
+            return Qt::GlobalColor::gray;
+        }
+    case 'c':
+        return Qt::GlobalColor::cyan;
+    case 'm':
+        return Qt::GlobalColor::magenta;
+    case 'y':
+        return Qt::GlobalColor::yellow;
+    default:
+        return Qt::GlobalColor::black;
+    }
 }
 
 Qt::PenStyle getPenStyle(const std::string style)

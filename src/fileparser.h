@@ -12,6 +12,7 @@
 #include "Rectangle.h"  /* used for rectangle's includes squares */
 #include "Ellipse.h"    /* used for ellipse's includes circles */
 #include "Text.h"       /* used for text objects */
+#include "vector.h"
 
 
 enum ShapeNames
@@ -26,7 +27,7 @@ enum ShapeNames
     TEXT      = 8
 };
 
-std::vector<Shape*> LoadFile();
+cs1c::vector<Shape*> LoadFile();
 
 
 #endif // FILEPARSER_H
