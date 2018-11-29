@@ -40,11 +40,12 @@ SOURCES += \
     src/Text.cpp \
     src/Canvas.cpp \
     src/Storage.cpp \
+    src/fileparser.cpp \
     src/ShapeListModel.cpp \
     src/PropertyDelegate.cpp \
     src/PropertyItem.cpp \
-    src/fileparser.cpp \
-    test/testShapes.cpp
+    test/testShapes.cpp \
+    src/login.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -56,16 +57,18 @@ HEADERS += \
     src/Ellipse.h \
     src/Text.h \
     src/Canvas.h \
+    src/fileParser.h \
     src/Storage.h \
     src/ShapeListModel.h \
     src/PropertyDelegate.h \
     src/PropertyItem.h \
-    src/fileParser.h \
-    test/Tests.h
+    test/Tests.h \
+    src/login.h
 
 
 FORMS += \
-    src/MainWindow.ui
+    src/MainWindow.ui \
+    src/login.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

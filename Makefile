@@ -59,8 +59,18 @@ SOURCES       = src/main.cpp \
 		src/Polygon.cpp \
 		src/Ellipse.cpp \
 		src/Text.cpp \
+		src/Canvas.cpp \
+		src/Storage.cpp \
+		src/fileparser.cpp \
+		src/ShapeListModel.cpp \
+		src/PropertyDelegate.cpp \
+		src/PropertyItem.cpp \
 		test/testShapes.cpp \
-		src/functions.cpp moc_MainWindow.cpp
+		src/login.cpp moc_MainWindow.cpp \
+		moc_Canvas.cpp \
+		moc_ShapeListModel.cpp \
+		moc_PropertyDelegate.cpp \
+		moc_login.cpp
 OBJECTS       = main.o \
 		MainWindow.o \
 		Shape.o \
@@ -70,11 +80,20 @@ OBJECTS       = main.o \
 		Polygon.o \
 		Ellipse.o \
 		Text.o \
+		Canvas.o \
+		Storage.o \
+		fileparser.o \
+		ShapeListModel.o \
+		PropertyDelegate.o \
+		PropertyItem.o \
 		testShapes.o \
-		functions.o \
-		moc_MainWindow.o
-DIST          = ModelBois/myshapes.txt \
-		/Applications/Qt/5.11.2/clang_64/mkspecs/features/spec_pre.prf \
+		login.o \
+		moc_MainWindow.o \
+		moc_Canvas.o \
+		moc_ShapeListModel.o \
+		moc_PropertyDelegate.o \
+		moc_login.o
+DIST          = /Applications/Qt/5.11.2/clang_64/mkspecs/features/spec_pre.prf \
 		/Applications/Qt/5.11.2/clang_64/mkspecs/qdevice.pri \
 		/Applications/Qt/5.11.2/clang_64/mkspecs/features/device_config.prf \
 		/Applications/Qt/5.11.2/clang_64/mkspecs/common/unix.conf \
@@ -273,8 +292,14 @@ DIST          = ModelBois/myshapes.txt \
 		src/Polygon.h \
 		src/Ellipse.h \
 		src/Text.h \
+		src/Canvas.h \
+		src/fileParser.h \
+		src/Storage.h \
+		src/ShapeListModel.h \
+		src/PropertyDelegate.h \
+		src/PropertyItem.h \
 		test/Tests.h \
-		src/modelheader.h src/main.cpp \
+		src/login.h src/main.cpp \
 		src/MainWindow.cpp \
 		src/Shape.cpp \
 		src/Line.cpp \
@@ -283,8 +308,14 @@ DIST          = ModelBois/myshapes.txt \
 		src/Polygon.cpp \
 		src/Ellipse.cpp \
 		src/Text.cpp \
+		src/Canvas.cpp \
+		src/Storage.cpp \
+		src/fileparser.cpp \
+		src/ShapeListModel.cpp \
+		src/PropertyDelegate.cpp \
+		src/PropertyItem.cpp \
 		test/testShapes.cpp \
-		src/functions.cpp
+		src/login.cpp
 QMAKE_TARGET  = ModelBois
 DESTDIR       = 
 TARGET        = ModelBois.app/Contents/MacOS/ModelBois
@@ -301,7 +332,7 @@ include /Applications/Qt/5.11.2/clang_64/mkspecs/features/mac/sdk.mk
 first: all
 ####### Build rules
 
-$(TARGET): ui_MainWindow.h $(OBJECTS)  
+$(TARGET): ui_MainWindow.h ui_login.h $(OBJECTS)  
 	@test -d ModelBois.app/Contents/MacOS/ || mkdir -p ModelBois.app/Contents/MacOS/
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
@@ -726,9 +757,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /Applications/Qt/5.11.2/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents src/MainWindow.h src/Shape.h src/Line.h src/PolyLine.h src/Rectangle.h src/Polygon.h src/Ellipse.h src/Text.h test/Tests.h src/modelheader.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/MainWindow.cpp src/Shape.cpp src/Line.cpp src/PolyLine.cpp src/Rectangle.cpp src/Polygon.cpp src/Ellipse.cpp src/Text.cpp test/testShapes.cpp src/functions.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents src/MainWindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents src/MainWindow.h src/Shape.h src/Line.h src/PolyLine.h src/Rectangle.h src/Polygon.h src/Ellipse.h src/Text.h src/Canvas.h src/fileParser.h src/Storage.h src/ShapeListModel.h src/PropertyDelegate.h src/PropertyItem.h test/Tests.h src/login.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/MainWindow.cpp src/Shape.cpp src/Line.cpp src/PolyLine.cpp src/Rectangle.cpp src/Polygon.cpp src/Ellipse.cpp src/Text.cpp src/Canvas.cpp src/Storage.cpp src/fileparser.cpp src/ShapeListModel.cpp src/PropertyDelegate.cpp src/PropertyItem.cpp test/testShapes.cpp src/login.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents src/MainWindow.ui src/login.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -760,26 +791,111 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /Applications/Qt/5.11.2/clang_64/mkspecs/features/data/dummy.cpp
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -pipe -stdlib=libc++ -g -std=gnu++11 $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk -mmacosx-version-min=10.11 -Wall -W -dM -E -o moc_predefs.h /Applications/Qt/5.11.2/clang_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_MainWindow.cpp
+compiler_moc_header_make_all: moc_MainWindow.cpp moc_Canvas.cpp moc_ShapeListModel.cpp moc_PropertyDelegate.cpp moc_login.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_MainWindow.cpp
-moc_MainWindow.cpp: /Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
+	-$(DEL_FILE) moc_MainWindow.cpp moc_Canvas.cpp moc_ShapeListModel.cpp moc_PropertyDelegate.cpp moc_login.cpp
+moc_MainWindow.cpp: src/Storage.h \
+		src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		src/ShapeListModel.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
 		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QTreeWidgetItem \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qtreewidget.h \
 		src/MainWindow.h \
 		moc_predefs.h \
 		/Applications/Qt/5.11.2/clang_64/bin/moc
 	/Applications/Qt/5.11.2/clang_64/bin/moc $(DEFINES) --include '/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois/moc_predefs.h' -I/Applications/Qt/5.11.2/clang_64/mkspecs/macx-clang -I'/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois' -I'/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois/src' -I/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers -I/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers -I/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/usr/include -F/Applications/Qt/5.11.2/clang_64/lib src/MainWindow.h -o moc_MainWindow.cpp
 
+moc_Canvas.cpp: src/Storage.h \
+		src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		src/ShapeListModel.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		src/Canvas.h \
+		moc_predefs.h \
+		/Applications/Qt/5.11.2/clang_64/bin/moc
+	/Applications/Qt/5.11.2/clang_64/bin/moc $(DEFINES) --include '/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois/moc_predefs.h' -I/Applications/Qt/5.11.2/clang_64/mkspecs/macx-clang -I'/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois' -I'/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois/src' -I/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers -I/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers -I/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/usr/include -F/Applications/Qt/5.11.2/clang_64/lib src/Canvas.h -o moc_Canvas.cpp
+
+moc_ShapeListModel.cpp: src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h \
+		src/ShapeListModel.h \
+		moc_predefs.h \
+		/Applications/Qt/5.11.2/clang_64/bin/moc
+	/Applications/Qt/5.11.2/clang_64/bin/moc $(DEFINES) --include '/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois/moc_predefs.h' -I/Applications/Qt/5.11.2/clang_64/mkspecs/macx-clang -I'/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois' -I'/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois/src' -I/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers -I/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers -I/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/usr/include -F/Applications/Qt/5.11.2/clang_64/lib src/ShapeListModel.h -o moc_ShapeListModel.cpp
+
+moc_PropertyDelegate.cpp: /Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QStyledItemDelegate \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qstyleditemdelegate.h \
+		src/PropertyDelegate.h \
+		moc_predefs.h \
+		/Applications/Qt/5.11.2/clang_64/bin/moc
+	/Applications/Qt/5.11.2/clang_64/bin/moc $(DEFINES) --include '/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois/moc_predefs.h' -I/Applications/Qt/5.11.2/clang_64/mkspecs/macx-clang -I'/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois' -I'/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois/src' -I/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers -I/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers -I/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/usr/include -F/Applications/Qt/5.11.2/clang_64/lib src/PropertyDelegate.h -o moc_PropertyDelegate.cpp
+
+moc_login.cpp: /Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
+		src/login.h \
+		moc_predefs.h \
+		/Applications/Qt/5.11.2/clang_64/bin/moc
+	/Applications/Qt/5.11.2/clang_64/bin/moc $(DEFINES) --include '/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois/moc_predefs.h' -I/Applications/Qt/5.11.2/clang_64/mkspecs/macx-clang -I'/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois' -I'/Users/tuckerharvey/Non-iCloud documents/Qt/ModelBois/src' -I/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers -I/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers -I/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk/usr/include -F/Applications/Qt/5.11.2/clang_64/lib src/login.h -o moc_login.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_MainWindow.h
+compiler_uic_make_all: ui_MainWindow.h ui_login.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_MainWindow.h
+	-$(DEL_FILE) ui_MainWindow.h ui_login.h
 ui_MainWindow.h: src/MainWindow.ui \
-		/Applications/Qt/5.11.2/clang_64/bin/uic
+		/Applications/Qt/5.11.2/clang_64/bin/uic \
+		src/Canvas.h \
+		src/Storage.h \
+		src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		src/ShapeListModel.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h
 	/Applications/Qt/5.11.2/clang_64/bin/uic src/MainWindow.ui -o ui_MainWindow.h
+
+ui_login.h: src/login.ui \
+		/Applications/Qt/5.11.2/clang_64/bin/uic
+	/Applications/Qt/5.11.2/clang_64/bin/uic src/login.ui -o ui_login.h
 
 compiler_rez_source_make_all:
 compiler_rez_source_clean:
@@ -794,35 +910,97 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 ####### Compile
 
 main.o: src/main.cpp src/MainWindow.h \
+		src/Storage.h \
+		src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		src/ShapeListModel.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
 		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QTreeWidgetItem \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qtreewidget.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QApplication \
 		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qapplication.h \
+		src/login.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
 		test/Tests.h \
-		src/modelheader.h
+		src/fileparser.h \
+		src/Line.h \
+		src/PolyLine.h \
+		src/Polygon.h \
+		src/Rectangle.h \
+		src/Ellipse.h \
+		src/Text.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QFont \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qfont.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QString \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qstring.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o src/main.cpp
 
 MainWindow.o: src/MainWindow.cpp src/MainWindow.h \
+		src/Storage.h \
+		src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		src/ShapeListModel.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
 		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		ui_MainWindow.h
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QTreeWidgetItem \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qtreewidget.h \
+		ui_MainWindow.h \
+		src/Ellipse.h \
+		src/Line.h \
+		src/Polygon.h \
+		src/PolyLine.h \
+		src/Rectangle.h \
+		src/Text.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QFont \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qfont.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QString \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		src/fileparser.h \
+		src/PropertyItem.h \
+		src/PropertyDelegate.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QStyledItemDelegate \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qstyleditemdelegate.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MainWindow.o src/MainWindow.cpp
 
 Shape.o: src/Shape.cpp src/Shape.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
 		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
-		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
-		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QMap \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qmap.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Shape.o src/Shape.cpp
 
 Line.o: src/Line.cpp src/Line.h \
 		src/Shape.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
@@ -833,6 +1011,8 @@ PolyLine.o: src/PolyLine.cpp src/PolyLine.h \
 		src/Shape.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
@@ -843,6 +1023,8 @@ Rectangle.o: src/Rectangle.cpp src/Rectangle.h \
 		src/Shape.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
@@ -853,6 +1035,8 @@ Polygon.o: src/Polygon.cpp src/Polygon.h \
 		src/Shape.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
@@ -863,6 +1047,8 @@ Ellipse.o: src/Ellipse.cpp src/Ellipse.h \
 		src/Shape.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
@@ -873,17 +1059,134 @@ Text.o: src/Text.cpp src/Text.h \
 		src/Shape.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
-		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QFont \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qfont.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QString \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qstring.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Text.o src/Text.cpp
+
+Canvas.o: src/Canvas.cpp src/Canvas.h \
+		src/Storage.h \
+		src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		src/ShapeListModel.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Canvas.o src/Canvas.cpp
+
+Storage.o: src/Storage.cpp src/Storage.h \
+		src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		src/ShapeListModel.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Storage.o src/Storage.cpp
+
+fileparser.o: src/fileparser.cpp src/fileparser.h \
+		src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		src/Line.h \
+		src/PolyLine.h \
+		src/Polygon.h \
+		src/Rectangle.h \
+		src/Ellipse.h \
+		src/Text.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QFont \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qfont.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QString \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/Qt \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qnamespace.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QColor \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qcolor.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fileparser.o src/fileparser.cpp
+
+ShapeListModel.o: src/ShapeListModel.cpp src/ShapeListModel.h \
+		src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QAbstractListModel \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ShapeListModel.o src/ShapeListModel.cpp
+
+PropertyDelegate.o: src/PropertyDelegate.cpp src/PropertyDelegate.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QStyledItemDelegate \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qstyleditemdelegate.h \
+		src/PropertyItem.h \
+		src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QTreeWidgetItem \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qtreewidget.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QComboBox \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qcombobox.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QSpinBox \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qspinbox.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QTreeWidget
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o PropertyDelegate.o src/PropertyDelegate.cpp
+
+PropertyItem.o: src/PropertyItem.cpp src/PropertyItem.h \
+		src/Shape.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QTreeWidgetItem \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qtreewidget.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o PropertyItem.o src/PropertyItem.cpp
 
 testShapes.o: test/testShapes.cpp test/Tests.h \
 		src/Ellipse.h \
 		src/Shape.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QBrush \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qbrush.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPen \
 		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpen.h \
 		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QPoint \
@@ -892,14 +1195,35 @@ testShapes.o: test/testShapes.cpp test/Tests.h \
 		src/Polygon.h \
 		src/PolyLine.h \
 		src/Rectangle.h \
-		src/Text.h
+		src/Text.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QFont \
+		/Applications/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qfont.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QString \
+		/Applications/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qstring.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o testShapes.o test/testShapes.cpp
 
-functions.o: src/functions.cpp src/modelheader.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o functions.o src/functions.cpp
+login.o: src/login.cpp src/login.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QDialog \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qdialog.h \
+		ui_login.h \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		/Applications/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o login.o src/login.cpp
 
 moc_MainWindow.o: moc_MainWindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_MainWindow.o moc_MainWindow.cpp
+
+moc_Canvas.o: moc_Canvas.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_Canvas.o moc_Canvas.cpp
+
+moc_ShapeListModel.o: moc_ShapeListModel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_ShapeListModel.o moc_ShapeListModel.cpp
+
+moc_PropertyDelegate.o: moc_PropertyDelegate.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_PropertyDelegate.o moc_PropertyDelegate.cpp
+
+moc_login.o: moc_login.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_login.o moc_login.cpp
 
 ####### Install
 
