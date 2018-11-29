@@ -283,7 +283,7 @@ Shape* ReadPolygon(std::ifstream& inFile)
 Shape* ReadRectangle(std::ifstream& inFile)
 {
     int x, y, width;
-    id_t l, w;
+    int l, w;
     std::string color, style, cap, join, brushStyle, brushColor;
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -345,7 +345,7 @@ Shape* ReadRectangle(std::ifstream& inFile)
 Shape* ReadSquare(std::ifstream& inFile)
 {
     int x, y, width;
-    id_t l;
+    int l;
     std::string color, style, cap, join, brushStyle, brushColor;
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -404,7 +404,7 @@ Shape* ReadSquare(std::ifstream& inFile)
 Shape* ReadEllipse(std::ifstream& inFile)
 {
     int x, y, width;
-    id_t a, b;
+    int a, b;
     std::string color, style, cap, join, brushStyle, brushColor;
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -465,7 +465,7 @@ Shape* ReadEllipse(std::ifstream& inFile)
 Shape* ReadCircle(std::ifstream& inFile)
 {
     int x, y, width;
-    id_t r;
+    int r;
     std::string color, style, cap, join, brushStyle, brushColor;
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -544,6 +544,7 @@ Shape* ReadText(std::ifstream& inFile)
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     getline(inFile, textStr);
+    QString txtStr(textStr.c_str());
 //    std::cout << "Text String: " << textStr << std::endl;
 
     // TEXT COLOR
@@ -581,8 +582,9 @@ Shape* ReadText(std::ifstream& inFile)
     pen.setCapStyle(getCapStyle(fontStyle));
 
 
-    Text *text = new Text(textStr, point, brush, pen, 8);
-    // Text *text(textStr, font, point, brush, pen, 8);
+
+//    Text *text = new Text(textStr, point, brush, pen, 8);
+     Text *text = new Text(txtStr, font, point, brush, pen, 8);
     return text;
 }
 

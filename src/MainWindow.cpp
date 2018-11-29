@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	store.shapes.push_back(new Rectangle{40, 50, QPoint{100, 200}, QBrush{QColor{0, 0, 255}}});
 	store.shapes.push_back(new Text{"Hello world!", QFont{}, QPoint{400, 400}});
 	
-	ui->canvas->set_storage(store);
+//	ui->canvas->set_storage(store);
 }
 
 MainWindow::~MainWindow()
