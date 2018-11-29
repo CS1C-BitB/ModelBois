@@ -17,6 +17,9 @@ enum class ShapeType {
 	TEXT
 };
 
+extern const QMap<ShapeType, QString> SHAPE_NAMES;
+extern const QMap<Qt::BrushStyle, QString> BRUSH_STYLE_NAMES;
+
 class Shape
 {
 public:

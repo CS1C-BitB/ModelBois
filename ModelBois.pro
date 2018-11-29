@@ -40,7 +40,10 @@ SOURCES += \
     src/Text.cpp \
     src/Canvas.cpp \
     src/Storage.cpp \
-    src/fileparser.cpp\
+    src/ShapeListModel.cpp \
+    src/PropertyDelegate.cpp \
+    src/PropertyItem.cpp \
+    src/fileparser.cpp \
     test/testShapes.cpp
 
 HEADERS += \
@@ -54,7 +57,10 @@ HEADERS += \
     src/Text.h \
     src/Canvas.h \
     src/Storage.h \
-    src/fileParser.h\
+    src/ShapeListModel.h \
+    src/PropertyDelegate.h \
+    src/PropertyItem.h \
+    src/fileParser.h \
     test/Tests.h
 
 

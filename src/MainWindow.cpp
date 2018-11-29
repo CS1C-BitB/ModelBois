@@ -10,6 +10,9 @@
 #include "Text.h"
 // /TEMP
 
+#include "PropertyItem.h"
+#include "PropertyDelegate.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -28,10 +31,37 @@ MainWindow::MainWindow(QWidget *parent) :
 	store.shapes.push_back(new Rectangle{40, 50, QPoint{100, 200}, QBrush{QColor{0, 0, 255}}});
 	store.shapes.push_back(new Text{"Hello world!", QFont{}, QPoint{400, 400}});
 	
+<<<<<<< HEAD
 //	ui->canvas->set_storage(store);
+=======
+	ui->canvas->set_storage(store);
+	
+	ui->ShapeList->setModel(&store.model);
+	
+	ui->PropTree->setHeaderLabels({"Property", "Value"});
+	ui->PropTree->setItemDelegateForColumn(1, new PropertyDelegate());
+>>>>>>> Tucker-Test
 }
 
 MainWindow::~MainWindow()
 {
 	delete ui;
+}
+
+void MainWindow::on_ShapeList_currentIndexChanged(int index)
+{
+	Shape* s = store.shapes.at(index);
+	
+	QTreeWidgetItem* old = ui->PropTree->topLevelItem(0);
+	if (old) {
+		ui->PropTree->removeItemWidget(old, 0);
+		delete old;
+	}
+	
+	new PropertyItem<Shape>(ui->PropTree, *s);
+}
+
+void MainWindow::on_PropTree_itemChanged(QTreeWidgetItem*, int)
+{
+	ui->canvas->update();
 }
