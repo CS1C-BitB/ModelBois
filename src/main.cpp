@@ -2,6 +2,7 @@
 #include "MainWindow.h"
 #include <QApplication>
 
+
 #ifdef UNITTEST
 #include "test/Tests.h"
 
