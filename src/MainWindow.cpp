@@ -54,3 +54,8 @@ void MainWindow::on_ShapeList_currentIndexChanged(int index)
 	
 	new PropItem<Shape>(ui->PropTree, *s);
 }
+
+void MainWindow::on_PropTree_itemChanged(QTreeWidgetItem *item, int column)
+{
+	ui->canvas->update();
+}

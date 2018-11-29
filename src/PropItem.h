@@ -81,7 +81,10 @@ PROP_DEF(void)::setData(int column, int role, const QVariant &value)
 	switch (role) {
 	case Qt::DisplayRole:
 	case Qt::EditRole:
-		if (column == 1) setter(value.value<T>());
+		if (column == 1) {
+			setter(value.value<T>());
+			emitDataChanged();
+		}
 		break;
 	}
 }
