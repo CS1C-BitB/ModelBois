@@ -17,7 +17,7 @@ QVariant ShapeListModel::data(const QModelIndex &index, int role) const
 	
 	switch (role) {
 	case Qt::DisplayRole:
-		return QString{"ID: %1; Type: %2"}.arg(s->getID()).arg(SHAPE_NAMES.at(s->getType()));
+		return QString{"ID: %1; Type: %2"}.arg(s->getID()).arg(SHAPE_NAMES[s->getType()]);
 		
 	default:
 		return QVariant{};

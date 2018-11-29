@@ -7,8 +7,6 @@
 
 #include <functional>
 
-extern const QMultiMap<Qt::BrushStyle, QString> STYLE_STRINGS;
-
 template<class T>
 class PropertyItem : public QTreeWidgetItem
 {
