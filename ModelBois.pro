@@ -38,6 +38,8 @@ SOURCES += \
     src/Polygon.cpp \
     src/Ellipse.cpp \
     src/Text.cpp \
+    src/Canvas.cpp \
+    src/Storage.cpp \
     test/testShapes.cpp
 
 HEADERS += \
@@ -49,6 +51,8 @@ HEADERS += \
     src/Polygon.h \
     src/Ellipse.h \
     src/Text.h \
+    src/Canvas.h \
+    src/Storage.h \
     test/Tests.h
 
 FORMS += \
@@ -58,3 +62,4 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+

@@ -3,12 +3,13 @@
 
 #include "Shape.h"
 
-#include <string>
+#include <QFont>
+#include <QString>
 
 class Text : public Shape
 {
 public:
-	Text(std::string str = "", const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
+	Text(QString str = "", const QFont &font = {}, const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
 	Text(const Text &copy);
 	Text(Text &&move) noexcept;
 	~Text() override;
@@ -22,11 +23,15 @@ public:
 	double getPerimeter() const override;
 	double getArea() const override;
 	
-	const std::string& getString() const;
-	void setString(const std::string&);
+	const QString& getString() const;
+	void setString(QString);
+	
+	const QFont& getFont() const;
+	void setFont(QFont);
 	
 private:
-	std::string str;
+	QFont font;
+	QString str;
 };
 
 #endif // TEXT_H

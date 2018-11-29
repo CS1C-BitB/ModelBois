@@ -2,8 +2,11 @@
 #define SHAPE_H
 
 #include <QBrush>
+#include <QPainter>
 #include <QPen>
 #include <QPoint>
+
+#include <memory>
 
 enum class ShapeType {
 	LINE,
@@ -87,11 +90,15 @@ public:
 protected:
 	Shape(id_t id);
 	void swap(Shape &other) noexcept;
+	std::unique_ptr<QPainter> getPainter(QPaintDevice* device, QPoint corner) const;
 	
 private:
 	QPoint pos;
 	QBrush brush;
 	QPen pen;
+	
+	static QPen id_pen;
+	static QFont id_font;
 	
 	id_t id{0};
 };

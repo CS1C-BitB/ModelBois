@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <utility>
 
-Text::Text(std::string str, const QPoint &pos, const QBrush &brush, const QPen &pen, id_t id)
-    : Shape{pos, brush, pen, id}, str{std::move(str)}
+Text::Text(QString str, const QFont &font, const QPoint &pos, const QBrush &brush, const QPen &pen, id_t id)
+    : Shape{pos, brush, pen, id}, font{font}, str{std::move(str)}
 { }
 
 Text::Text(const Text &copy) = default;
@@ -30,7 +30,13 @@ Text& Text::operator=(Text &&other) noexcept
 
 void Text::draw(QPaintDevice* device)
 {
-	// TODO
+	QFontMetrics fm{font};
+	QSize size {fm.width(str), fm.height()};
+	QPoint corner {-size.width() / 2, -size.height() / 2};
+	auto paint = getPainter(device, corner);
+	
+	paint->setFont(font);
+	paint->drawText(QRect{corner, size}, str);
 }
 
 ShapeType Text::getType() const
@@ -42,9 +48,15 @@ double Text::getPerimeter() const
 double Text::getArea() const
 { return -1; }
 
-const std::string& Text::getString() const
+const QString& Text::getString() const
 { return str; }
 
-void Text::setString(const std::string& string)
-{ str = string; }
+void Text::setString(QString string)
+{ str = std::move(string); }
+
+const QFont& Text::getFont() const
+{ return font; }
+
+void Text::setFont(QFont f)
+{ font = std::move(f); }
 

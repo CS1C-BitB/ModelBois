@@ -50,7 +50,16 @@ PolyLine& PolyLine::operator=(PolyLine &&other) noexcept
 
 void PolyLine::draw(QPaintDevice* device)
 {
-	// TODO
+	QPoint corner;
+	for (auto p : points) {
+		corner.setX(std::min(corner.x(), p.x()));
+		corner.setY(std::min(corner.y(), p.y()));
+	}
+	auto paint = getPainter(device, corner);
+	
+	for (size_t i = 0; i < points.size() - 1; ++i) {
+		paint->drawLine(points[i], points[i + 1]);
+	}
 }
 
 ShapeType PolyLine::getType() const
