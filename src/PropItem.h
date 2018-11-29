@@ -14,15 +14,12 @@ public:
 	using getter_t = std::function<T()>;
 	using setter_t = std::function<void(T)>;
 	
-	PropItem(QString name, getter_t getter = {}, setter_t setter = {});
-	PropItem(QTreeWidget* parent, QString name, getter_t getter, setter_t setter);
 	PropItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter);
 	
 	QVariant data(int column, int role) const override;
 	void setData(int column, int role, const QVariant &value) override;
 	
 private:
-	void init();
 	QString name;
 	getter_t getter;
 	setter_t setter;
@@ -39,25 +36,34 @@ public:
 	void setData(int column, int role, const QVariant &value) override;
 	
 private:
-	void init(Shape&);
 	QString name;
 };
 
-template<> class PropItem<QPoint>;
+template<>
+class PropItem<QPoint> : public QTreeWidgetItem
+{
+public:
+	using getter_t = std::function<QPoint()>;
+	using setter_t = std::function<void(QPoint)>;
+	
+	PropItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter);
+	
+	QVariant data(int column, int role) const override;
+	void setData(int column, int role, const QVariant &value) override;
+	
+private:
+	QString name;
+	getter_t getter;
+	//setter_t setter;
+};
 
 #define PROP_DEF(ret) template<class T> ret PropItem<T>
 
-PROP_DEF(/**/)::PropItem(QString name, getter_t getter, setter_t setter)
-    : QTreeWidgetItem(Qt::UserRole), name{std::move(name)}, getter{std::move(getter)}, setter{std::move(setter)}
-{ init(); }
-
-PROP_DEF(/**/)::PropItem(QTreeWidget* parent, QString name, getter_t getter, setter_t setter)
-    : QTreeWidgetItem(parent, Qt::UserRole), name{std::move(name)}, getter{std::move(getter)}, setter{std::move(setter)}
-{ init(); }
-
 PROP_DEF(/**/)::PropItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter)
     : QTreeWidgetItem(parent, Qt::UserRole), name{std::move(name)}, getter{std::move(getter)}, setter{std::move(setter)}
-{ init(); }
+{
+	setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEditable);
+}
 
 PROP_DEF(QVariant)::data(int column, int role) const
 {
@@ -86,13 +92,6 @@ PROP_DEF(void)::setData(int column, int role, const QVariant &value)
 			emitDataChanged();
 		}
 		break;
-	}
-}
-
-PROP_DEF(void)::init()
-{
-	if (setter) {
-		setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEditable);
 	}
 }
 
