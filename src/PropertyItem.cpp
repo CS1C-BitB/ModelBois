@@ -8,7 +8,7 @@
 
 PropertyItem<Shape>::PropertyItem(QTreeWidget* parent, Shape& s)
     : QTreeWidgetItem(parent, PropShape),
-      name{QString("ID: %1; Type: %2").arg(s.getID()).arg(SHAPE_NAMES.at(s.getType()))}
+      name{QString("ID: %1; Type: %2").arg(s.getID()).arg(SHAPE_NAMES[s.getType()])}
 {
 	new PropertyItem<QPoint>(
 	            this,
@@ -84,34 +84,6 @@ QVariant PropertyItem<QPoint>::data(int column, int role) const
  * 
  *****************************************************************************/
 
-#if 1
-const QMultiMap<Qt::BrushStyle, QString> STYLE_STRINGS {
-	{Qt::NoBrush, "None"},
-	{Qt::SolidPattern, "Solid"},
-	{Qt::Dense1Pattern, "Dense1"},
-	{Qt::Dense2Pattern, "Dense2"},
-	{Qt::Dense3Pattern, "Dense3"},
-	{Qt::Dense4Pattern, "Dense4"},
-	{Qt::Dense5Pattern, "Dense5"},
-	{Qt::Dense6Pattern, "Dense6"},
-	{Qt::Dense7Pattern, "Dense7"},
-	{Qt::HorPattern, "Horizontal"},
-};
-#else
-const QMultiMap<Qt::BrushStyle, QString> STYLE_STRINGS {
-	{Qt::NoBrush, "NoBrush"},
-	{Qt::SolidPattern, "SolidPattern"},
-	{Qt::Dense1Pattern, "Dense1Pattern"},
-	{Qt::Dense2Pattern, "Dense2Pattern"},
-	{Qt::Dense3Pattern, "Dense3Pattern"},
-	{Qt::Dense4Pattern, "Dense4Pattern"},
-	{Qt::Dense5Pattern, "Dense5Pattern"},
-	{Qt::Dense6Pattern, "Dense6Pattern"},
-	{Qt::Dense7Pattern, "Dense7Pattern"},
-	{Qt::HorPattern, "HorPattern"},
-};
-#endif
-
 PropertyItem<QBrush>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
     : QTreeWidgetItem(parent, PropBrush), name{std::move(name)}, getter{std::move(getter_in)}
 {
@@ -124,8 +96,8 @@ PropertyItem<QBrush>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 	new PropertyItem<QString>(
 	            this,
 	            "Style",
-	            [this]() { return STYLE_STRINGS.find(getter().style()).value(); },
-	            [this, setter](QString s) { auto v = getter(); v.setStyle(STYLE_STRINGS.key(s, Qt::NoBrush)); setter(v); }
+	            [this]() { return BRUSH_STYLE_NAMES[getter().style()]; },
+	            [this, setter](QString s) { auto v = getter(); v.setStyle(BRUSH_STYLE_NAMES.key(s, Qt::NoBrush)); setter(v); }
 	);
 }
 

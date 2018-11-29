@@ -17,7 +17,7 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 	switch (type) {
 	case PropBrush: {
 		QComboBox* editor = new QComboBox{parent};
-		QStringList strings = STYLE_STRINGS.values();
+		QStringList strings = BRUSH_STYLE_NAMES.values();
 		editor->insertItems(0, strings);
 		editor->setEditable(false);
 		return editor;
@@ -27,8 +27,7 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 		editor->setFrame(false);
 		editor->setMinimum(0);
 		editor->setMaximum(255);
-	
-	    return editor;
+		return editor;
 	}
 	default:
 		QSpinBox *editor = new QSpinBox(parent);

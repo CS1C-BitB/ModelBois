@@ -1,11 +1,13 @@
 #include "Shape.h"
 
+#include <QMap>
+
 #include <algorithm>
 #include <utility>
 
 static unsigned int shape_id = 0;
 
-std::map<ShapeType, QString> SHAPE_NAMES {
+const QMap<ShapeType, QString> SHAPE_NAMES {
 	{ShapeType::LINE, "Line"},
 	{ShapeType::POLYLINE, "Polyline"},
 	{ShapeType::POLYGON, "Polygon"},
@@ -13,6 +15,26 @@ std::map<ShapeType, QString> SHAPE_NAMES {
 	{ShapeType::ELLIPSE, "Ellipse"},
 	{ShapeType::TEXT, "Text"}
 };
+
+#define STYLE_DEF(name) {Qt::name, #name}
+const QMap<Qt::BrushStyle, QString> BRUSH_STYLE_NAMES {
+	STYLE_DEF(NoBrush),
+	STYLE_DEF(SolidPattern),
+	STYLE_DEF(Dense1Pattern),
+	STYLE_DEF(Dense2Pattern),
+	STYLE_DEF(Dense3Pattern),
+	STYLE_DEF(Dense4Pattern),
+	STYLE_DEF(Dense5Pattern),
+	STYLE_DEF(Dense6Pattern),
+	STYLE_DEF(Dense7Pattern),
+	STYLE_DEF(HorPattern),
+	STYLE_DEF(VerPattern),
+	STYLE_DEF(CrossPattern),
+	STYLE_DEF(BDiagPattern),
+	STYLE_DEF(FDiagPattern),
+	STYLE_DEF(DiagCrossPattern),
+};
+#undef STYLE_DEF
 
 Shape::Shape(const QPoint& pos, const QBrush &brush, QPen pen, id_t id)
     : pos{pos}, brush{brush}, pen{std::move(pen)}, id{id}
