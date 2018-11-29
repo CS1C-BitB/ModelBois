@@ -26,6 +26,9 @@ public:
 	const QString& getString() const;
 	void setString(QString);
 	
+	const QFont& getFont() const;
+	void setFont(QFont);
+	
 private:
 	QFont font;
 	QString str;

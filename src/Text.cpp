@@ -54,3 +54,9 @@ const QString& Text::getString() const
 void Text::setString(QString string)
 { str = std::move(string); }
 
+const QFont& Text::getFont() const
+{ return font; }
+
+void Text::setFont(QFont f)
+{ font = std::move(f); }
+
