@@ -38,10 +38,10 @@ std::vector<Shape*> LoadFile()
     while(inFile && myShapes.size() < SHAPES_IN_FILE)
     {
         // takes us to the first data point
-        std::cout << std::endl;
+//        std::cout << std::endl;
         inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
         inFile >> id;
-        std::cout << "ID " << id << std::endl;
+//        std::cout << "ID " << id << std::endl;
         inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
 
         //if(inFile.eof())
@@ -51,50 +51,49 @@ std::vector<Shape*> LoadFile()
         {
         case LINE:
             getline(inFile, sName);
-            std::cout << "Name:" << sName << std::endl;
+//            std::cout << "Name:" << sName << std::endl;
             // parse the line part of the file
             myShapes.push_back(ReadLine(inFile));
             break;
         case POLYLINE:
             getline(inFile, sName);
-            std::cout << "Name:" << sName << std::endl;
+//            std::cout << "Name:" << sName << std::endl;
             myShapes.push_back(ReadPolyLine(inFile));
             break;
         case POLYGON:
             getline(inFile, sName);
-            std::cout << "Name:" << sName << std::endl;
+//            std::cout << "Name:" << sName << std::endl;
             myShapes.push_back(ReadPolygon(inFile));
             break;
         case RECTANGLE:
             getline(inFile, sName);
-            std::cout << "Name:" << sName << std::endl;
+//            std::cout << "Name:" << sName << std::endl;
             myShapes.push_back(ReadRectangle(inFile));
             break;
         case SQUARE:
             getline(inFile, sName);
-            std::cout << "Name:" << sName << std::endl;
+//            std::cout << "Name:" << sName << std::endl;
              myShapes.push_back(ReadSquare(inFile));
             break;
         case ELLIPSE:
             getline(inFile, sName);
-            std::cout << "Name:" << sName << std::endl;
+//            std::cout << "Name:" << sName << std::endl;
              myShapes.push_back(ReadEllipse(inFile));
             break;
         case CIRCLE:
             getline(inFile, sName);
-            std::cout << "Name:" << sName << std::endl;
+//            std::cout << "Name:" << sName << std::endl;
             myShapes.push_back(ReadCircle(inFile));
             break;
         case TEXT:
             getline(inFile, sName);
-            std::cout << "Name:" << sName << std::endl;
+//            std::cout << "Name:" << sName << std::endl;
             myShapes.push_back(ReadText(inFile));
             break;
         default:
             std::cout << "error";
-            std::cin.get();
+//            std::cin.get();
         }
-
     }
     inFile.close();
 
@@ -115,7 +114,7 @@ Shape* ReadLine(std::ifstream &inFile)
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> y2;
 
-    std::cout << "Points: " << x << ' ' << y << ' ' << x2 << ' ' << y2 << std::endl;
+//    std::cout << "Points: " << x << ' ' << y << ' ' << x2 << ' ' << y2 << std::endl;
     QPoint front(x, y);
     QPoint end (x2, y2);
 
@@ -128,7 +127,7 @@ Shape* ReadLine(std::ifstream &inFile)
     // PEN WIDTH
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     inFile >> width;
-    std::cout << "Width: " << width << std::endl ;
+//    std::cout << "Width: " << width << std::endl ;
 
     // PEN STYLE
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -171,8 +170,8 @@ Shape* ReadPolyLine( std::ifstream& inFile)
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> y4;
 
-    std::cout << "Points: " << x << ' ' << y << ' ' << x2 << ' ' << y2
-              << ' '        << x3 << ' ' << y3 << ' ' << x4 << ' ' << y4 << std::endl;
+//    std::cout << "Points: " << x << ' ' << y << ' ' << x2 << ' ' << y2
+//              << ' '        << x3 << ' ' << y3 << ' ' << x4 << ' ' << y4 << std::endl;
     QPoint p1(x, y), p2(x2, y2), p3(x3, y3), p4(x4, y4);
     std::vector<QPoint> points;
     points.push_back(p1);
@@ -189,7 +188,7 @@ Shape* ReadPolyLine( std::ifstream& inFile)
     // PEN WIDTH
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     inFile >> width;
-    std::cout << "Width: " << width << std::endl ;
+//    std::cout << "Width: " << width << std::endl ;
 
     // PEN STYLE
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -232,8 +231,8 @@ Shape* ReadPolygon(std::ifstream& inFile)
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> y4;
 
-    std::cout << "Points: " << x << ' ' << y << ' ' << x2 << ' ' << y2
-              << ' '        << x3 << ' ' << y3 << ' ' << x4 << ' ' << y4 << std::endl;
+//    std::cout << "Points: " << x << ' ' << y << ' ' << x2 << ' ' << y2
+//              << ' '        << x3 << ' ' << y3 << ' ' << x4 << ' ' << y4 << std::endl;
     QPoint p1(x, y), p2(x2, y2), p3(x3, y3), p4(x4, y4);
     std::vector<QPoint> points;
     points.push_back(p1);
@@ -250,7 +249,7 @@ Shape* ReadPolygon(std::ifstream& inFile)
     // PEN WIDTH
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     inFile >> width;
-    std::cout << "Width: " << width << std::endl ;
+//    std::cout << "Width: " << width << std::endl ;
 
     // PEN STYLE
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -292,14 +291,14 @@ Shape* ReadRectangle(std::ifstream& inFile)
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> y;
 
-     std::cout << "Points: " << x << ' ' << y;
+//     std::cout << "Points: " << x << ' ' << y;
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> l;
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> w;
 
-    std::cout << " Length: " << l << " Width: " << w << std::endl;
+//    std::cout << " Length: " << l << " Width: " << w << std::endl;
     QPoint point(x, y);
 
     // PEN COLOR
@@ -311,7 +310,7 @@ Shape* ReadRectangle(std::ifstream& inFile)
     // PEN WIDTH
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     inFile >> width;
-    std::cout << "Width: " << width << std::endl ;
+//    std::cout << "Width: " << width << std::endl ;
 
     // PEN STYLE
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -354,12 +353,12 @@ Shape* ReadSquare(std::ifstream& inFile)
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> y;
 
-     std::cout << "Points: " << x << ' ' << y;
+//     std::cout << "Points: " << x << ' ' << y;
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> l;
 
-    std::cout << " Length: " << l << std::endl;
+//    std::cout << " Length: " << l << std::endl;
     QPoint point(x, y);
 
     // PEN COLOR
@@ -371,7 +370,7 @@ Shape* ReadSquare(std::ifstream& inFile)
     // PEN WIDTH
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     inFile >> width;
-    std::cout << "Width: " << width << std::endl ;
+//    std::cout << "Width: " << width << std::endl ;
 
     // PEN STYLE
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -413,14 +412,14 @@ Shape* ReadEllipse(std::ifstream& inFile)
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> y;
 
-     std::cout << "Points: " << x << ' ' << y;
+//     std::cout << "Points: " << x << ' ' << y;
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> a;
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> b;
 
-    std::cout << " Semi A: " << a << " Semi B: " << b << std::endl;
+//    std::cout << " Semi A: " << a << " Semi B: " << b << std::endl;
     QPoint point(x, y);
 
     // PEN COLOR
@@ -432,7 +431,7 @@ Shape* ReadEllipse(std::ifstream& inFile)
     // PEN WIDTH
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     inFile >> width;
-    std::cout << "Width: " << width << std::endl ;
+//    std::cout << "Width: " << width << std::endl ;
 
     // PEN STYLE
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -474,12 +473,12 @@ Shape* ReadCircle(std::ifstream& inFile)
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> y;
 
-     std::cout << "Points: " << x << ' ' << y;
+//     std::cout << "Points: " << x << ' ' << y;
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> r;
 
-    std::cout << " Radius: " << r << std::endl;
+//    std::cout << " Radius: " << r << std::endl;
     QPoint point(x, y);
 
     // PEN COLOR
@@ -491,7 +490,7 @@ Shape* ReadCircle(std::ifstream& inFile)
     // PEN WIDTH
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     inFile >> width;
-    std::cout << "Width: " << width << std::endl ;
+//    std::cout << "Width: " << width << std::endl;
 
     // PEN STYLE
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -520,7 +519,6 @@ Shape* ReadCircle(std::ifstream& inFile)
 
     Ellipse *circle = new Ellipse(r, r, point, brush, pen, 7);
     return circle;
-
 }
 
 Shape* ReadText(std::ifstream& inFile)
@@ -534,19 +532,19 @@ Shape* ReadText(std::ifstream& inFile)
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> y;
 
-     std::cout << "Points: " << x << ' ' << y;
+//     std::cout << "Points: " << x << ' ' << y;
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> l;
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
     inFile >> w;
 
-    std::cout << " Length: " << l << " Width: " << w << std::endl;
+//    std::cout << " Length: " << l << " Width: " << w << std::endl;
     QPoint point(x, y);
 
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     getline(inFile, textStr);
-    std::cout << "Text String: " << textStr << std::endl;
+//    std::cout << "Text String: " << textStr << std::endl;
 
     // TEXT COLOR
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -557,12 +555,12 @@ Shape* ReadText(std::ifstream& inFile)
     // TEXT ALLIGN
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     getline(inFile, textAlign);
-    std::cout << "Text Align: " << textAlign << std::endl;
+//    std::cout << "Text Align: " << textAlign << std::endl;
 
     // TEXT POINT SIZE
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
     inFile >> pointSize;
-    std::cout << "Point Size: " << pointSize << std::endl;
+//    std::cout << "Point Size: " << pointSize << std::endl;
 
     // TEXT FONT FAMILY
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -605,92 +603,92 @@ Qt::GlobalColor getColor(const std::string color)
 {
       if(color == " white")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::white;
       }
       else if(color == " black")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::black;
       }
       else if(color == " cyan")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::cyan;
       }
       else if(color == " darkCyan")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::darkCyan;
       }
       else if(color == " red")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::red;
       }
       else if(color == " darkRed")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::darkRed;
       }
       else if(color == " magenta")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::magenta;
       }
       else if(color == " darkMagenta")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::darkMagenta;
       }
       else if(color == " green")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::green;
       }
       else if(color == " darkGreen")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::darkGreen;
       }
       else if(color == " yellow")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::yellow;
       }
       else if(color == " darkYellow")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::darkYellow;
       }
       else if(color == " blue")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::blue;
       }
       else if(color == " darkBlue")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::darkBlue;
       }
       else if(color == " gray")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::gray;
       }
       else if(color == " darkGray")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::darkGray;
       }
       else if(color == " lightGray")
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::lightGray;
       }
       else
       {
-          std::cout << "Color:" << color;
+//          std::cout << "Color:" << color;
           return Qt::GlobalColor::black;
       }
 }
@@ -699,37 +697,37 @@ Qt::PenStyle getPenStyle(const std::string style)
 {
     if(style == " SolidLine")
     {
-        std::cout << "Style:" << style << std::endl;
+//        std::cout << "Style:" << style << std::endl;
         return Qt::SolidLine;
     }
     else if(style == " DashLine")
     {
-        std::cout << "Style:" << style << std::endl;
+//        std::cout << "Style:" << style << std::endl;
         return Qt::DashLine;
     }
     else if(style == " DotLine")
     {
-        std::cout << "Style:" << style << std::endl;
+//        std::cout << "Style:" << style << std::endl;
         return Qt::DotLine;
     }
     else if(style == " DashDotLine")
     {
-        std::cout << "Style:" << style << std::endl;
+//        std::cout << "Style:" << style << std::endl;
         return Qt::DashDotLine;
     }
     else if(style == " DashDotDotLine")
     {
-        std::cout << "Style:" << style << std::endl;
+//        std::cout << "Style:" << style << std::endl;
         return Qt::DashDotDotLine;
     }
     else if(style == " CustomDashLine")
     {
-        std::cout << "Style:" << style << std::endl;
+//        std::cout << "Style:" << style << std::endl;
         return Qt::CustomDashLine;
     }
     else
     {
-        std::cout << "Style:" << style << std::endl;
+//        std::cout << "Style:" << style << std::endl;
         return Qt::SolidLine;
     }
 }
@@ -739,16 +737,16 @@ Qt::PenCapStyle getCapStyle(std::string capStyle)
     switch(capStyle[1])
     {
     case 'S':
-        std::cout << "Cap Style:" << capStyle << std::endl;
+//        std::cout << "Cap Style:" << capStyle << std::endl;
         return Qt::SquareCap;
     case 'F':
-         std::cout << "Cap Style:" << capStyle << std::endl;
+//         std::cout << "Cap Style:" << capStyle << std::endl;
         return Qt::FlatCap;
     case 'R':
-         std::cout << "Cap Style:" << capStyle << std::endl;
+//         std::cout << "Cap Style:" << capStyle << std::endl;
         return Qt::RoundCap;
     default:
-        std::cout << "Cap Style Sqaure Cap (Deafult)" << std::endl;
+//        std::cout << "Cap Style Sqaure Cap (Deafult)" << std::endl;
         return Qt::SquareCap;
     }
 }
@@ -758,13 +756,13 @@ Qt::PenJoinStyle getPenJoinStyle(const std::string joinStyle)
     switch(joinStyle[1])
     {
     case 'R':
-        std::cout << "Join Style:" << joinStyle << std::endl;
+//        std::cout << "Join Style:" << joinStyle << std::endl;
         return Qt::RoundJoin;
     case 'M':
-        std::cout << "Join Style:" << joinStyle << std::endl;
+//        std::cout << "Join Style:" << joinStyle << std::endl;
         return Qt::MiterJoin;
     default:
-        std::cout << "Join Style: BevelJoin (Default)" << std::endl;
+//        std::cout << "Join Style: BevelJoin (Default)" << std::endl;
         return Qt::BevelJoin;
     }
 }
@@ -774,7 +772,7 @@ Qt::BrushStyle   getBrushStyle(const std::string brushStyle)
     switch(brushStyle[1])
     {
     case 'S':
-        std::cout << "Brush Style:" << brushStyle << std::endl;
+//        std::cout << "Brush Style:" << brushStyle << std::endl;
         return Qt::SolidPattern;
     case 'D' : switch(brushStyle[6])
                {
@@ -796,20 +794,20 @@ Qt::BrushStyle   getBrushStyle(const std::string brushStyle)
                     return Qt::DiagCrossPattern;
                }
     case 'H' :
-        std::cout << "Brush Style:" << brushStyle << std::endl;
+//        std::cout << "Brush Style:" << brushStyle << std::endl;
         return Qt::HorPattern;
     case 'V':
-        std::cout << "Brush Style:" << brushStyle << std::endl;
+//        std::cout << "Brush Style:" << brushStyle << std::endl;
         return Qt::VerPattern;
     case 'C':
         return Qt::CrossPattern;
     case 'B':
         return Qt::BDiagPattern;
     case 'F':
-        std::cout << "Brush Style:" << brushStyle << std::endl;
+//        std::cout << "Brush Style:" << brushStyle << std::endl;
         return Qt::FDiagPattern;
     default:
-        std::cout << "Brush Style: No Brush(Default)" << std::endl;
+//        std::cout << "Brush Style: No Brush(Default)" << std::endl;
         return Qt::NoBrush;
     }
 }
@@ -821,7 +819,7 @@ QFont::Weight getFontWeight(const std::string fontWeight)
     case 'L':
         return QFont::Light;
     case 'N':
-        std::cout << "Font Weight:" << fontWeight << std::endl;
+//        std::cout << "Font Weight:" << fontWeight << std::endl;
         return QFont::Normal;
     case 'D':
         return QFont::DemiBold;
@@ -835,7 +833,7 @@ QFont::Weight getFontWeight(const std::string fontWeight)
             return QFont::Black;
         }
    default:
-        std::cout << "Font Weight: Normal (Default)" << std::endl;
+//        std::cout << "Font Weight: Normal (Default)" << std::endl;
         return QFont::Normal;
     }
 }
