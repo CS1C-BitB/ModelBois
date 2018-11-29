@@ -41,7 +41,8 @@ SOURCES += \
     src/Canvas.cpp \
     src/Storage.cpp \
     src/ShapeListModel.cpp \
-    src/PropItem.cpp
+    src/PropertyDelegate.cpp \
+    src/PropertyItem.cpp
     test/testShapes.cpp
 
 HEADERS += \
@@ -56,7 +57,8 @@ HEADERS += \
     src/Canvas.h \
     src/Storage.h \
     src/ShapeListModel.h \
-    src/PropItem.h
+    src/PropertyDelegate.h \
+    src/PropertyItem.h
     test/Tests.h
 
 FORMS += \
