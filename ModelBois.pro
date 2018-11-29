@@ -40,6 +40,7 @@ SOURCES += \
     src/Text.cpp \
     src/Canvas.cpp \
     src/Storage.cpp \
+    src/fileparser.cpp\
     test/testShapes.cpp
 
 HEADERS += \
@@ -53,6 +54,7 @@ HEADERS += \
     src/Text.h \
     src/Canvas.h \
     src/Storage.h \
+    src/fileParser.h\
     test/Tests.h
 
 
