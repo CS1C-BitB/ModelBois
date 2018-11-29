@@ -10,7 +10,8 @@
 #include "Text.h"
 // /TEMP
 
-#include "PropItem.h"
+#include "PropertyItem.h"
+#include "PropertyDelegate.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -35,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->ShapeList->setModel(&store.model);
 	
 	ui->PropTree->setHeaderLabels({"Property", "Value"});
+	ui->PropTree->setItemDelegateForColumn(1, new PropertyDelegate());
 }
 
 MainWindow::~MainWindow()
@@ -52,7 +54,7 @@ void MainWindow::on_ShapeList_currentIndexChanged(int index)
 		delete old;
 	}
 	
-	new PropItem<Shape>(ui->PropTree, *s);
+	new PropertyItem<Shape>(ui->PropTree, *s);
 }
 
 void MainWindow::on_PropTree_itemChanged(QTreeWidgetItem*, int)

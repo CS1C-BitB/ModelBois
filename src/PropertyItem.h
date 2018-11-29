@@ -7,14 +7,16 @@
 
 #include <functional>
 
+extern const QMultiMap<Qt::BrushStyle, QString> STYLE_STRINGS;
+
 template<class T>
-class PropItem : public QTreeWidgetItem
+class PropertyItem : public QTreeWidgetItem
 {
 public:
 	using getter_t = std::function<T()>;
 	using setter_t = std::function<void(T)>;
 	
-	PropItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter);
+	PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter);
 	
 	QVariant data(int column, int role) const override;
 	void setData(int column, int role, const QVariant &value) override;
@@ -26,40 +28,50 @@ private:
 };
 
 template<>
-class PropItem<Shape> : public QTreeWidgetItem
+class PropertyItem<Shape> : public QTreeWidgetItem
 {
 public:
-	PropItem(QTreeWidget* parent, Shape&);
-	~PropItem();
+	PropertyItem(QTreeWidget* parent, Shape&);
 	
 	QVariant data(int column, int role) const override;
-	void setData(int column, int role, const QVariant &value) override;
 	
 private:
 	QString name;
 };
 
-template<>
-class PropItem<QPoint> : public QTreeWidgetItem
-{
-public:
-	using getter_t = std::function<QPoint()>;
-	using setter_t = std::function<void(QPoint)>;
-	
-	PropItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter);
-	
-	QVariant data(int column, int role) const override;
-	void setData(int column, int role, const QVariant &value) override;
-	
-private:
-	QString name;
-	getter_t getter;
-	//setter_t setter;
+#define META_PROP_ITEM(type) \
+template<> class PropertyItem<type> : public QTreeWidgetItem \
+{ \
+public: \
+	using getter_t = std::function<type()>; \
+	using setter_t = std::function<void(type)>; \
+	\
+	PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter); \
+	\
+	QVariant data(int column, int role) const override; \
+	\
+private: \
+	QString name; \
+	getter_t getter; \
+}
+
+enum PropItemType {
+	PropData = Qt::UserRole,
+	PropShape,
+	PropPoint,
+	PropBrush,
+	PropColor
 };
 
-#define PROP_DEF(ret) template<class T> ret PropItem<T>
+META_PROP_ITEM(QPoint);
+META_PROP_ITEM(QBrush);
+META_PROP_ITEM(QColor);
 
-PROP_DEF(/**/)::PropItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter)
+#undef META_PROP_ITEM
+
+#define PROP_DEF(ret) template<class T> ret PropertyItem<T>
+
+PROP_DEF(/**/)::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter)
     : QTreeWidgetItem(parent, Qt::UserRole), name{std::move(name)}, getter{std::move(getter)}, setter{std::move(setter)}
 {
 	setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEditable);

@@ -43,7 +43,7 @@
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2">
+   <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
       <widget class="QLabel" name="label">
@@ -64,11 +64,23 @@
      </item>
      <item>
       <widget class="QTreeWidget" name="PropTree">
+       <property name="minimumSize">
+        <size>
+         <width>268</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="columnCount">
         <number>2</number>
        </property>
+       <attribute name="headerCascadingSectionResizes">
+        <bool>true</bool>
+       </attribute>
        <attribute name="headerDefaultSectionSize">
         <number>160</number>
+       </attribute>
+       <attribute name="headerStretchLastSection">
+        <bool>true</bool>
        </attribute>
        <column>
         <property name="text">
