@@ -23,6 +23,8 @@ private slots:
 	
 	void on_PropTree_itemChanged(QTreeWidgetItem *item, int column);
 	
+	void on_remove_clicked();
+	
 private:
 	Storage store;
 	Ui::MainWindow *ui;

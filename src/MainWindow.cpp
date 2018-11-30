@@ -13,6 +13,9 @@
 #include "PropertyItem.h"
 #include "PropertyDelegate.h"
 
+#include <QComboBox>
+#include <QPushButton>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -48,19 +51,41 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_ShapeList_currentIndexChanged(int index)
 {
-	Shape* s = store.shapes.at(index);
-	
 	QTreeWidgetItem* old = ui->PropTree->topLevelItem(0);
 	if (old) {
 		ui->PropTree->removeItemWidget(old, 0);
 		delete old;
 	}
 	
-	new PropertyItem<Shape>(ui->PropTree->invisibleRootItem(), *s);
-	ui->PropTree->expandAll();
+	if (store.shapes.empty()) {
+		ui->ShapeList->setEnabled(false);
+		ui->remove->setEnabled(false);
+		// TODO: Re-enable on add
+	}
+	else if (index >= store.shapes.size()) {
+		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+	}
+	else {
+		Shape* s = store.shapes.at(index);
+		new PropertyItem<Shape>(ui->PropTree->invisibleRootItem(), *s);
+		ui->PropTree->expandAll();
+	}
+	
+	ui->PropTree->update();
 }
 
 void MainWindow::on_PropTree_itemChanged(QTreeWidgetItem*, int)
 {
 	ui->canvas->update();
+}
+
+void MainWindow::on_remove_clicked()
+{
+	size_t index = ui->ShapeList->currentIndex();
+	delete store.shapes.at(index);
+	store.shapes.erase(store.shapes.begin() + index);
+	ui->canvas->update();
+	ui->ShapeList->update();
+	
+	on_ShapeList_currentIndexChanged(index);
 }

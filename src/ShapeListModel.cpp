@@ -13,6 +13,9 @@ QVariant ShapeListModel::data(const QModelIndex &index, int role) const
 	if (!index.isValid())
 		return QVariant{};
 	
+	if (index.row() >= list->size())
+		return "None";
+	
 	Shape* s = (*list)[index.row()];
 	
 	switch (role) {
