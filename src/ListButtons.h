@@ -15,6 +15,8 @@ public:
 	explicit ListButtons(QWidget *parent = nullptr);
 	~ListButtons();
 	
+	void setRemoveEnabled(bool);
+	
 signals:
 	void add();
 	void remove();
