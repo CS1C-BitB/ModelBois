@@ -20,6 +20,9 @@ enum class ShapeType {
 extern const QMap<QString, QColor> COLOR_NAMES;
 extern const QMap<ShapeType, QString> SHAPE_NAMES;
 extern const QMap<Qt::BrushStyle, QString> BRUSH_STYLE_NAMES;
+extern const QMap<Qt::PenStyle, QString> PEN_STYLE_NAMES;
+extern const QMap<Qt::PenCapStyle, QString> PEN_CAP_STYLE_NAMES;
+extern const QMap<Qt::PenJoinStyle, QString> PEN_JOIN_STYLE_NAMES;
 
 class Shape
 {

@@ -8,11 +8,15 @@
 #include <functional>
 
 enum PropItemType {
-	PropData = Qt::UserRole,
+	PropInt = Qt::UserRole,
+	PropString,
 	PropBrush,
 	PropBrushStyle,
 	PropColor,
 	PropPen,
+	PropPenStyle,
+	PropPenCapStyle,
+	PropPenJoinStyle,
 	PropPoint,
 	PropShape,
 };
@@ -25,7 +29,7 @@ public:
 	using getter_t = std::function<T()>;
 	using setter_t = std::function<void(T)>;
 	
-	PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter, int type = PropData);
+	PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter, int type = PropInt);
 	
 	QVariant data(int column, int role) const override;
 	void setData(int column, int role, const QVariant &value) override;

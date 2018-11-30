@@ -57,6 +57,27 @@ const QMap<Qt::BrushStyle, QString> BRUSH_STYLE_NAMES {
 	STYLE_DEF(FDiagPattern),
 	STYLE_DEF(DiagCrossPattern),
 };
+
+const QMap<Qt::PenStyle, QString> PEN_STYLE_NAMES {
+	STYLE_DEF(NoPen),
+	STYLE_DEF(SolidLine),
+	STYLE_DEF(DashLine),
+	STYLE_DEF(DotLine),
+	STYLE_DEF(DashDotLine),
+	STYLE_DEF(DashDotDotLine),
+};
+
+const QMap<Qt::PenCapStyle, QString> PEN_CAP_STYLE_NAMES {
+	STYLE_DEF(SquareCap),
+	STYLE_DEF(FlatCap),
+	STYLE_DEF(RoundCap),
+};
+
+const QMap<Qt::PenJoinStyle, QString> PEN_JOIN_STYLE_NAMES {
+	STYLE_DEF(BevelJoin),
+	STYLE_DEF(MiterJoin),
+	STYLE_DEF(RoundJoin),
+};
 #undef STYLE_DEF
 
 Shape::Shape(const QPoint& pos, const QBrush &brush, QPen pen, id_t id)

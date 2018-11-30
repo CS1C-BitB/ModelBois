@@ -93,12 +93,39 @@ QVariant PropertyItem<QPoint>::data(int column, int role) const
 PropertyItem<QPen>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
     : QTreeWidgetItem(parent, PropPen), name{std::move(name)}, getter{std::move(getter_in)}
 {
+	new PropertyItem<int>(
+	            this,
+	            "Width",
+	            [this]() { return getter().width(); },
+	            [this, setter](int w) { auto v = getter(); v.setWidth(w); setter(v); }
+	);
 	new PropertyItem<QString>(
 	            this,
 	            "Color",
 	            [this]() { return COLOR_NAMES.key(getter().color()); },
 	            [this, setter](QString s) { auto v = getter(); v.setColor(COLOR_NAMES[s]); setter(v); },
 	            PropColor
+	);
+	new PropertyItem<QString>(
+	            this,
+	            "Style",
+	            [this]() { return PEN_STYLE_NAMES[getter().style()]; },
+	            [this, setter](QString s) { auto v = getter(); v.setStyle(PEN_STYLE_NAMES.key(s)); setter(v); },
+	            PropPenStyle
+	);
+	new PropertyItem<QString>(
+	            this,
+	            "Cap Style",
+	            [this]() { return PEN_CAP_STYLE_NAMES[getter().capStyle()]; },
+	            [this, setter](QString s) { auto v = getter(); v.setCapStyle(PEN_CAP_STYLE_NAMES.key(s)); setter(v); },
+	            PropPenCapStyle
+	);
+	new PropertyItem<QString>(
+	            this,
+	            "Join Style",
+	            [this]() { return PEN_JOIN_STYLE_NAMES[getter().joinStyle()]; },
+	            [this, setter](QString s) { auto v = getter(); v.setJoinStyle(PEN_JOIN_STYLE_NAMES.key(s)); setter(v); },
+	            PropPenJoinStyle
 	);
 }
 
