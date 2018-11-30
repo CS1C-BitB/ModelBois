@@ -56,7 +56,8 @@ void MainWindow::on_ShapeList_currentIndexChanged(int index)
 		delete old;
 	}
 	
-	new PropertyItem<Shape>(ui->PropTree, *s);
+	new PropertyItem<Shape>(ui->PropTree->invisibleRootItem(), *s);
+	ui->PropTree->expandAll();
 }
 
 void MainWindow::on_PropTree_itemChanged(QTreeWidgetItem*, int)

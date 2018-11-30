@@ -1,47 +1,94 @@
 #include "PropertyItem.h"
 
+#include "Shapes.h"
+
+using namespace std::placeholders;
+
 /******************************************************************************
  * 
  * Shape specialization
  * 
  *****************************************************************************/
 
-PropertyItem<Shape>::PropertyItem(QTreeWidget* parent, Shape& s)
+PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
     : QTreeWidgetItem(parent, PropShape),
       name{QString("ID: %1; Type: %2").arg(s.getID()).arg(SHAPE_NAMES[s.getType()])}
 {
 	new PropertyItem<QPoint>(
 	            this,
 	            "Position",
-	            [&s]() { return s.getPos(); },
+	            std::bind(&Shape::getPos, &s),
 	            [&s](QPoint p) { s.setPos(p); }
 	);
 	new PropertyItem<QPen>(
 	            this,
 	            "Line",
-	            [&s]() { return s.getPen(); },
-	            [&s](QPen p) { s.setPen(p);}
+	            std::bind(&Shape::getPen, &s),
+	            std::bind(&Shape::setPen, &s, _1)
 	);
 	new PropertyItem<QBrush>(
 	            this,
 	            "Fill",
-	            [&s]() { return s.getBrush(); },
-	            [&s](QBrush b) { s.setBrush(b);}
+	            std::bind(&Shape::getBrush, &s),
+	            std::bind(&Shape::setBrush, &s, _1)
 	);
-	parent->expandAll(); // All or just top?
-}
-
-QVariant PropertyItem<Shape>::data(int column, int role) const
-{
-	switch (role) {
-	case Qt::DisplayRole:
-		if (column == 0) {
-			return name;
-		}
-		break;
+	
+#define TRY_CAST(type, var) type* var = dynamic_cast<type*>(&s)
+	
+	if (TRY_CAST(Ellipse, ellipse)) {
+		new PropertyItem<Ellipse>(this, *ellipse);
+	}
+	else if (TRY_CAST(Line, line)) {
+		new PropertyItem<Line>(this, *line);
 	}
 	
-	return QVariant{};
+#undef TRY_CAST
+}
+
+/******************************************************************************
+ * 
+ * Ellipse specialization
+ * 
+ *****************************************************************************/
+
+PropertyItem<Ellipse>::PropertyItem(QTreeWidgetItem* parent, Ellipse& ellipse)
+    : QTreeWidgetItem(parent, PropShape), name{"Ellipse"}
+{
+	new PropertyItem<int>(
+	            this,
+	            "Width",
+	            std::bind(&Ellipse::getWidth, &ellipse),
+	            std::bind(&Ellipse::setWidth, &ellipse, _1)
+	);
+	new PropertyItem<int>(
+	            this,
+	            "Height",
+	            std::bind(&Ellipse::getHeight, &ellipse),
+	            std::bind(&Ellipse::setHeight, &ellipse, _1)
+	);
+}
+
+/******************************************************************************
+ * 
+ * Line specialization
+ * 
+ *****************************************************************************/
+
+PropertyItem<Line>::PropertyItem(QTreeWidgetItem* parent, Line& line)
+    : QTreeWidgetItem(parent, PropShape), name{"Line"}
+{
+	new PropertyItem<QPoint>(
+	            this,
+	            "Start",
+	            std::bind(&Line::getStart, &line),
+	            std::bind(&Line::setStart, &line, _1)
+	);
+	new PropertyItem<QPoint>(
+	            this,
+	            "End",
+	            std::bind(&Line::getEnd, &line),
+	            std::bind(&Line::setEnd, &line, _1)
+	);
 }
 
 /******************************************************************************

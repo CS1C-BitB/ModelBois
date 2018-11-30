@@ -42,7 +42,7 @@ SOURCES += \
     src/Storage.cpp \
     src/ShapeListModel.cpp \
     src/PropertyDelegate.cpp \
-    src/PropertyItem.cpp
+    src/PropertyItem.cpp \
     test/testShapes.cpp
 
 HEADERS += \
@@ -58,7 +58,8 @@ HEADERS += \
     src/Storage.h \
     src/ShapeListModel.h \
     src/PropertyDelegate.h \
-    src/PropertyItem.h
+    src/PropertyItem.h \
+    src/Shapes.h \
     test/Tests.h
 
 FORMS += \

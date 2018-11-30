@@ -1,7 +1,7 @@
 #ifndef PROPITEM_H
 #define PROPITEM_H
 
-#include "Shape.h"
+#include "Shapes.h"
 
 #include <QTreeWidgetItem>
 
@@ -40,29 +40,40 @@ private:
 	setter_t setter;
 };
 
-template<>
-class PropertyItem<Shape> : public QTreeWidgetItem
-{
-public:
-	PropertyItem(QTreeWidget* parent, Shape&);
-	
-	QVariant data(int column, int role) const override;
-	
-private:
-	QString name;
+
+
+// Directly references an object, no getters/setters
+
+#define NO_DATA_PROP_ITEM(type) \
+template<> \
+class PropertyItem<type> : public QTreeWidgetItem \
+{ \
+public: \
+	PropertyItem(QTreeWidgetItem* parent, type&); \
+	\
+	QVariant data(int column, int role) const override \
+	{ \
+		switch (role) { \
+		case Qt::DisplayRole: \
+			if (column == 0) { \
+				return name; \
+			} \
+			break; \
+		} \
+		\
+		return QVariant{}; \
+	} \
+	\
+private: \
+	QString name; \
 };
 
+NO_DATA_PROP_ITEM(Shape)
+NO_DATA_PROP_ITEM(Ellipse)
+NO_DATA_PROP_ITEM(Line)
+NO_DATA_PROP_ITEM(Polygon)
 
-
-// Properties that are set directly and have special rules
-// Still needed?
-
-#define SPECIAL_PROP_ITEM(T) \
-	template<> PropertyItem<T>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter, setter_t setter); \
-	template<> QVariant PropertyItem<T>::data(int column, int role) const; \
-	template<> void PropertyItem<T>::setData(int column, int role, const QVariant &value);
-
-#undef SPECIAL_PROP_ITEM
+#undef NO_DATA_PROP_ITEM
 
 
 
