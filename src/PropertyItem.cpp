@@ -41,6 +41,9 @@ PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
 	else if (TRY_CAST(Line, line)) {
 		new PropertyItem<Line>(this, *line);
 	}
+	else if (TRY_CAST(Polygon, poly)) {
+		new PropertyItem<Polygon>(this, *poly);
+	}
 	
 #undef TRY_CAST
 }
@@ -88,6 +91,25 @@ PropertyItem<Line>::PropertyItem(QTreeWidgetItem* parent, Line& line)
 	            "End",
 	            std::bind(&Line::getEnd, &line),
 	            std::bind(&Line::setEnd, &line, _1)
+	);
+}
+
+/******************************************************************************
+ * 
+ * Polygon specialization
+ * 
+ *****************************************************************************/
+
+PropertyItem<Polygon>::PropertyItem(QTreeWidgetItem* parent, Polygon& poly)
+    : QTreeWidgetItem(parent, PropShape), name{"Polygon"}
+{
+	
+	new PropertyItem<QList<QPoint>>(
+	            this,
+	            "Vertices",
+	            std::bind(&Polygon::getCount, &poly),
+	            std::bind(&Polygon::getPoint, &poly, _1),
+	            std::bind(&Polygon::setPoint, &poly, _1, _2)
 	);
 }
 

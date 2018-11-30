@@ -19,6 +19,7 @@ enum PropItemType {
 	PropPenJoinStyle,
 	PropPoint,
 	PropShape,
+	PropNone
 };
 
 template<class T>
@@ -38,6 +39,25 @@ private:
 	QString name;
 	getter_t getter;
 	setter_t setter;
+};
+
+
+
+template<class T>
+class PropertyItem<QList<T>> : public QTreeWidgetItem
+{
+public:
+	using get_size_t = std::function<size_t()>;
+	using get_item_t = std::function<T(size_t)>;
+	using set_item_t = std::function<void(size_t, T)>;
+	
+	PropertyItem(QTreeWidgetItem* parent, QString name, get_size_t g_s, get_item_t g_i, set_item_t s_i, int type = PropNone);
+	
+	QVariant data(int column, int role) const override;
+	
+private:
+	QString name;
+	get_size_t get_size;
 };
 
 
@@ -144,5 +164,42 @@ PROP_DEF(void)::setData(int column, int role, const QVariant &value)
 }
 
 #undef PROP_DEF
+
+
+
+// Partial Specialization for lists
+
+#define LIST_PROP_DEF(ret) template<class T> ret PropertyItem<QList<T>>
+
+LIST_PROP_DEF(/**/)::PropertyItem(QTreeWidgetItem* parent, QString name, get_size_t g_s, get_item_t get_item, set_item_t set_item, int type)
+    : QTreeWidgetItem(parent, type), name{std::move(name)}, get_size{std::move(g_s)}
+{
+	for (size_t i = 0, count = get_size(); i < count; ++i) {
+		new PropertyItem<T>(
+		            this,
+		            QString{"[%1]"}.arg(i),
+		            std::bind(get_item, i),
+		            std::bind(set_item, i, std::placeholders::_1)
+		);
+	}
+}
+
+LIST_PROP_DEF(QVariant)::data(int column, int role) const
+{
+	switch (role) {
+	case Qt::DisplayRole:
+		if (column == 0) {
+			return name;
+		}
+		else {
+			return QString{"Size: %1"}.arg(get_size());
+		}
+		break;
+	}
+	
+	return QVariant{};
+}
+
+#undef LIST_PROP_DEF
 
 #endif // PROPITEM_H
