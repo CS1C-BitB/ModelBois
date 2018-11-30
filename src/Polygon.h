@@ -23,8 +23,10 @@ public:
 	std::size_t getCount() const;
 	QPoint getPoint(std::size_t i) const;
 	void setPoint(std::size_t i, const QPoint &point);
-	void pushPoint(const QPoint &point);
-	void clearPoints();
+	void insert(size_t before, const QPoint &point);
+	//void pushPoint(const QPoint &point);
+	void erase(size_t i);
+	//void clearPoints();
 	
 private:
 	std::vector<QPoint> points;

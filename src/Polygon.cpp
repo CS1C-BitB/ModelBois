@@ -103,15 +103,29 @@ void Polygon::setPoint(std::size_t i, const QPoint &point)
 	setPos(center(points, getPos()));
 }
 
+void Polygon::insert(size_t before, const QPoint &point)
+{
+	points.insert(points.begin() + before, point - getPos());
+	setPos(center(points, getPos()));
+}
+
+/*
 void Polygon::pushPoint(const QPoint &point)
 {
 	points.push_back(point - getPos());
 	setPos(center(points, getPos()));
+}*/
+
+void Polygon::erase(size_t i)
+{
+	points.erase(points.begin() + i);
+	setPos(center(points, getPos()));
 }
 
+/*
 void Polygon::clearPoints()
 {
 	points.clear();
 	setPos(center(points, getPos()));
 }
-
+*/

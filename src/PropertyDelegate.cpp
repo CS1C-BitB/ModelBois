@@ -72,7 +72,7 @@ void PropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 		int value = index.model()->data(index, Qt::EditRole).toInt();
 		
 		spinBox->setValue(value);
-		connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
+		//connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
 	}
 }
 

@@ -43,7 +43,8 @@ SOURCES += \
     src/ShapeListModel.cpp \
     src/PropertyDelegate.cpp \
     src/PropertyItem.cpp \
-    test/testShapes.cpp
+    test/testShapes.cpp \
+    src/ListButtons.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -60,10 +61,12 @@ HEADERS += \
     src/PropertyDelegate.h \
     src/PropertyItem.h \
     src/Shapes.h \
-    test/Tests.h
+    test/Tests.h \
+    src/ListButtons.h
 
 FORMS += \
-    src/MainWindow.ui
+    src/MainWindow.ui \
+    src/ListButtons.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

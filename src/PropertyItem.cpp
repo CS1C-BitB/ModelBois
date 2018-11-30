@@ -109,7 +109,9 @@ PropertyItem<Polygon>::PropertyItem(QTreeWidgetItem* parent, Polygon& poly)
 	            "Vertices",
 	            std::bind(&Polygon::getCount, &poly),
 	            std::bind(&Polygon::getPoint, &poly, _1),
-	            std::bind(&Polygon::setPoint, &poly, _1, _2)
+	            std::bind(&Polygon::setPoint, &poly, _1, _2),
+	            std::bind(&Polygon::insert, &poly, _1, _2),
+	            std::bind(&Polygon::erase, &poly, _1)
 	);
 }
 
