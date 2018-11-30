@@ -11,7 +11,7 @@ using namespace std::placeholders;
  *****************************************************************************/
 
 PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
-    : QTreeWidgetItem(parent, PropShape),
+    : QTreeWidgetItem(parent, PropNone),
       name{QString("ID: %1; Type: %2").arg(s.getID()).arg(SHAPE_NAMES[s.getType()])}
 {
 	new PropertyItem<QPoint>(
@@ -44,7 +44,15 @@ PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
 	else if (TRY_CAST(Polygon, poly)) {
 		new PropertyItem<Polygon>(this, *poly);
 	}
-	
+	else if (TRY_CAST(PolyLine, poly)) {
+		new PropertyItem<PolyLine>(this, *poly);
+	}
+	else if (TRY_CAST(Rectangle, rect)) {
+		new PropertyItem<Rectangle>(this, *rect);
+	}
+	else if (TRY_CAST(Text, text)) {
+		new PropertyItem<Text>(this, *text);
+	}
 #undef TRY_CAST
 }
 
@@ -55,7 +63,7 @@ PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
  *****************************************************************************/
 
 PropertyItem<Ellipse>::PropertyItem(QTreeWidgetItem* parent, Ellipse& ellipse)
-    : QTreeWidgetItem(parent, PropShape), name{"Ellipse"}
+    : QTreeWidgetItem(parent, PropNone), name{"Ellipse"}
 {
 	new PropertyItem<int>(
 	            this,
@@ -78,7 +86,7 @@ PropertyItem<Ellipse>::PropertyItem(QTreeWidgetItem* parent, Ellipse& ellipse)
  *****************************************************************************/
 
 PropertyItem<Line>::PropertyItem(QTreeWidgetItem* parent, Line& line)
-    : QTreeWidgetItem(parent, PropShape), name{"Line"}
+    : QTreeWidgetItem(parent, PropNone), name{"Line"}
 {
 	new PropertyItem<QPoint>(
 	            this,
@@ -101,7 +109,7 @@ PropertyItem<Line>::PropertyItem(QTreeWidgetItem* parent, Line& line)
  *****************************************************************************/
 
 PropertyItem<Polygon>::PropertyItem(QTreeWidgetItem* parent, Polygon& poly)
-    : QTreeWidgetItem(parent, PropShape), name{"Polygon"}
+    : QTreeWidgetItem(parent, PropNone), name{"Polygon"}
 {
 	
 	new PropertyItem<QList<QPoint>>(
@@ -117,12 +125,80 @@ PropertyItem<Polygon>::PropertyItem(QTreeWidgetItem* parent, Polygon& poly)
 
 /******************************************************************************
  * 
+ * PolyLine specialization
+ * 
+ *****************************************************************************/
+
+PropertyItem<PolyLine>::PropertyItem(QTreeWidgetItem* parent, PolyLine& poly)
+    : QTreeWidgetItem(parent, PropNone), name{"PolyLine"}
+{
+	
+	new PropertyItem<QList<QPoint>>(
+	            this,
+	            "Vertices",
+	            std::bind(&PolyLine::getCount, &poly),
+	            std::bind(&PolyLine::getPoint, &poly, _1),
+	            std::bind(&PolyLine::setPoint, &poly, _1, _2),
+	            std::bind(&PolyLine::insert, &poly, _1, _2),
+	            std::bind(&PolyLine::erase, &poly, _1)
+	);
+}
+
+/******************************************************************************
+ * 
+ * Rectangle specialization
+ * 
+ *****************************************************************************/
+
+PropertyItem<Rectangle>::PropertyItem(QTreeWidgetItem* parent, Rectangle& rect)
+    : QTreeWidgetItem(parent, PropNone), name{"Rectangle"}
+{
+	new PropertyItem<int>(
+	            this,
+	            "Width",
+	            std::bind(&Rectangle::getWidth, &rect),
+	            std::bind(&Rectangle::setWidth, &rect, _1)
+	);
+	new PropertyItem<int>(
+	            this,
+	            "Height",
+	            std::bind(&Rectangle::getHeight, &rect),
+	            std::bind(&Rectangle::setHeight, &rect, _1)
+	);
+}
+
+/******************************************************************************
+ * 
+ * Text specialization
+ * 
+ *****************************************************************************/
+
+PropertyItem<Text>::PropertyItem(QTreeWidgetItem* parent, Text& text)
+    : QTreeWidgetItem(parent, PropNone), name{"Text"}
+{
+	new PropertyItem<QString>(
+	            this,
+	            "Text",
+	            std::bind(&Text::getString, &text),
+	            std::bind(&Text::setString, &text, _1),
+	            PropString
+	);
+	new PropertyItem<QFont>(
+	            this,
+	            "Font",
+	            std::bind(&Text::getFont, &text),
+	            std::bind(&Text::setFont, &text, _1)
+	);
+}
+
+/******************************************************************************
+ * 
  * QPoint specialization
  * 
  *****************************************************************************/
 
 PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
-    : QTreeWidgetItem(parent, PropPoint), name{std::move(name)}, getter{std::move(getter_in)}
+    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}
 {
 	new PropertyItem<int>(
 	            this,
@@ -162,7 +238,7 @@ QVariant PropertyItem<QPoint>::data(int column, int role) const
  *****************************************************************************/
 
 PropertyItem<QPen>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
-    : QTreeWidgetItem(parent, PropPen), name{std::move(name)}, getter{std::move(getter_in)}
+    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}
 {
 	new PropertyItem<int>(
 	            this,
@@ -220,7 +296,7 @@ QVariant PropertyItem<QPen>::data(int column, int role) const
  *****************************************************************************/
 
 PropertyItem<QBrush>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
-    : QTreeWidgetItem(parent, PropBrush), name{std::move(name)}, getter{std::move(getter_in)}
+    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}
 {
 	new PropertyItem<QString>(
 	            this,
@@ -239,6 +315,58 @@ PropertyItem<QBrush>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 }
 
 QVariant PropertyItem<QBrush>::data(int column, int role) const
+{
+	switch (role) {
+	case Qt::DisplayRole:
+		if (column == 0) {
+			return name;
+		}
+		break;
+	}
+	
+	return QVariant{};
+}
+
+/******************************************************************************
+ * 
+ * QFont specialization
+ * 
+ *****************************************************************************/
+
+PropertyItem<QFont>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
+    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}
+{
+	new PropertyItem<QString>(
+	            this,
+	            "Family",
+	            ([this]() { return getter().family(); }),
+	            ([this, setter](QString s) { QFont f = getter(); f.setFamily(s); setter(f); }),
+	            PropString
+	);
+	new PropertyItem<int>(
+	            this,
+	            "Size",
+	            ([this]() { return getter().pointSize(); }),
+	            ([this, setter](int s) { QFont f = getter(); f.setPointSize(s); setter(f); }),
+	            PropInt
+	);
+	new PropertyItem<QString>(
+	            this,
+	            "Style",
+	            ([this]() { return FONT_STYLE_NAMES[getter().style()]; }),
+	            ([this, setter](QString s) { QFont f = getter(); f.setStyle(FONT_STYLE_NAMES.key(s)); setter(f); }),
+	            PropFontStyle
+	);
+	new PropertyItem<QString>(
+	            this,
+	            "Weight",
+	            ([this]() { return FONT_WEIGHT_NAMES[static_cast<QFont::Weight>(getter().weight())]; }),
+	            ([this, setter](QString s) { QFont f = getter(); f.setWeight(FONT_WEIGHT_NAMES.key(s)); setter(f); }),
+	            PropFontWight
+	);
+}
+
+QVariant PropertyItem<QFont>::data(int column, int role) const
 {
 	switch (role) {
 	case Qt::DisplayRole:

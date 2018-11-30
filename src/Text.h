@@ -6,6 +6,9 @@
 #include <QFont>
 #include <QString>
 
+extern const QMap<QFont::Style, QString> FONT_STYLE_NAMES;
+extern const QMap<QFont::Weight, QString> FONT_WEIGHT_NAMES;
+
 class Text : public Shape
 {
 public:

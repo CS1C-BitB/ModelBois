@@ -83,9 +83,21 @@ void PolyLine::setPoint(std::size_t i, const QPoint &point)
 	setPos(center(points, getPos()));
 }
 
+void PolyLine::insert(size_t before, const QPoint &point)
+{
+	points.insert(points.begin() + before, point - getPos());
+	setPos(center(points, getPos()));
+}
+
 void PolyLine::pushPoint(const QPoint &point)
 {
 	points.push_back(point - getPos());
+	setPos(center(points, getPos()));
+}
+
+void PolyLine::erase(size_t i)
+{
+	points.erase(points.begin() + i);
 	setPos(center(points, getPos()));
 }
 

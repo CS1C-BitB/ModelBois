@@ -24,9 +24,9 @@ public:
 	QPoint getPoint(std::size_t i) const;
 	void setPoint(std::size_t i, const QPoint &point);
 	void insert(size_t before, const QPoint &point);
-	//void pushPoint(const QPoint &point);
+	void pushPoint(const QPoint &point);
 	void erase(size_t i);
-	//void clearPoints();
+	void clearPoints();
 	
 private:
 	std::vector<QPoint> points;

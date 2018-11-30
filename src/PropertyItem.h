@@ -8,19 +8,16 @@
 
 #include <functional>
 
-enum PropItemType {
+enum PropEditType {
 	PropInt = Qt::UserRole,
 	PropString,
-	PropBrush,
 	PropBrushStyle,
 	PropColor,
-	PropList,
-	PropPen,
+	PropFontStyle,
+	PropFontWight,
 	PropPenStyle,
 	PropPenCapStyle,
 	PropPenJoinStyle,
-	PropPoint,
-	PropShape,
 	PropNone
 };
 
@@ -100,6 +97,9 @@ NO_DATA_PROP_ITEM(Shape)
 NO_DATA_PROP_ITEM(Ellipse)
 NO_DATA_PROP_ITEM(Line)
 NO_DATA_PROP_ITEM(Polygon)
+NO_DATA_PROP_ITEM(PolyLine)
+NO_DATA_PROP_ITEM(Rectangle)
+NO_DATA_PROP_ITEM(Text)
 
 #undef NO_DATA_PROP_ITEM
 
@@ -126,6 +126,7 @@ private: \
 META_PROP_ITEM(QPoint)
 META_PROP_ITEM(QPen)
 META_PROP_ITEM(QBrush)
+META_PROP_ITEM(QFont)
 
 #undef META_PROP_ITEM
 
@@ -180,7 +181,7 @@ PROP_DEF(void)::setData(int column, int role, const QVariant &value)
 #define LIST_PROP_DEF(ret) template<class T> ret PropertyItem<QList<T>>
 
 LIST_PROP_DEF(/**/)::PropertyItem(QTreeWidgetItem* parent, QString name, get_size_t g_s, get_item_t get_item, set_item_t set_item, insert_t insert, erase_t erase)
-    : QTreeWidgetItem(parent, PropList), name{std::move(name)}, get_size{std::move(g_s)}, insert{std::move(insert)}, erase{std::move(erase)}
+    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, get_size{std::move(g_s)}, insert{std::move(insert)}, erase{std::move(erase)}
 {
 	for (size_t i = 0, count = get_size(); i < count; ++i) {
 		new PropertyItem<T>(

@@ -3,6 +3,7 @@
 #include "PropertyItem.h"
 
 #include <QComboBox>
+#include <QLineEdit>
 #include <QSpinBox>
 #include <QTreeWidget>
 
@@ -40,11 +41,21 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 		editor->setMaximum(1000);
 		return editor;
 	}
+	case PropString: {
+		QLineEdit* editor = new QLineEdit(parent);
+		return editor;
+	}
 	case PropBrushStyle:
 		TEXT_SELECTION(BRUSH_STYLE_NAMES.values());
 		break;
 	case PropColor:
 		TEXT_SELECTION(COLOR_NAMES.keys());
+		break;
+	case PropFontStyle:
+		TEXT_SELECTION(FONT_STYLE_NAMES.values());
+		break;
+	case PropFontWight:
+		TEXT_SELECTION(FONT_WEIGHT_NAMES.values());
 		break;
 	case PropPenStyle:
 		TEXT_SELECTION(PEN_STYLE_NAMES.values());
@@ -60,36 +71,53 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 	return nullptr;
 }
 
+#define TRY_CAST(type, var) type* var = dynamic_cast<type*>(editor)
+
 void PropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-	if (QComboBox* comboBox = dynamic_cast<QComboBox*>(editor)) {
+	if (TRY_CAST(QComboBox, comboBox)) {
 		QString value = index.model()->data(index, Qt::EditRole).value<QString>();
 		
 		comboBox->setCurrentText(value);
 		connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
 	}
-	else if (QSpinBox* spinBox = dynamic_cast<QSpinBox*>(editor)) {
+	else if (TRY_CAST(QSpinBox, spinBox)) {
 		int value = index.model()->data(index, Qt::EditRole).toInt();
 		
 		spinBox->setValue(value);
+		// Real-time update disabled for performance
 		//connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
+	}
+	else if (TRY_CAST(QLineEdit, line)) {
+		QString value = index.model()->data(index, Qt::EditRole).value<QString>();
+		
+		line->setText(value);
+		// Real-time update disabled for performance
+		//connect(line, &QLineEdit::textChanged, this, std::bind(&PropertyDelegate::valueChanged, this, editor));
 	}
 }
 
 void PropertyDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-	if (QComboBox* comboBox = dynamic_cast<QComboBox*>(editor)) {
+	if (TRY_CAST(QComboBox, comboBox)) {
 		QString value = comboBox->currentText();
 		
 		model->setData(index, value, Qt::EditRole);
 	}
-	else if (QSpinBox* spinBox = dynamic_cast<QSpinBox*>(editor)) {
+	else if (TRY_CAST(QSpinBox, spinBox)) {
 		spinBox->interpretText();
 		int value = spinBox->value();
 		
 		model->setData(index, value, Qt::EditRole);
 	}
+	else if (TRY_CAST(QLineEdit, line)) {
+		QString value = line->text();
+		
+		model->setData(index, value, Qt::EditRole);
+	}
 }
+
+#undef TRY_CAST
 
 void PropertyDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex&) const
 {
