@@ -163,7 +163,7 @@ std::unique_ptr<QPainter> Shape::getPainter(QPaintDevice* device, QPoint corner)
 	
 	paint->setPen(id_pen);
 	paint->setFont(id_font);
-	paint->drawText(corner, QString("ID: %1").arg(getID()));
+	paint->drawText(corner - QPoint{0, 4}, QString("ID: %1").arg(getID()));
 	
 	paint->setBrush(brush);
 	paint->setPen(pen);
