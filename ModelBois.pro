@@ -64,7 +64,8 @@ HEADERS += \
     src/Shapes.h \
     test/Tests.h \
     src/ListButtons.h \
-    src/PosButton.h
+    src/PosButton.h \
+    src/Serializer.h
 
 FORMS += \
     src/MainWindow.ui \
