@@ -263,19 +263,45 @@ QVariant PropertyItem<QPoint>::data(int column, int role) const
 template<>
 void PropertyItem<QList<QPoint>>::add()
 {
+	MainWindow* window = static_cast<MainWindow*>(treeWidget()->window());
 	size_t i = get_size();
-	insert(i, QPoint{});
-	auto* prop = new PropertyItem<QPoint>(
-	            this,
-	            QString{"[%1]"}.arg(i),
-	            std::bind(get_item, i),
-	            std::bind(set_item, i, _1)
-	);
-	treeWidget()->expandItem(prop);
-	static_cast<PosButton*>(treeWidget()->itemWidget(prop, 1))->pressed();
-	static_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(true);
+	
+	treeWidget()->setCurrentItem(this);
+	// Set pointer
+	window->SetCanvasCursor(Qt::CrossCursor);
+	// Set setter
+	QObject::connect(window, &MainWindow::on_canvas_click, [this, window, i](int x, int y) {
+		insert(i, QPoint{x, y});
+		auto* prop = new PropertyItem<QPoint>(
+		            this,
+		            QString{"[%1]"}.arg(i),
+		            std::bind(get_item, i),
+		            std::bind(set_item, i, _1)
+		);
+		treeWidget()->expandItem(prop);
+		emitDataChanged();
+		// Unset setter
+		DISCONNECT;
+	});
+	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, [this, window]() {
+		DISCONNECT;
+	});
+}
+
+template<>
+void PropertyItem<QList<QPoint>>::remove()
+{
+	MainWindow* window = static_cast<MainWindow*>(treeWidget()->window());
+	DISCONNECT;
+	
+	size_t i = get_size() - 1;
+	erase(i);
+	removeChild(child(i));
+	static_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(i != 0);
 	emitDataChanged();
 }
+
+#undef DISCONNECT
 
 /******************************************************************************
  * 
