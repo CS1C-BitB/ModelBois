@@ -260,6 +260,23 @@ QVariant PropertyItem<QPoint>::data(int column, int role) const
 	return QVariant{};
 }
 
+template<>
+void PropertyItem<QList<QPoint>>::add()
+{
+	size_t i = get_size();
+	insert(i, QPoint{});
+	auto* prop = new PropertyItem<QPoint>(
+	            this,
+	            QString{"[%1]"}.arg(i),
+	            std::bind(get_item, i),
+	            std::bind(set_item, i, _1)
+	);
+	treeWidget()->expandItem(prop);
+	static_cast<PosButton*>(treeWidget()->itemWidget(prop, 1))->pressed();
+	static_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(true);
+	emitDataChanged();
+}
+
 /******************************************************************************
  * 
  * QPen specialization
