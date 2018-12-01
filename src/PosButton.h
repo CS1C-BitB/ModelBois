@@ -16,7 +16,7 @@ public:
 	~PosButton();
 	
 signals:
-	void pressed();
+	void clicked();
 	
 private:
 	Ui::PosButton *ui;

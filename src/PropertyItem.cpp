@@ -230,7 +230,7 @@ PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 } while (0)
 	
 	PosButton* button = new PosButton();
-	QObject::connect(button, &PosButton::pressed, [this, setter, window]() {
+	QObject::connect(button, &PosButton::clicked, [this, setter, window]() {
 		treeWidget()->setCurrentItem(this);
 		// Set pointer
 		window->SetCanvasCursor(Qt::CrossCursor);

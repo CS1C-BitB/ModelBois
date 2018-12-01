@@ -56,6 +56,12 @@
        <height>20</height>
       </size>
      </property>
+     <property name="toolTip">
+      <string>Appends an item</string>
+     </property>
+     <property name="statusTip">
+      <string>Appends an item</string>
+     </property>
      <property name="text">
       <string>+</string>
      </property>
@@ -68,6 +74,12 @@
        <width>20</width>
        <height>20</height>
       </size>
+     </property>
+     <property name="toolTip">
+      <string>Remove last item</string>
+     </property>
+     <property name="statusTip">
+      <string>Remove last item</string>
      </property>
      <property name="text">
       <string>-</string>

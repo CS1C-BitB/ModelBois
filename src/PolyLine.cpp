@@ -57,9 +57,15 @@ void PolyLine::draw(QPaintDevice* device)
 	}
 	auto paint = getPainter(device, corner);
 	
+#if 1
+	// Polygonal chain ver
 	for (size_t i = 0; i < points.size() - 1; ++i) {
 		paint->drawLine(points[i], points[i + 1]);
 	}
+#else
+	// Point pairs ver
+	paint->drawLines(points.data(), points.size() / 2);
+#endif
 }
 
 ShapeType PolyLine::getType() const

@@ -8,7 +8,7 @@ PosButton::PosButton(QWidget *parent) :
     ui(new Ui::PosButton)
 {
 	ui->setupUi(this);
-	connect(ui->pushButton, SIGNAL(clicked(bool)), this, SIGNAL(pressed()));
+	connect(ui->button, SIGNAL(clicked(bool)), this, SIGNAL(clicked()));
 }
 
 PosButton::~PosButton()
