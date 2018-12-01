@@ -18,6 +18,11 @@ public:
 	explicit MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
 	
+	void SetCanvasCursor(const QCursor&);
+	
+signals:
+	void on_canvas_click(int x, int y);
+	
 private slots:
 	void on_ShapeList_currentIndexChanged(int index);
 	

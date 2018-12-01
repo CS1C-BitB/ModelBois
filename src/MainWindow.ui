@@ -77,7 +77,7 @@
         <bool>true</bool>
        </attribute>
        <attribute name="headerDefaultSectionSize">
-        <number>160</number>
+        <number>150</number>
        </attribute>
        <attribute name="headerStretchLastSection">
         <bool>true</bool>

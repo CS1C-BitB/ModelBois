@@ -49,6 +49,11 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+void MainWindow::SetCanvasCursor(const QCursor &c)
+{
+	ui->canvas->setCursor(c);
+}
+
 void MainWindow::on_ShapeList_currentIndexChanged(int index)
 {
 	QTreeWidgetItem* old = ui->PropTree->topLevelItem(0);

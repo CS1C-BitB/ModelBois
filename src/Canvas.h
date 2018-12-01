@@ -19,6 +19,7 @@ public slots:
 	
 protected:
 	void paintEvent(QPaintEvent *event) override;
+	void mousePressEvent(QMouseEvent *event) override;
 	
 private:
 	const vector_t* shapes;

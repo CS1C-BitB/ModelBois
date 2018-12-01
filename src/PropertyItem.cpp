@@ -1,5 +1,7 @@
 #include "PropertyItem.h"
 
+#include "MainWindow.h"
+#include "PosButton.h"
 #include "Shapes.h"
 
 using namespace std::placeholders;
@@ -54,6 +56,8 @@ PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
 		new PropertyItem<Text>(this, *text);
 	}
 #undef TRY_CAST
+	
+	treeWidget()->setCurrentItem(this);
 }
 
 /******************************************************************************
@@ -212,6 +216,31 @@ PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 	            [this]() -> int { return getter().y(); },
 	            [this, setter](int y) { setter(QPoint{getter().x(), y}); }
 	);
+	
+	MainWindow* window = static_cast<MainWindow*>(treeWidget()->window());
+	
+#define DISCONNECT do { \
+	QObject::disconnect(window, &MainWindow::on_canvas_click, nullptr, nullptr); \
+	window->SetCanvasCursor(Qt::ArrowCursor); \
+} while (0)
+	
+	PosButton* button = new PosButton();
+	QObject::connect(button, &PosButton::pressed, [this, setter, window]() {
+		treeWidget()->setCurrentItem(this);
+		// Set pointer
+		window->SetCanvasCursor(Qt::CrossCursor);
+		// Set setter
+		QObject::connect(window, &MainWindow::on_canvas_click, [this, setter, window](int x, int y) {
+			setter(QPoint{x, y});
+			emitDataChanged();
+			// Unset setter
+			DISCONNECT;
+		});
+	});
+	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, [this, window]() {
+		DISCONNECT;
+	});
+	treeWidget()->setItemWidget(this, 1, button);
 }
 
 QVariant PropertyItem<QPoint>::data(int column, int role) const
