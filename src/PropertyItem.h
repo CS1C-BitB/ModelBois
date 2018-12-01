@@ -11,6 +11,7 @@
 enum PropEditType {
 	PropInt = Qt::UserRole,
 	PropString,
+	PropAlignment,
 	PropBrushStyle,
 	PropColor,
 	PropFontStyle,
@@ -130,6 +131,7 @@ private: \
 };
 
 META_PROP_ITEM(QPoint)
+META_PROP_ITEM(QRect)
 META_PROP_ITEM(QPen)
 META_PROP_ITEM(QBrush)
 META_PROP_ITEM(QFont)
@@ -172,7 +174,7 @@ PROP_DEF(void)::setData(int column, int role, const QVariant &value)
 	case Qt::EditRole:
 		if (column == 1) {
 			setter(value.value<T>());
-			//emitDataChanged(); Too slow
+			//emitDataChanged(); // Too slow
 			this->treeWidget()->itemChanged(this, 1);
 		}
 		break;

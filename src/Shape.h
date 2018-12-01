@@ -8,13 +8,19 @@
 
 #include <memory>
 
-enum class ShapeType {
+enum ShapeType {
 	LINE,
+	LineType = LINE,
 	POLYLINE,
+	PolylineType = POLYLINE,
 	POLYGON,
+	PolygonType = POLYGON,
 	RECTANGLE,
+	RectangleType = RECTANGLE,
 	ELLIPSE,
-	TEXT
+	EllipseType = ELLIPSE,
+	TEXT,
+	TextType = TEXT
 };
 
 extern const QMap<QString, QColor> COLOR_NAMES;
@@ -93,6 +99,8 @@ public:
 	void setPos(const QPoint& pos);
 	void setBrush(const QBrush&);
 	void setPen(const QPen&);
+	
+	static bool hasFill(ShapeType);
 	
 protected:
 	Shape(id_t id);

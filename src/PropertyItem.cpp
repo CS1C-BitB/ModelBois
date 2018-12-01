@@ -22,20 +22,20 @@ PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
 	            std::bind(&Shape::getPos, &s),
 	            [&s](QPoint p) { s.setPos(p); }
 	);
-	new PropertyItem<QPen>(
-	            this,
-	            "Line",
-	            std::bind(&Shape::getPen, &s),
-	            std::bind(&Shape::setPen, &s, _1)
-	);
-	if (   s.getType() != ShapeType::LINE
-	    && s.getType() != ShapeType::POLYLINE
-	    && s.getType() != ShapeType::TEXT) {
+	if (s.getType() != TextType) {
+		new PropertyItem<QPen>(
+			this,
+			"Line",
+			std::bind(&Shape::getPen, &s),
+			std::bind(&Shape::setPen, &s, _1)
+		);
+	}
+	if (Shape::hasFill(s.getType())) {
 		new PropertyItem<QBrush>(
-					this,
-					"Fill",
-					std::bind(&Shape::getBrush, &s),
-					std::bind(&Shape::setBrush, &s, _1)
+			this,
+			"Fill",
+			std::bind(&Shape::getBrush, &s),
+			std::bind(&Shape::setBrush, &s, _1)
 		);
 	}
 	
@@ -191,11 +191,31 @@ PropertyItem<Text>::PropertyItem(QTreeWidgetItem* parent, Text& text)
 	            std::bind(&Text::setString, &text, _1),
 	            PropString
 	);
+	new PropertyItem<QString>(
+	            this,
+	            "Color",
+	            ([&text]() { return COLOR_NAMES.key(text.getPen().color()); }),
+	            ([&text](QString s) { QPen p = text.getPen(); p.setColor(COLOR_NAMES[s]); text.setPen(p); }),
+	            PropColor
+	);
 	new PropertyItem<QFont>(
 	            this,
 	            "Font",
 	            std::bind(&Text::getFont, &text),
 	            std::bind(&Text::setFont, &text, _1)
+	);
+	new PropertyItem<QRect>(
+	            this,
+	            "Box",
+	            std::bind(&Text::getRect, &text),
+	            std::bind(&Text::setRect, &text, _1)
+	);
+	new PropertyItem<QString>(
+	            this,
+	            "Alignment",
+	            ([&text]() { return ALIGNMENT_NAMES[text.getAlign()]; }),
+	            ([&text](QString s) { text.setAlign(ALIGNMENT_NAMES.key(s)); }),
+	            PropAlignment
 	);
 }
 
@@ -354,6 +374,58 @@ QVariant PropertyItem<QList<QPoint>>::data(int column, int role) const
 		}
 		else {
 			return QString{"Size: %1"}.arg(get_size());
+		}
+		break;
+	}
+	
+	return QVariant{};
+}
+
+/******************************************************************************
+ * 
+ * QRect specialization
+ * 
+ *****************************************************************************/
+
+PropertyItem<QRect>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
+    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}
+{
+	new PropertyItem<int>(
+	            this,
+	            "X",
+	            [this]() -> int { return getter().left(); },
+	            [this, setter](int x) { auto v = getter(); v.moveLeft(x); setter(v); }
+	);
+	new PropertyItem<int>(
+	            this,
+	            "Y",
+	            [this]() -> int { return getter().top(); },
+	            [this, setter](int x) { auto v = getter(); v.moveTop(x); setter(v); }
+	);
+	new PropertyItem<int>(
+	            this,
+	            "Width",
+	            [this]() -> int { return getter().width(); },
+	            [this, setter](int x) { auto v = getter(); v.setWidth(x); setter(v); }
+	);
+	new PropertyItem<int>(
+	            this,
+	            "Height",
+	            [this]() -> int { return getter().height(); },
+	            [this, setter](int x) { auto v = getter(); v.setHeight(x); setter(v); }
+	);
+}
+
+QVariant PropertyItem<QRect>::data(int column, int role) const
+{
+	switch (role) {
+	case Qt::DisplayRole:
+		if (column == 0) {
+			return name;
+		}
+		else {
+			QRect r = getter();
+			return QString{"[(%1, %2), %3 x %4]"}.arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
 		}
 		break;
 	}

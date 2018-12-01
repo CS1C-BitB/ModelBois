@@ -144,6 +144,13 @@ void Shape::setBrush(const QBrush& brush)
 void Shape::setPen(const QPen& pen)
 { this->pen = pen; }
 
+bool Shape::hasFill(ShapeType type)
+{
+	return    type != LineType
+	       && type != PolylineType
+	       && type != TextType;
+}
+
 void Shape::swap(Shape &other) noexcept
 {
 	std::swap(pos, other.pos);

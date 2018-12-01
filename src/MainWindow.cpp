@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	                                 QPoint{600, 200}, QPoint{650, 200}, QPoint{700, 300}, QPoint{600, 300}
 	                             }});
 	store.shapes.push_back(new Rectangle{40, 50, QPoint{100, 200}, QBrush{QColor{0, 0, 255}}});
-	store.shapes.push_back(new Text{"Hello world!", QFont{}, QPoint{400, 400}});
+	store.shapes.push_back(new Text{"Hello world!", QFont{}, -1, -1, Qt::AlignCenter, QPoint{400, 400}});
 	
 	ui->canvas->set_storage(store);
 	
@@ -73,7 +73,7 @@ void MainWindow::on_ShapeList_currentIndexChanged(int index)
 		ui->remove->setEnabled(false);
 		// TODO: Re-enable on add
 	}
-	else if (index >= store.shapes.size()) {
+	else if (index >= (int)store.shapes.size()) {
 		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
 	}
 	else {

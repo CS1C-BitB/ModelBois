@@ -45,6 +45,9 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 		QLineEdit* editor = new QLineEdit(parent);
 		return editor;
 	}
+	case PropAlignment:
+		TEXT_SELECTION(ALIGNMENT_NAMES.values());
+		break;
 	case PropBrushStyle:
 		TEXT_SELECTION(BRUSH_STYLE_NAMES.values());
 		break;

@@ -5,6 +5,16 @@
 #include <algorithm>
 #include <utility>
 
+#define STYLE_DEF(name) {Qt::name, #name}
+const QMap<Qt::AlignmentFlag, QString> ALIGNMENT_NAMES {
+	STYLE_DEF(AlignLeft),
+	STYLE_DEF(AlignRight),
+	STYLE_DEF(AlignTop),
+	STYLE_DEF(AlignBottom),
+	STYLE_DEF(AlignCenter),
+};
+#undef STYLE_DEF
+
 #define FONT_STYLE_DEF(name) {QFont::name, #name}
 const QMap<QFont::Style, QString> FONT_STYLE_NAMES {
 	FONT_STYLE_DEF(StyleNormal),
@@ -24,8 +34,8 @@ const QMap<QFont::Weight, QString> FONT_WEIGHT_NAMES {
 };
 #undef FONT_STYLE_DEF
 
-Text::Text(QString str, const QFont &font, const QPoint &pos, const QBrush &brush, const QPen &pen, id_t id)
-    : Shape{pos, brush, pen, id}, font{font}, str{std::move(str)}
+Text::Text(QString str, const QFont &font, int w, int h, Qt::AlignmentFlag align, const QPoint &pos, const QBrush &brush, const QPen &pen, id_t id)
+    : Shape{pos, brush, pen, id}, str{std::move(str)}, font{font}, w{w}, h{h}, align{align}
 { }
 
 Text::Text(const Text &copy) = default;
@@ -51,15 +61,12 @@ Text& Text::operator=(Text &&other) noexcept
 
 void Text::draw(QPaintDevice* device)
 {
-	QFontMetrics fm{font};
-	QSize size {fm.width(str), fm.height()};
-	size *= 1.1;
-	QPoint corner {-size.width() / 2, -size.height() / 2};
-	auto paint = getPainter(device, corner);
+	QRect rect = getRect();
+	rect.moveCenter(QPoint{});
+	auto paint = getPainter(device, rect.topLeft());
 	
 	paint->setFont(font);
-	// Margin helps with italics
-	paint->drawText(QRect{corner, size}, str);
+	paint->drawText(rect, align, str);
 }
 
 ShapeType Text::getType() const
@@ -82,4 +89,40 @@ const QFont& Text::getFont() const
 
 void Text::setFont(QFont f)
 { font = std::move(f); }
+
+QRect Text::getRect() const
+{
+	QFontMetrics fm{font};
+	QSize size{((w < 0) ? (int)(fm.width(str) * 1.1) : w), ((h < 0) ? (int)(fm.height() * 1.1) : h)};
+	QRect rect{QPoint{}, size};
+	
+	rect.moveCenter(getPos());
+	
+	return rect;
+}
+
+void Text::setRect(const QRect &rect)
+{
+	setPos(rect.center());
+	w = rect.width();
+	h = rect.height();
+}
+
+int Text::getWidth() const
+{ return w; }
+
+void Text::setWidth(int width)
+{ w = width; }
+
+int Text::getHeight() const
+{ return h; }
+
+void Text::setHeight(int height)
+{ h = height; }
+
+Qt::AlignmentFlag Text::getAlign() const
+{ return align; }
+
+void Text::setAlign(Qt::AlignmentFlag a)
+{ align = a; }
 
