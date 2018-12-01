@@ -28,12 +28,16 @@ PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
 	            std::bind(&Shape::getPen, &s),
 	            std::bind(&Shape::setPen, &s, _1)
 	);
-	new PropertyItem<QBrush>(
-	            this,
-	            "Fill",
-	            std::bind(&Shape::getBrush, &s),
-	            std::bind(&Shape::setBrush, &s, _1)
-	);
+	if (   s.getType() != ShapeType::LINE
+	    && s.getType() != ShapeType::POLYLINE
+	    && s.getType() != ShapeType::TEXT) {
+		new PropertyItem<QBrush>(
+					this,
+					"Fill",
+					std::bind(&Shape::getBrush, &s),
+					std::bind(&Shape::setBrush, &s, _1)
+		);
+	}
 	
 #define TRY_CAST(type, var) type* var = dynamic_cast<type*>(&s)
 	
