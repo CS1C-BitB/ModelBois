@@ -222,6 +222,7 @@ PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 #define DISCONNECT do { \
 	QObject::disconnect(window, &MainWindow::on_canvas_click, nullptr, nullptr); \
 	window->SetCanvasCursor(Qt::ArrowCursor); \
+	window->SetStatusText(""); \
 } while (0)
 	
 	PosButton* button = new PosButton();
@@ -229,6 +230,7 @@ PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 		treeWidget()->setCurrentItem(this);
 		// Set pointer
 		window->SetCanvasCursor(Qt::CrossCursor);
+		window->SetStatusText("Click to set position");
 		// Set setter
 		QObject::connect(window, &MainWindow::on_canvas_click, [this, setter, window](int x, int y) {
 			setter(QPoint{x, y});
@@ -266,8 +268,11 @@ void PropertyItem<QList<QPoint>>::add()
 	MainWindow* window = static_cast<MainWindow*>(treeWidget()->window());
 	
 	treeWidget()->setCurrentItem(this);
+	
 	// Set pointer
 	window->SetCanvasCursor(Qt::CrossCursor);
+	window->SetStatusText("Click to add points");
+	
 	// Set setter
 	QObject::connect(window, &MainWindow::on_canvas_click, [this, window](int x, int y) {
 		size_t i = get_size();

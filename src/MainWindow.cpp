@@ -15,6 +15,7 @@
 
 #include <QComboBox>
 #include <QPushButton>
+#include <QStatusBar>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -52,6 +53,11 @@ MainWindow::~MainWindow()
 void MainWindow::SetCanvasCursor(const QCursor &c)
 {
 	ui->canvas->setCursor(c);
+}
+
+void MainWindow::SetStatusText(const QString &str, int timeout)
+{
+	ui->statusBar->showMessage(str, timeout);
 }
 
 void MainWindow::on_ShapeList_currentIndexChanged(int index)

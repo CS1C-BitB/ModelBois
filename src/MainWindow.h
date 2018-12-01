@@ -19,6 +19,7 @@ public:
 	~MainWindow();
 	
 	void SetCanvasCursor(const QCursor&);
+	void SetStatusText(const QString&, int timeout = 0);
 	
 signals:
 	void on_canvas_click(int x, int y);
