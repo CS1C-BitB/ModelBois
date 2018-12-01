@@ -57,10 +57,16 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Appends an item</string>
+      <string>Starts appending points</string>
      </property>
      <property name="statusTip">
-      <string>Appends an item</string>
+      <string>Starts appending points</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	font-weight: bold;
+	color: rgb(78, 154, 6)
+}</string>
      </property>
      <property name="text">
       <string>+</string>
@@ -80,6 +86,12 @@
      </property>
      <property name="statusTip">
       <string>Remove last item</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+	color: rgb(204, 0, 0);
+	font-weight: bold;
+}</string>
      </property>
      <property name="text">
       <string>-</string>

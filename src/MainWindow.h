@@ -22,7 +22,7 @@ public:
 	void SetStatusText(const QString&, int timeout = 0);
 	
 signals:
-	void on_canvas_click(int x, int y);
+	void onCanvasClick(int x, int y);
 	
 private slots:
 	void on_ShapeList_currentIndexChanged(int index);

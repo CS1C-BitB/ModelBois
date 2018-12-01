@@ -59,8 +59,13 @@ void PolyLine::draw(QPaintDevice* device)
 	
 #if 1
 	// Polygonal chain ver
-	for (size_t i = 0; i < points.size() - 1; ++i) {
-		paint->drawLine(points[i], points[i + 1]);
+	if (points.size() == 1) {
+		paint->drawPoint(points[0]);
+	}
+	else if (!points.empty()) {
+		for (size_t i = 0; i < points.size() - 1; ++i) {
+			paint->drawLine(points[i], points[i + 1]);
+		}
 	}
 #else
 	// Point pairs ver

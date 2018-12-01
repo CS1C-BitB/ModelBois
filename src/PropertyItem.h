@@ -42,19 +42,19 @@ private:
 
 
 
-// Partial Specialization for lists
+// Specialization for list of QPoints
 
-template<class T>
-class PropertyItem<QList<T>> : public QTreeWidgetItem
+template<>
+class PropertyItem<QList<QPoint>> : public QTreeWidgetItem
 {
 public:
 	using get_size_t = std::function<size_t()>;
-	using get_item_t = std::function<T(size_t)>;
-	using set_item_t = std::function<void(size_t, T)>;
-	using insert_t = std::function<void(size_t, T)>;
+	using get_item_t = std::function<QPoint(size_t)>;
+	using set_item_t = std::function<void(size_t, QPoint)>;
+	using insert_t = std::function<void(size_t, QPoint)>;
 	using erase_t = std::function<void(size_t)>;
 	
-	PropertyItem(QTreeWidgetItem* parent, QString name, get_size_t g_s, get_item_t g_i, set_item_t s_i, insert_t insert, erase_t erase);
+	PropertyItem(QTreeWidgetItem* parent, QString name, get_size_t get_size, get_item_t get_item, set_item_t set_item, insert_t insert, erase_t erase);
 	
 	QVariant data(int column, int role) const override;
 	
@@ -180,79 +180,5 @@ PROP_DEF(void)::setData(int column, int role, const QVariant &value)
 }
 
 #undef PROP_DEF
-
-
-
-// Partial Specialization for lists
-
-#define LIST_PROP_DEF(ret) template<class T> ret PropertyItem<QList<T>>
-
-LIST_PROP_DEF(/**/)::PropertyItem(QTreeWidgetItem* parent, QString name, get_size_t get_size_in, get_item_t get_item_in, set_item_t set_item_in, insert_t insert_in, erase_t erase_in)
-    : QTreeWidgetItem(parent, PropNone),
-      name{std::move(name)},
-      get_size{std::move(get_size_in)},
-      get_item{std::move(get_item_in)},
-      set_item{std::move(set_item_in)},
-      insert{std::move(insert_in)},
-      erase{std::move(erase_in)}
-{
-	size_t i = 0, count = get_size();
-	for (; i < count; ++i) {
-		new PropertyItem<T>(
-		            this,
-		            QString{"[%1]"}.arg(i),
-		            std::bind(get_item, i),
-		            std::bind(set_item, i, std::placeholders::_1)
-		);
-	}
-	
-	ListButtons* buttons = new ListButtons();
-	buttons->setRemoveEnabled(count != 0);
-	QObject::connect(buttons, &ListButtons::add, std::bind(&PropertyItem<QList<T>>::add, this));
-	QObject::connect(buttons, &ListButtons::remove, std::bind(&PropertyItem<QList<T>>::remove, this));
-	treeWidget()->setItemWidget(this, 1, buttons);
-}
-
-LIST_PROP_DEF(void)::add()
-{
-	size_t i = get_size();
-	insert(i, T{});
-	treeWidget()->expandItem(
-		new PropertyItem<T>(
-		            this,
-		            QString{"[%1]"}.arg(i),
-		            std::bind(get_item, i),
-		            std::bind(set_item, i, std::placeholders::_1)
-	));
-	static_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(true);
-	emitDataChanged();
-}
-
-LIST_PROP_DEF(void)::remove()
-{
-	size_t i = get_size() - 1;
-	erase(i);
-	removeChild(child(i));
-	static_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(i != 0);
-	emitDataChanged();
-}
-
-LIST_PROP_DEF(QVariant)::data(int column, int role) const
-{
-	switch (role) {
-	case Qt::DisplayRole:
-		if (column == 0) {
-			return name;
-		}
-		else {
-			return QString{"Size: %1"}.arg(get_size());
-		}
-		break;
-	}
-	
-	return QVariant{};
-}
-
-#undef LIST_PROP_DEF
 
 #endif // PROPITEM_H

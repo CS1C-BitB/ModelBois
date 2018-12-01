@@ -205,6 +205,17 @@ PropertyItem<Text>::PropertyItem(QTreeWidgetItem* parent, Text& text)
  * 
  *****************************************************************************/
 
+void Disconnect(MainWindow* window, QTreeWidget* tree, QWidget* button)
+{
+	QObject::disconnect(window, &MainWindow::onCanvasClick, nullptr, nullptr);
+	QObject::disconnect(tree, &QTreeWidget::currentItemChanged, nullptr, nullptr);
+	window->SetCanvasCursor(Qt::ArrowCursor);
+	if (button) {
+		button->setStatusTip(button->toolTip());
+		window->SetStatusText("");
+	}
+}
+
 PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
     : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}
 {
@@ -223,30 +234,24 @@ PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 	
 	MainWindow* window = static_cast<MainWindow*>(treeWidget()->window());
 	
-#define DISCONNECT do { \
-	QObject::disconnect(window, &MainWindow::on_canvas_click, nullptr, nullptr); \
-	window->SetCanvasCursor(Qt::ArrowCursor); \
-	window->SetStatusText(""); \
-} while (0)
-	
-	PosButton* button = new PosButton();
-	QObject::connect(button, &PosButton::clicked, [this, setter, window]() {
+	PosButton* buttonWidget = new PosButton();
+	QWidget* button = buttonWidget->findChild<QWidget*>("button");
+	QObject::connect(buttonWidget, &PosButton::clicked, [this, setter, window, button]() {
 		treeWidget()->setCurrentItem(this);
 		// Set pointer
 		window->SetCanvasCursor(Qt::CrossCursor);
+		button->setStatusTip("");
 		window->SetStatusText("Click to set position");
 		// Set setter
-		QObject::connect(window, &MainWindow::on_canvas_click, [this, setter, window](int x, int y) {
+		QObject::connect(window, &MainWindow::onCanvasClick, [this, setter, window, button](int x, int y) {
 			setter(QPoint{x, y});
 			emitDataChanged();
 			// Unset setter
-			DISCONNECT;
+			Disconnect(window, treeWidget(), button);
 		});
+		QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget(), button));
 	});
-	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, [this, window]() {
-		DISCONNECT;
-	});
-	treeWidget()->setItemWidget(this, 1, button);
+	treeWidget()->setItemWidget(this, 1, buttonWidget);
 }
 
 QVariant PropertyItem<QPoint>::data(int column, int role) const
@@ -266,19 +271,51 @@ QVariant PropertyItem<QPoint>::data(int column, int role) const
 	return QVariant{};
 }
 
-template<>
+/******************************************************************************
+ * 
+ * QPoint list specialization
+ * 
+ *****************************************************************************/
+
+PropertyItem<QList<QPoint>>::PropertyItem(QTreeWidgetItem* parent, QString name, get_size_t get_size_in, get_item_t get_item_in, set_item_t set_item_in, insert_t insert_in, erase_t erase_in)
+    : QTreeWidgetItem(parent, PropNone),
+      name{std::move(name)},
+      get_size{std::move(get_size_in)},
+      get_item{std::move(get_item_in)},
+      set_item{std::move(set_item_in)},
+      insert{std::move(insert_in)},
+      erase{std::move(erase_in)}
+{
+	size_t i = 0, count = get_size();
+	for (; i < count; ++i) {
+		new PropertyItem<QPoint>(
+		            this,
+		            QString{"[%1]"}.arg(i),
+		            std::bind(get_item, i),
+		            std::bind(set_item, i, std::placeholders::_1)
+		);
+	}
+	
+	ListButtons* buttons = new ListButtons();
+	buttons->setRemoveEnabled(count != 0);
+	QObject::connect(buttons, &ListButtons::add, std::bind(&PropertyItem<QList<QPoint>>::add, this));
+	QObject::connect(buttons, &ListButtons::remove, std::bind(&PropertyItem<QList<QPoint>>::remove, this));
+	treeWidget()->setItemWidget(this, 1, buttons);
+}
+
 void PropertyItem<QList<QPoint>>::add()
 {
 	MainWindow* window = static_cast<MainWindow*>(treeWidget()->window());
-	
+	QWidget* button = static_cast<PosButton*>(treeWidget()->itemWidget(this, 1))->findChild<QWidget*>("add");
 	treeWidget()->setCurrentItem(this);
 	
 	// Set pointer
 	window->SetCanvasCursor(Qt::CrossCursor);
+	button->setStatusTip("");
 	window->SetStatusText("Click to add points");
 	
 	// Set setter
-	QObject::connect(window, &MainWindow::on_canvas_click, [this, window](int x, int y) {
+	QObject::connect(window, &MainWindow::onCanvasClick, [this, window](int x, int y) {
 		size_t i = get_size();
 		insert(i, QPoint{x, y});
 		auto* prop = new PropertyItem<QPoint>(
@@ -290,18 +327,16 @@ void PropertyItem<QList<QPoint>>::add()
 		treeWidget()->expandItem(prop);
 		emitDataChanged();
 		// Unset setter
-		//DISCONNECT;
+		//Disconnect(window, treeWidget(), button);
 	});
-	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, [this, window]() {
-		DISCONNECT;
-	});
+	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget(), button));
 }
 
-template<>
 void PropertyItem<QList<QPoint>>::remove()
 {
 	MainWindow* window = static_cast<MainWindow*>(treeWidget()->window());
-	DISCONNECT;
+	
+	Disconnect(window, treeWidget(), nullptr);
 	
 	size_t i = get_size() - 1;
 	erase(i);
@@ -310,7 +345,21 @@ void PropertyItem<QList<QPoint>>::remove()
 	emitDataChanged();
 }
 
-#undef DISCONNECT
+QVariant PropertyItem<QList<QPoint>>::data(int column, int role) const
+{
+	switch (role) {
+	case Qt::DisplayRole:
+		if (column == 0) {
+			return name;
+		}
+		else {
+			return QString{"Size: %1"}.arg(get_size());
+		}
+		break;
+	}
+	
+	return QVariant{};
+}
 
 /******************************************************************************
  * 
