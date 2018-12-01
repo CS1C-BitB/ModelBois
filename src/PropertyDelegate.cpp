@@ -85,15 +85,13 @@ void PropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 		int value = index.model()->data(index, Qt::EditRole).toInt();
 		
 		spinBox->setValue(value);
-		// Real-time update disabled for performance
-		//connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
+		connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
 	}
 	else if (TRY_CAST(QLineEdit, line)) {
 		QString value = index.model()->data(index, Qt::EditRole).value<QString>();
 		
 		line->setText(value);
-		// Real-time update disabled for performance
-		//connect(line, &QLineEdit::textChanged, this, std::bind(&PropertyDelegate::valueChanged, this, editor));
+		connect(line, &QLineEdit::textChanged, this, std::bind(&PropertyDelegate::valueChanged, this, editor));
 	}
 }
 

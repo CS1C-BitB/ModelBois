@@ -172,7 +172,8 @@ PROP_DEF(void)::setData(int column, int role, const QVariant &value)
 	case Qt::EditRole:
 		if (column == 1) {
 			setter(value.value<T>());
-			emitDataChanged();
+			//emitDataChanged(); Too slow
+			this->treeWidget()->itemChanged(this, 1);
 		}
 		break;
 	}

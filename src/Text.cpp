@@ -53,12 +53,13 @@ void Text::draw(QPaintDevice* device)
 {
 	QFontMetrics fm{font};
 	QSize size {fm.width(str), fm.height()};
+	size *= 1.1;
 	QPoint corner {-size.width() / 2, -size.height() / 2};
 	auto paint = getPainter(device, corner);
 	
 	paint->setFont(font);
 	// Margin helps with italics
-	paint->drawText(QRect{corner, size*1.1}, str);
+	paint->drawText(QRect{corner, size}, str);
 }
 
 ShapeType Text::getType() const
