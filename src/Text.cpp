@@ -61,11 +61,12 @@ Text& Text::operator=(Text &&other) noexcept
 
 void Text::draw(QPaintDevice* device)
 {
+	auto paint = getPainter(device);
 	QRect rect = getRect();
 	rect.moveCenter(QPoint{});
-	auto paint = getPainter(device, rect.topLeft());
 	
 	paint->setFont(font);
+	
 	paint->drawText(rect, align, str);
 }
 

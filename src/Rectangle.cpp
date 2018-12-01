@@ -31,10 +31,11 @@ Rectangle& Rectangle::operator=(Rectangle &&other) noexcept
 
 void Rectangle::draw(QPaintDevice* device)
 {
-	QPoint corner = QPoint{-w / 2, -h / 2};
-	auto paint = getPainter(device, corner);
+	auto paint = getPainter(device);
+	QRect rect = getRect();
+	rect.moveCenter(QPoint{});
 	
-	paint->drawRect(corner.x(), corner.y(), w, h);
+	paint->drawRect(rect);
 }
 
 ShapeType Rectangle::getType() const
@@ -45,6 +46,13 @@ double Rectangle::getPerimeter() const
 
 double Rectangle::getArea() const
 { return std::abs(w * h); }
+
+QRect Rectangle::getRect() const
+{
+	QRect rect{0, 0, w, h};
+	rect.moveCenter(getPos());
+	return rect;
+}
 
 int Rectangle::getWidth() const
 { return w; }

@@ -75,12 +75,15 @@ void MainWindow::on_ShapeList_currentIndexChanged(int index)
 	}
 	else if (index >= (int)store.shapes.size()) {
 		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+		return;
 	}
 	else {
 		Shape* s = store.shapes.at(index);
 		new PropertyItem<Shape>(ui->PropTree->invisibleRootItem(), *s);
 		ui->PropTree->expandAll();
 	}
+	
+	ui->canvas->setSelected(index);
 	
 	ui->PropTree->update();
 }

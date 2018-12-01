@@ -75,6 +75,12 @@ public:
 	virtual double getArea() const = 0;
 	
 	/**
+	 * @brief getRect Gets the bounding rectangle of the shape.
+	 * @return Bounding rectangle.
+	 */
+	virtual QRect getRect() const = 0;
+	
+	/**
 	 * @brief getPos Gets the position of the shape.
 	 * @return Position
 	 * 
@@ -105,7 +111,7 @@ public:
 protected:
 	Shape(id_t id);
 	void swap(Shape &other) noexcept;
-	std::unique_ptr<QPainter> getPainter(QPaintDevice* device, QPoint corner) const;
+	std::unique_ptr<QPainter> getPainter(QPaintDevice* device) const;
 	
 private:
 	QPoint pos;

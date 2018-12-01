@@ -16,6 +16,7 @@ public:
 signals:
 	
 public slots:
+	void setSelected(int);
 	
 protected:
 	void paintEvent(QPaintEvent *event) override;
@@ -23,6 +24,8 @@ protected:
 	
 private:
 	const vector_t* shapes;
+	const QImage target;
+	int selected;
 
 };
 

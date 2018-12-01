@@ -41,8 +41,7 @@ Line& Line::operator=(Line &&other) noexcept
 
 void Line::draw(QPaintDevice* device)
 {
-	QPoint corner {std::min(A.x(), B.x()), std::min(A.y(), B.y())};
-	auto paint = getPainter(device, corner);
+	auto paint = getPainter(device);
 	
 	paint->drawLine(A, B);
 }
@@ -56,7 +55,13 @@ double Line::getPerimeter() const
 double Line::getArea() const
 { return -1; }
 
-// TODO: global coords
+QRect Line::getRect() const
+{
+	QRect rect{QPoint{std::min(A.x(), B.x()), std::min(A.y(), B.y())},
+	           QPoint{std::max(A.x(), B.x()), std::max(A.y(), B.y())}};
+	rect.moveCenter(getPos());
+	return rect;
+}
 
 QPoint Line::getStart() const
 { return A + getPos(); }

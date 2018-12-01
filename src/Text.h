@@ -33,7 +33,7 @@ public:
 	const QFont& getFont() const;
 	void setFont(QFont);
 	
-	QRect getRect() const;
+	QRect getRect() const override;
 	void setRect(const QRect&);
 	
 	int getWidth() const;

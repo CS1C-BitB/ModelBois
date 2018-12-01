@@ -32,8 +32,7 @@ Ellipse& Ellipse::operator=(Ellipse &&other) noexcept
 
 void Ellipse::draw(QPaintDevice* device)
 {
-	QPoint corner {-w / 2, -h / 2};
-	auto paint = getPainter(device, corner);
+	auto paint = getPainter(device);
 	
 	paint->drawEllipse(QPoint{}, w / 2, h / 2);
 }
@@ -61,6 +60,13 @@ double Ellipse::getArea() const
 	double b = std::abs(h) / 2.0;
 	
 	return pi * a * b;
+}
+
+QRect Ellipse::getRect() const
+{
+	QRect rect{0, 0, w, h};
+	rect.moveCenter(getPos() - QPoint{1, 1});
+	return rect;
 }
 
 int Ellipse::getWidth() const

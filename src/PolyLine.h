@@ -21,6 +21,7 @@ public:
 	ShapeType getType() const override;
 	double getPerimeter() const override;
 	double getArea() const override;
+	QRect getRect() const override;
 	
 	std::size_t getCount() const;
 	QPoint getPoint(std::size_t i) const;
@@ -31,6 +32,7 @@ public:
 	void clearPoints();
 	
 private:
+	void setCenter();
 	std::vector<QPoint> points;
 };
 
