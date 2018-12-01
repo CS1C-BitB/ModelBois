@@ -264,13 +264,13 @@ template<>
 void PropertyItem<QList<QPoint>>::add()
 {
 	MainWindow* window = static_cast<MainWindow*>(treeWidget()->window());
-	size_t i = get_size();
 	
 	treeWidget()->setCurrentItem(this);
 	// Set pointer
 	window->SetCanvasCursor(Qt::CrossCursor);
 	// Set setter
-	QObject::connect(window, &MainWindow::on_canvas_click, [this, window, i](int x, int y) {
+	QObject::connect(window, &MainWindow::on_canvas_click, [this, window](int x, int y) {
+		size_t i = get_size();
 		insert(i, QPoint{x, y});
 		auto* prop = new PropertyItem<QPoint>(
 		            this,
@@ -281,7 +281,7 @@ void PropertyItem<QList<QPoint>>::add()
 		treeWidget()->expandItem(prop);
 		emitDataChanged();
 		// Unset setter
-		DISCONNECT;
+		//DISCONNECT;
 	});
 	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, [this, window]() {
 		DISCONNECT;
