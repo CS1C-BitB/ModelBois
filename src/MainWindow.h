@@ -4,6 +4,7 @@
 #include "Storage.h"
 
 #include <QMainWindow>
+#include <QTimer>
 #include <QTreeWidgetItem>
 
 namespace Ui {
@@ -31,9 +32,12 @@ private slots:
 	
 	void on_remove_clicked();
 	
+	void on_actionSave_triggered();
+	
 private:
 	Storage store;
 	Ui::MainWindow *ui;
+	QTimer saveTimer;
 };
 
 #endif // MAINWINDOW_H

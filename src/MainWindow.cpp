@@ -7,10 +7,13 @@
 
 #include "PropertyItem.h"
 #include "PropertyDelegate.h"
+#include "Serializer.h"
 
 #include <QComboBox>
 #include <QPushButton>
 #include <QStatusBar>
+
+const char* filename = "myShapes.txt";
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,10 +40,18 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->PropTree->setHeaderLabels({"Property", "Value"});
 	ui->PropTree->setItemDelegate(new PropertyDelegate());
 	ui->PropTree->setEditTriggers(QAbstractItemView::AllEditTriggers);
+	
+	saveTimer.setSingleShot(true);
+	connect(&saveTimer, &QTimer::timeout, [this]() {
+		SetStatusText("Saving shapes...");
+		writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
+		SetStatusText("Saved shapes file", 2000);
+	});
 }
 
 MainWindow::~MainWindow()
 {
+	writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
 	delete ui->PropTree->itemDelegate();
 	delete ui;
 }
@@ -86,6 +97,9 @@ void MainWindow::on_ShapeList_currentIndexChanged(int index)
 void MainWindow::on_PropTree_itemChanged(QTreeWidgetItem*, int)
 {
 	ui->canvas->update();
+	// [Optional] Save on change
+	// Delayed to prevent spam-writes, will write file after two seconds without updates
+	//saveTimer.start(2000);
 }
 
 void MainWindow::on_remove_clicked()
@@ -97,4 +111,9 @@ void MainWindow::on_remove_clicked()
 	ui->ShapeList->update();
 	
 	on_ShapeList_currentIndexChanged(index);
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+	saveTimer.start(0);
 }
