@@ -9,7 +9,9 @@
 #include "PropertyDelegate.h"
 #include "Serializer.h"
 
+#include <QCloseEvent>
 #include <QComboBox>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QStatusBar>
 
@@ -46,12 +48,13 @@ MainWindow::MainWindow(QWidget *parent) :
 		SetStatusText("Saving shapes...");
 		writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
 		SetStatusText("Saved shapes file", 2000);
+		modified = false;
 	});
+	modified = false;
 }
 
 MainWindow::~MainWindow()
 {
-	writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
 	delete ui->PropTree->itemDelegate();
 	delete ui;
 }
@@ -64,6 +67,35 @@ void MainWindow::SetCanvasCursor(const QCursor &c)
 void MainWindow::SetStatusText(const QString &str, int timeout)
 {
 	ui->statusBar->showMessage(str, timeout);
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+	if (!modified) {
+		event->accept();
+	}
+	else {
+		QMessageBox* warn = new QMessageBox(
+		            QMessageBox::Warning,
+		            "Unsaved Changes",
+		            "You have unsaved changes, do you wish to quit anyway?",
+		            QMessageBox::Save | QMessageBox::Cancel | QMessageBox::Yes,
+		            this
+		);
+		warn->exec();
+		switch (warn->result()) {
+		case QMessageBox::Save:
+			writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
+			event->accept();
+			break;
+		case QMessageBox::Cancel:
+			event->ignore();
+			break;
+		case QMessageBox::Yes:
+			event->accept();
+			break;
+		}
+	}
 }
 
 void MainWindow::on_ShapeList_currentIndexChanged(int index)
@@ -100,6 +132,7 @@ void MainWindow::on_ShapeList_currentIndexChanged(int index)
 void MainWindow::onDataChanged()
 {
 	ui->canvas->update();
+	modified = true;
 	// [Optional] Save on change
 	// Delayed to prevent spam-writes, will write file after two seconds without updates
 	//saveTimer.start(2000);

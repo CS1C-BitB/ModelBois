@@ -22,6 +22,9 @@ public:
 	void SetCanvasCursor(const QCursor&);
 	void SetStatusText(const QString&, int timeout = 0);
 	
+protected:
+	void closeEvent(QCloseEvent *event);
+	
 signals:
 	void onCanvasClick(int x, int y);
 	
@@ -38,6 +41,7 @@ private:
 	Storage store;
 	Ui::MainWindow *ui;
 	QTimer saveTimer;
+	bool modified;
 };
 
 #endif // MAINWINDOW_H
