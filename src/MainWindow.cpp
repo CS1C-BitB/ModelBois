@@ -68,6 +68,7 @@ void MainWindow::SetStatusText(const QString &str, int timeout)
 
 void MainWindow::on_ShapeList_currentIndexChanged(int index)
 {
+	disconnect(ui->PropTree, &QTreeWidget::itemChanged, nullptr, nullptr);
 	QTreeWidgetItem* old = ui->PropTree->topLevelItem(0);
 	if (old) {
 		ui->PropTree->removeItemWidget(old, 0);
@@ -92,9 +93,11 @@ void MainWindow::on_ShapeList_currentIndexChanged(int index)
 	ui->canvas->setSelected(index);
 	
 	ui->PropTree->update();
+	
+	connect(ui->PropTree, &QTreeWidget::itemChanged, this, &MainWindow::onDataChanged);
 }
 
-void MainWindow::on_PropTree_itemChanged(QTreeWidgetItem*, int)
+void MainWindow::onDataChanged()
 {
 	ui->canvas->update();
 	// [Optional] Save on change

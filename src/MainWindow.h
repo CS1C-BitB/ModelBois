@@ -28,7 +28,7 @@ signals:
 private slots:
 	void on_ShapeList_currentIndexChanged(int index);
 	
-	void on_PropTree_itemChanged(QTreeWidgetItem *item, int column);
+	void onDataChanged();
 	
 	void on_remove_clicked();
 	
