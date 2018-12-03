@@ -37,8 +37,7 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 	case PropInt: {
 		auto *editor = new QSpinBox(parent);
 		editor->setFrame(false);
-		editor->setMinimum(0);
-		editor->setMaximum(1000);
+		editor->setRange(0, 2000);
 		return editor;
 	}
 	case PropString: {
