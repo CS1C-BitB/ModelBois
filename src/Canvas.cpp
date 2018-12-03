@@ -44,7 +44,7 @@ void Canvas::paintEvent(QPaintEvent */*event*/)
 void Canvas::mousePressEvent(QMouseEvent *event)
 {
 	if (event->button() & Qt::LeftButton) {
-		static_cast<MainWindow*>(window())->onCanvasClick(event->x(), event->y());
+		dynamic_cast<MainWindow*>(window())->onCanvasClick(event->x(), event->y());
 	}
 }
 

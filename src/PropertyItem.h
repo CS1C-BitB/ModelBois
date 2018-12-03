@@ -128,6 +128,7 @@ public: \
 private: \
 	QString name; \
 	getter_t getter; \
+	setter_t setter; \
 };
 
 META_PROP_ITEM(QPoint)

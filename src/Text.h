@@ -48,8 +48,8 @@ public:
 private:
 	QString str;
 	QFont font;
-	int w, h;
-	Qt::AlignmentFlag align;
+	int w = -1, h = -1;
+	Qt::AlignmentFlag align = Qt::AlignCenter;
 };
 
 #endif // TEXT_H

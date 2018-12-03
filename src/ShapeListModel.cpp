@@ -5,18 +5,18 @@ ShapeListModel::ShapeListModel(vector_t* list)
 
 int ShapeListModel::rowCount(const QModelIndex &) const
 {
-	return list->size();
+	return static_cast<int>(list->size());
 }
 
 QVariant ShapeListModel::data(const QModelIndex &index, int role) const
 {
-	if (!index.isValid())
+	if (!index.isValid() || index.row() < 0)
 		return QVariant{};
 	
-	if (index.row() >= list->size())
+	if (index.row() >= static_cast<int>(list->size()))
 		return "None";
 	
-	Shape* s = (*list)[index.row()];
+	Shape* s = (*list)[static_cast<size_t>(index.row())];
 	
 	switch (role) {
 	case Qt::DisplayRole:

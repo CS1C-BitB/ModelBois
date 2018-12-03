@@ -45,6 +45,10 @@ Text::Text(Text &&move) noexcept
 {
 	swap(move);
 	std::swap(str, move.str);
+	std::swap(font, move.font);
+	std::swap(w, move.w);
+	std::swap(h, move.h);
+	std::swap(align, move.align);
 }
 
 Text::~Text() = default;
@@ -56,6 +60,10 @@ Text& Text::operator=(Text &&other) noexcept
 	Text move{std::move(other)};
 	swap(move);
 	std::swap(str, move.str);
+	std::swap(font, move.font);
+	std::swap(w, move.w);
+	std::swap(h, move.h);
+	std::swap(align, move.align);
 	return *this;
 }
 

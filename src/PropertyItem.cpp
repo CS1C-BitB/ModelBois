@@ -39,7 +39,7 @@ PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
 		);
 	}
 	
-#define TRY_CAST(type, var) type* var = dynamic_cast<type*>(&s)
+#define TRY_CAST(type, var) auto* var = dynamic_cast<type*>(&s)
 	
 	if (TRY_CAST(Ellipse, ellipse)) {
 		new PropertyItem<Ellipse>(this, *ellipse);
@@ -236,34 +236,34 @@ void Disconnect(MainWindow* window, QTreeWidget* tree, QWidget* button)
 	}
 }
 
-PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
-    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}
+PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter_in)
+    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}, setter{std::move(setter_in)}
 {
 	new PropertyItem<int>(
 	            this,
 	            "X",
 	            [this]() -> int { return getter().x(); },
-	            [this, setter](int x) { setter(QPoint{x, getter().y()}); }
+	            [this](int x) { setter(QPoint{x, getter().y()}); }
 	);
 	new PropertyItem<int>(
 	            this,
 	            "Y",
 	            [this]() -> int { return getter().y(); },
-	            [this, setter](int y) { setter(QPoint{getter().x(), y}); }
+	            [this](int y) { setter(QPoint{getter().x(), y}); }
 	);
 	
-	MainWindow* window = static_cast<MainWindow*>(treeWidget()->window());
+	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
 	
-	PosButton* buttonWidget = new PosButton();
-	QWidget* button = buttonWidget->findChild<QWidget*>("button");
-	QObject::connect(buttonWidget, &PosButton::clicked, [this, setter, window, button]() {
+	auto* buttonWidget = new PosButton();
+	auto* button = buttonWidget->findChild<QWidget*>("button");
+	QObject::connect(buttonWidget, &PosButton::clicked, [this, window, button]() {
 		treeWidget()->setCurrentItem(this);
 		// Set pointer
 		window->SetCanvasCursor(Qt::CrossCursor);
 		button->setStatusTip("");
 		window->SetStatusText("Click to set position");
 		// Set setter
-		QObject::connect(window, &MainWindow::onCanvasClick, [this, setter, window, button](int x, int y) {
+		QObject::connect(window, &MainWindow::onCanvasClick, [this, window, button](int x, int y) {
 			setter(QPoint{x, y});
 			emitDataChanged();
 			// Unset setter
@@ -285,7 +285,6 @@ QVariant PropertyItem<QPoint>::data(int column, int role) const
 			QPoint p = getter();
 			return QString{"(%1, %2)"}.arg(p.x()).arg(p.y());
 		}
-		break;
 	}
 	
 	return QVariant{};
@@ -316,7 +315,7 @@ PropertyItem<QList<QPoint>>::PropertyItem(QTreeWidgetItem* parent, QString name,
 		);
 	}
 	
-	ListButtons* buttons = new ListButtons();
+	auto* buttons = new ListButtons();
 	buttons->setRemoveEnabled(count != 0);
 	QObject::connect(buttons, &ListButtons::add, std::bind(&PropertyItem<QList<QPoint>>::add, this));
 	QObject::connect(buttons, &ListButtons::remove, std::bind(&PropertyItem<QList<QPoint>>::remove, this));
@@ -325,8 +324,8 @@ PropertyItem<QList<QPoint>>::PropertyItem(QTreeWidgetItem* parent, QString name,
 
 void PropertyItem<QList<QPoint>>::add()
 {
-	MainWindow* window = static_cast<MainWindow*>(treeWidget()->window());
-	QWidget* button = static_cast<PosButton*>(treeWidget()->itemWidget(this, 1))->findChild<QWidget*>("add");
+	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
+	auto* button = treeWidget()->itemWidget(this, 1)->findChild<QWidget*>("add");
 	treeWidget()->setCurrentItem(this);
 	
 	// Set pointer
@@ -335,7 +334,7 @@ void PropertyItem<QList<QPoint>>::add()
 	window->SetStatusText("Click to add points");
 	
 	// Set setter
-	QObject::connect(window, &MainWindow::onCanvasClick, [this, window](int x, int y) {
+	QObject::connect(window, &MainWindow::onCanvasClick, [this](int x, int y) {
 		size_t i = get_size();
 		insert(i, QPoint{x, y});
 		auto* prop = new PropertyItem<QPoint>(
@@ -346,22 +345,20 @@ void PropertyItem<QList<QPoint>>::add()
 		);
 		treeWidget()->expandItem(prop);
 		emitDataChanged();
-		// Unset setter
-		//Disconnect(window, treeWidget(), button);
 	});
 	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget(), button));
 }
 
 void PropertyItem<QList<QPoint>>::remove()
 {
-	MainWindow* window = static_cast<MainWindow*>(treeWidget()->window());
+	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
 	
 	Disconnect(window, treeWidget(), nullptr);
 	
 	size_t i = get_size() - 1;
 	erase(i);
-	removeChild(child(i));
-	static_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(i != 0);
+	removeChild(child(static_cast<int>(i)));
+	dynamic_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(i != 0);
 	emitDataChanged();
 }
 
@@ -375,7 +372,6 @@ QVariant PropertyItem<QList<QPoint>>::data(int column, int role) const
 		else {
 			return QString{"Size: %1"}.arg(get_size());
 		}
-		break;
 	}
 	
 	return QVariant{};
@@ -387,32 +383,32 @@ QVariant PropertyItem<QList<QPoint>>::data(int column, int role) const
  * 
  *****************************************************************************/
 
-PropertyItem<QRect>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
-    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}
+PropertyItem<QRect>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter_in)
+    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}, setter{std::move(setter_in)}
 {
 	new PropertyItem<int>(
 	            this,
 	            "X",
 	            [this]() -> int { return getter().left(); },
-	            [this, setter](int x) { auto v = getter(); v.moveLeft(x); setter(v); }
+	            [this](int x) { auto v = getter(); v.moveLeft(x); setter(v); }
 	);
 	new PropertyItem<int>(
 	            this,
 	            "Y",
 	            [this]() -> int { return getter().top(); },
-	            [this, setter](int x) { auto v = getter(); v.moveTop(x); setter(v); }
+	            [this](int x) { auto v = getter(); v.moveTop(x); setter(v); }
 	);
 	new PropertyItem<int>(
 	            this,
 	            "Width",
 	            [this]() -> int { return getter().width(); },
-	            [this, setter](int x) { auto v = getter(); v.setWidth(x); setter(v); }
+	            [this](int x) { auto v = getter(); v.setWidth(x); setter(v); }
 	);
 	new PropertyItem<int>(
 	            this,
 	            "Height",
 	            [this]() -> int { return getter().height(); },
-	            [this, setter](int x) { auto v = getter(); v.setHeight(x); setter(v); }
+	            [this](int x) { auto v = getter(); v.setHeight(x); setter(v); }
 	);
 }
 
@@ -427,7 +423,6 @@ QVariant PropertyItem<QRect>::data(int column, int role) const
 			QRect r = getter();
 			return QString{"[(%1, %2), %3 x %4]"}.arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
 		}
-		break;
 	}
 	
 	return QVariant{};
@@ -439,41 +434,41 @@ QVariant PropertyItem<QRect>::data(int column, int role) const
  * 
  *****************************************************************************/
 
-PropertyItem<QPen>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
-    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}
+PropertyItem<QPen>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter_in)
+    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}, setter{std::move(setter_in)}
 {
 	new PropertyItem<int>(
 	            this,
 	            "Width",
 	            [this]() { return getter().width(); },
-	            [this, setter](int w) { auto v = getter(); v.setWidth(w); setter(v); }
+	            [this](int w) { auto v = getter(); v.setWidth(w); setter(v); }
 	);
 	new PropertyItem<QString>(
 	            this,
 	            "Color",
 	            [this]() { return COLOR_NAMES.key(getter().color()); },
-	            [this, setter](QString s) { auto v = getter(); v.setColor(COLOR_NAMES[s]); setter(v); },
+	            [this](QString s) { auto v = getter(); v.setColor(COLOR_NAMES[s]); setter(v); },
 	            PropColor
 	);
 	new PropertyItem<QString>(
 	            this,
 	            "Style",
 	            [this]() { return PEN_STYLE_NAMES[getter().style()]; },
-	            [this, setter](QString s) { auto v = getter(); v.setStyle(PEN_STYLE_NAMES.key(s)); setter(v); },
+	            [this](QString s) { auto v = getter(); v.setStyle(PEN_STYLE_NAMES.key(s)); setter(v); },
 	            PropPenStyle
 	);
 	new PropertyItem<QString>(
 	            this,
 	            "Cap Style",
 	            [this]() { return PEN_CAP_STYLE_NAMES[getter().capStyle()]; },
-	            [this, setter](QString s) { auto v = getter(); v.setCapStyle(PEN_CAP_STYLE_NAMES.key(s)); setter(v); },
+	            [this](QString s) { auto v = getter(); v.setCapStyle(PEN_CAP_STYLE_NAMES.key(s)); setter(v); },
 	            PropPenCapStyle
 	);
 	new PropertyItem<QString>(
 	            this,
 	            "Join Style",
 	            [this]() { return PEN_JOIN_STYLE_NAMES[getter().joinStyle()]; },
-	            [this, setter](QString s) { auto v = getter(); v.setJoinStyle(PEN_JOIN_STYLE_NAMES.key(s)); setter(v); },
+	            [this](QString s) { auto v = getter(); v.setJoinStyle(PEN_JOIN_STYLE_NAMES.key(s)); setter(v); },
 	            PropPenJoinStyle
 	);
 }
@@ -497,21 +492,21 @@ QVariant PropertyItem<QPen>::data(int column, int role) const
  * 
  *****************************************************************************/
 
-PropertyItem<QBrush>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
-    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}
+PropertyItem<QBrush>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter_in)
+    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}, setter{std::move(setter_in)}
 {
 	new PropertyItem<QString>(
 	            this,
 	            "Color",
 	            [this]() { return COLOR_NAMES.key(getter().color()); },
-	            [this, setter](QString s) { auto v = getter(); v.setColor(COLOR_NAMES[s]); setter(v); },
+	            [this](QString s) { auto v = getter(); v.setColor(COLOR_NAMES[s]); setter(v); },
 	            PropColor
 	);
 	new PropertyItem<QString>(
 	            this,
 	            "Style",
 	            [this]() { return BRUSH_STYLE_NAMES[getter().style()]; },
-	            [this, setter](QString s) { auto v = getter(); v.setStyle(BRUSH_STYLE_NAMES.key(s)); setter(v); },
+	            [this](QString s) { auto v = getter(); v.setStyle(BRUSH_STYLE_NAMES.key(s)); setter(v); },
 	            PropBrushStyle
 	);
 }
@@ -535,35 +530,35 @@ QVariant PropertyItem<QBrush>::data(int column, int role) const
  * 
  *****************************************************************************/
 
-PropertyItem<QFont>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter)
-    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}
+PropertyItem<QFont>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter_in)
+    : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}, setter{std::move(setter_in)}
 {
 	new PropertyItem<QString>(
 	            this,
 	            "Family",
 	            ([this]() { return getter().family(); }),
-	            ([this, setter](QString s) { QFont f = getter(); f.setFamily(s); setter(f); }),
+	            ([this](QString s) { QFont f = getter(); f.setFamily(s); setter(f); }),
 	            PropString
 	);
 	new PropertyItem<int>(
 	            this,
 	            "Size",
 	            ([this]() { return getter().pointSize(); }),
-	            ([this, setter](int s) { QFont f = getter(); f.setPointSize(s); setter(f); }),
+	            ([this](int s) { QFont f = getter(); f.setPointSize(s); setter(f); }),
 	            PropInt
 	);
 	new PropertyItem<QString>(
 	            this,
 	            "Style",
 	            ([this]() { return FONT_STYLE_NAMES[getter().style()]; }),
-	            ([this, setter](QString s) { QFont f = getter(); f.setStyle(FONT_STYLE_NAMES.key(s)); setter(f); }),
+	            ([this](QString s) { QFont f = getter(); f.setStyle(FONT_STYLE_NAMES.key(s)); setter(f); }),
 	            PropFontStyle
 	);
 	new PropertyItem<QString>(
 	            this,
 	            "Weight",
 	            ([this]() { return FONT_WEIGHT_NAMES[static_cast<QFont::Weight>(getter().weight())]; }),
-	            ([this, setter](QString s) { QFont f = getter(); f.setWeight(FONT_WEIGHT_NAMES.key(s)); setter(f); }),
+	            ([this](QString s) { QFont f = getter(); f.setWeight(FONT_WEIGHT_NAMES.key(s)); setter(f); }),
 	            PropFontWight
 	);
 }

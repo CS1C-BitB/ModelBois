@@ -21,7 +21,7 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 		return nullptr;
 	}
 	
-	QTreeWidget* tree = static_cast<QTreeWidget*>(parent->parent());
+	auto* tree = dynamic_cast<QTreeWidget*>(parent->parent());
 	QTreeWidgetItem* item = tree->currentItem();
 	int type = item->type();
 	
@@ -35,14 +35,14 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 	
 	switch (type) {
 	case PropInt: {
-		QSpinBox *editor = new QSpinBox(parent);
+		auto *editor = new QSpinBox(parent);
 		editor->setFrame(false);
 		editor->setMinimum(0);
 		editor->setMaximum(1000);
 		return editor;
 	}
 	case PropString: {
-		QLineEdit* editor = new QLineEdit(parent);
+		auto* editor = new QLineEdit(parent);
 		return editor;
 	}
 	case PropAlignment:
@@ -74,12 +74,12 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 	return nullptr;
 }
 
-#define TRY_CAST(type, var) type* var = dynamic_cast<type*>(editor)
+#define TRY_CAST(type, var) auto* var = dynamic_cast<type*>(editor)
 
 void PropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
 	if (TRY_CAST(QComboBox, comboBox)) {
-		QString value = index.model()->data(index, Qt::EditRole).value<QString>();
+		QString value = index.model()->data(index, Qt::EditRole).toString();
 		
 		comboBox->setCurrentText(value);
 		connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
@@ -91,7 +91,7 @@ void PropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 		connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
 	}
 	else if (TRY_CAST(QLineEdit, line)) {
-		QString value = index.model()->data(index, Qt::EditRole).value<QString>();
+		QString value = index.model()->data(index, Qt::EditRole).toString();
 		
 		line->setText(value);
 		connect(line, &QLineEdit::textChanged, this, std::bind(&PropertyDelegate::valueChanged, this, editor));
