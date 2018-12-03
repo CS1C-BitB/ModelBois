@@ -29,9 +29,6 @@ void sortByArea(vector<Shape*>& shapeList) {
 
         vector<Shape*>::iterator smallestValueIter = shapeList.begin();
         for (vector<Shape*>::iterator current = shapeList.begin(); current != shapeList.end(); current++) {
-            if (*current == nullptr) {
-                return;
-            }
             if ((*current)->getArea() < (*smallestValueIter)->getArea()) {
                 smallestValueIter = current;
             }
