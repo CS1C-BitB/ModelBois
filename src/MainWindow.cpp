@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+	this->setWindowTitle(filename);
 	
 	// TODO: Testing shapes, replace with file loader
 	store.shapes.push_back(new Ellipse{50, 25, QPoint{50, 100}, QBrush{QColor{255, 0, 0}}});
@@ -49,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
 		writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
 		SetStatusText("Saved shapes file", 2000);
 		modified = false;
+		this->setWindowTitle(filename);
 	});
 	modified = false;
 }
@@ -133,6 +135,7 @@ void MainWindow::onDataChanged()
 {
 	ui->canvas->update();
 	modified = true;
+	this->setWindowTitle(QString{"%1*"}.arg(filename));
 	// [Optional] Save on change
 	// Delayed to prevent spam-writes, will write file after two seconds without updates
 	//saveTimer.start(2000);
@@ -152,4 +155,9 @@ void MainWindow::on_remove_clicked()
 void MainWindow::on_actionSave_triggered()
 {
 	saveTimer.start(0);
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+	this->close();
 }
