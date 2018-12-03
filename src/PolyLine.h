@@ -31,7 +31,8 @@ public:
 	void erase(size_t i);
 	void clearPoints();
 	
-private:
+protected:
+	PolyLine(id_t id);
 	void setCenter();
 	std::vector<QPoint> points;
 };

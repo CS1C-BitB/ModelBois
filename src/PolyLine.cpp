@@ -95,6 +95,10 @@ void PolyLine::clearPoints()
 	setCenter();
 }
 
+PolyLine::PolyLine(id_t id)
+    : Shape{id}
+{ }
+
 void PolyLine::setCenter()
 {
 	QPoint old = getPos();

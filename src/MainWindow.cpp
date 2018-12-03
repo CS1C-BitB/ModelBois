@@ -2,12 +2,7 @@
 #include "ui_MainWindow.h"
 
 // TEMP
-#include "Ellipse.h"
-#include "Line.h"
-#include "Polygon.h"
-#include "PolyLine.h"
-#include "Rectangle.h"
-#include "Text.h"
+#include "Shapes.h"
 // /TEMP
 
 #include "PropertyItem.h"

@@ -5,15 +5,13 @@
 #include <utility>
 
 Polygon::Polygon(std::vector<QPoint> points, const QBrush &brush, const QPen &pen, id_t id)
-    : Shape{QPoint{}, brush, pen, id}, points{std::move(points)}
-{
-	setCenter();
-}
+    : PolyLine{std::move(points), brush, pen, id}
+{ }
 
 Polygon::Polygon(const Polygon &copy) = default;
 
 Polygon::Polygon(Polygon &&move) noexcept
-    : Shape{id_t(-1)}
+    : PolyLine{id_t(-1)}
 {
 	swap(move);
 	std::swap(points, move.points);
@@ -67,64 +65,5 @@ double Polygon::getArea() const
 	}
 	
 	return area / 2;
-}
-
-QRect Polygon::getRect() const
-{
-	QRect rect{points[0] + getPos(), QSize{}};
-	for (auto p : points) {
-		rect.setLeft(  std::min(p.x() + getPos().x(), rect.left()));
-		rect.setRight( std::max(p.x() + getPos().x(), rect.right()));
-		rect.setTop(   std::min(p.y() + getPos().y(), rect.top()));
-		rect.setBottom(std::max(p.y() + getPos().y(), rect.bottom()));
-	}
-	return rect;
-}
-
-std::size_t Polygon::getCount() const
-{ return points.size(); }
-
-QPoint Polygon::getPoint(std::size_t i) const
-{ return points[i] + getPos(); }
-
-void Polygon::setPoint(std::size_t i, const QPoint &point)
-{
-	points[i] = point - getPos();
-	setCenter();
-}
-
-void Polygon::insert(size_t before, const QPoint &point)
-{
-	points.insert(points.begin() + before, point - getPos());
-	setCenter();
-}
-
-void Polygon::pushPoint(const QPoint &point)
-{
-	points.push_back(point - getPos());
-	setCenter();
-}
-
-void Polygon::erase(size_t i)
-{
-	points.erase(points.begin() + i);
-	setCenter();
-}
-
-void Polygon::clearPoints()
-{
-	points.clear();
-	setCenter();
-}
-
-void Polygon::setCenter()
-{
-	QPoint old = getPos();
-	setPos(getRect().center());
-	QPoint offset = old - getPos();
-	
-	for (auto& p : points) {
-		p += offset;
-	}
 }
 
