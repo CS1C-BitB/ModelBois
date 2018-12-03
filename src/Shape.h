@@ -9,18 +9,12 @@
 #include <memory>
 
 enum ShapeType {
-	LINE,
-	LineType = LINE,
-	POLYLINE,
-	PolylineType = POLYLINE,
-	POLYGON,
-	PolygonType = POLYGON,
-	RECTANGLE,
-	RectangleType = RECTANGLE,
-	ELLIPSE,
-	EllipseType = ELLIPSE,
-	TEXT,
-	TextType = TEXT
+	LineType,
+	PolylineType,
+	PolygonType,
+	RectangleType,
+	EllipseType,
+	TextType
 };
 
 extern const QMap<QString, QColor> COLOR_NAMES;

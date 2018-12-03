@@ -31,12 +31,12 @@ const QMap<QString, QColor> COLOR_NAMES {
 #undef COLOR_DEF
 
 const QMap<ShapeType, QString> SHAPE_NAMES {
-	{ShapeType::LINE, "Line"},
-	{ShapeType::POLYLINE, "Polyline"},
-	{ShapeType::POLYGON, "Polygon"},
-	{ShapeType::RECTANGLE, "Rectangle"},
-	{ShapeType::ELLIPSE, "Ellipse"},
-	{ShapeType::TEXT, "Text"}
+	{LineType, "Line"},
+	{PolylineType, "Polyline"},
+	{PolygonType, "Polygon"},
+	{RectangleType, "Rectangle"},
+	{EllipseType, "Ellipse"},
+	{TextType, "Text"}
 };
 
 #define STYLE_DEF(name) {Qt::name, #name}

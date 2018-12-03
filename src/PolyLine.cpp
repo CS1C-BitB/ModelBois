@@ -39,7 +39,7 @@ void PolyLine::draw(QPaintDevice* device)
 }
 
 ShapeType PolyLine::getType() const
-{ return ShapeType::POLYLINE; }
+{ return PolylineType; }
 
 double PolyLine::getPerimeter() const
 { return -1; }

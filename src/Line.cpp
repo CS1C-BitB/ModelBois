@@ -47,7 +47,7 @@ void Line::draw(QPaintDevice* device)
 }
 
 ShapeType Line::getType() const
-{ return ShapeType::LINE; }
+{ return LineType; }
 
 double Line::getPerimeter() const
 { return -1; }

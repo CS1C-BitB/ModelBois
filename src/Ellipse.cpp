@@ -38,7 +38,7 @@ void Ellipse::draw(QPaintDevice* device)
 }
 
 ShapeType Ellipse::getType() const
-{ return ShapeType::ELLIPSE; }
+{ return EllipseType; }
 
 const double pi = std::acos(-1);
 double Ellipse::getPerimeter() const
