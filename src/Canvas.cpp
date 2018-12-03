@@ -11,9 +11,9 @@ Canvas::Canvas(QWidget *parent)
 	setAutoFillBackground(true);
 }
 
-void Canvas::set_storage(const Storage &store)
+void Canvas::set_storage(vector_t* vec)
 {
-	shapes = &store.shapes;
+	shapes = vec;
 }
 
 void Canvas::setSelected(int i)
@@ -25,13 +25,13 @@ void Canvas::setSelected(int i)
 void Canvas::paintEvent(QPaintEvent */*event*/)
 {
 	static QPoint offset{target.size().width() / 2, target.size().height() / 2};
-	if (shapes) {
+	if (shapes && shapes->size()) {
 		for (Shape* shape : *shapes) {
 			shape->draw(this);
 		}
 	}
-	if (selected >= 0 && selected < (int)shapes->size()) {
-		Shape* s = shapes->at(selected);
+	if (selected >= 0 && selected < shapes->size()) {
+		Shape* s = (*shapes)[selected];
 		QPainter paint{this};
 		QPen outline;
 		outline.setStyle(Qt::DotLine);

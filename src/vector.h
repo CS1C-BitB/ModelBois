@@ -3,6 +3,8 @@
 
 #include "LinkedList.h"
 
+#include <algorithm>
+
 namespace cs1c {
     //!  A vector class. 
     /*!
@@ -79,13 +81,13 @@ namespace cs1c {
         void resize(int newSize);
         void push_back(T object);
         void reserve(int newCapacity);
+		iterator erase(iterator pos);
 
         iterator begin();
-        const iterator begin() const;
+        //const iterator begin() const;
         iterator end();
-        const iterator end() const;
+        //const iterator end() const;
         iterator insert(iterator position, const T& value);
-        iterator erase(iterator position);
 
     private:
         T& get(int index) const;
@@ -402,6 +404,7 @@ namespace cs1c {
     /*!
      \return Element to the first object in the vector.
     */
+	/*
     template<class T>
     const typename vector<T>::iterator vector<T>::begin() const {
         if (!m_nodeList.empty()) {
@@ -411,7 +414,7 @@ namespace cs1c {
         else {
             return iterator(this, nullptr, 0);
         }
-    }
+    }*/
 
     //! A public member function taking zero arguments and returning an iterator.
     /*!
@@ -425,11 +428,11 @@ namespace cs1c {
     //! A public member function taking zero arguments and returning a constant iterator.
     /*!
      \return Element to one past the last element of the vector.
-    */
+    *//*
     template<class T>
     const typename vector<T>::iterator vector<T>::end() const {
         return iterator(this, nullptr, 0);        
-    }
+    }*/
 
     //! A public member function taking two arguments and returning an iterator.
     /*!

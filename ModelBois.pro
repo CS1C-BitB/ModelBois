@@ -45,7 +45,8 @@ SOURCES += \
     src/PropertyItem.cpp \
     test/testShapes.cpp \
     src/ListButtons.cpp \
-    src/PosButton.cpp
+    src/PosButton.cpp \
+    src/Sort.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -65,7 +66,10 @@ HEADERS += \
     test/Tests.h \
     src/ListButtons.h \
     src/PosButton.h \
-    src/Serializer.h
+    src/Serializer.h \
+    src/LinkedList.h \
+    src/VectorNode.h \
+    src/vector.h
 
 FORMS += \
     src/MainWindow.ui \

@@ -11,7 +11,7 @@ class Canvas : public QWidget
 public:
 	explicit Canvas(QWidget *parent = nullptr);
 	
-	void set_storage(const Storage& store);
+	void set_storage(vector_t* vec);
 	
 signals:
 	
@@ -23,7 +23,7 @@ protected:
 	void mousePressEvent(QMouseEvent *event) override;
 	
 private:
-	const vector_t* shapes;
+	vector_t* shapes;
 	const QImage target;
 	int selected;
 

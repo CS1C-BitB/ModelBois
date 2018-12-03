@@ -15,7 +15,7 @@
 #include <QPushButton>
 #include <QStatusBar>
 
-const char* filename = "myShapes.txt";
+static const char* filename = "myShapes.txt";
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	store.shapes.push_back(new Rectangle{40, 50, QPoint{100, 200}, QBrush{QColor{0, 0, 255}}});
 	store.shapes.push_back(new Text{"Hello world!", QFont{}, -1, -1, Qt::AlignCenter, QPoint{400, 400}});
 	
-	ui->canvas->set_storage(store);
+	ui->canvas->set_storage(&store.shapes);
 	
 	ui->ShapeList->setModel(&store.model);
 	
@@ -109,17 +109,17 @@ void MainWindow::on_ShapeList_currentIndexChanged(int index)
 		delete old;
 	}
 	
-	if (store.shapes.empty()) {
+	if (store.shapes.size() == 0) {
 		ui->ShapeList->setEnabled(false);
 		ui->remove->setEnabled(false);
 		// TODO: Re-enable on add
 	}
-	else if (index >= (int)store.shapes.size()) {
+	else if (index >= store.shapes.size()) {
 		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
 		return;
 	}
 	else {
-		Shape* s = store.shapes.at(index);
+		Shape* s = store.shapes[index];
 		new PropertyItem<Shape>(ui->PropTree->invisibleRootItem(), *s);
 		ui->PropTree->expandAll();
 	}
@@ -143,9 +143,15 @@ void MainWindow::onDataChanged()
 
 void MainWindow::on_remove_clicked()
 {
-	size_t index = ui->ShapeList->currentIndex();
-	delete store.shapes.at(index);
-	store.shapes.erase(store.shapes.begin() + index);
+	int index = ui->ShapeList->currentIndex();
+	auto it = store.shapes.begin();
+	for (int i = 0; i < index; ++i) {
+		++it;
+	}
+	delete *it;
+	
+	store.shapes.erase(it);
+	
 	ui->canvas->update();
 	ui->ShapeList->update();
 	
