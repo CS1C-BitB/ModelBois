@@ -35,20 +35,7 @@ void PolyLine::draw(QPaintDevice* device)
 {
 	auto paint = getPainter(device);
 	
-#if 1
-	// Polygonal chain ver
-	if (points.size() == 1) {
-		paint->drawPoint(points[0]);
-	}
-	else if (!points.empty()) {
-		for (size_t i = 0; i < points.size() - 1; ++i) {
-			paint->drawLine(points[i], points[i + 1]);
-		}
-	}
-#else
-	// Point pairs ver
-	paint->drawLines(points.data(), points.size() / 2);
-#endif
+	paint->drawPolyline(points.data(), points.size());
 }
 
 ShapeType PolyLine::getType() const
