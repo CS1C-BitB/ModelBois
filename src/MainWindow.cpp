@@ -7,16 +7,22 @@
 
 #include "PropertyItem.h"
 #include "PropertyDelegate.h"
+#include "Serializer.h"
 
+#include <QCloseEvent>
 #include <QComboBox>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QStatusBar>
+
+const char* filename = "myShapes.txt";
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+	this->setWindowTitle(filename);
 	
 	// TODO: Testing shapes, replace with file loader
 	store.shapes.push_back(new Ellipse{50, 25, QPoint{50, 100}, QBrush{QColor{255, 0, 0}}});
@@ -37,6 +43,16 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->PropTree->setHeaderLabels({"Property", "Value"});
 	ui->PropTree->setItemDelegate(new PropertyDelegate());
 	ui->PropTree->setEditTriggers(QAbstractItemView::AllEditTriggers);
+	
+	saveTimer.setSingleShot(true);
+	connect(&saveTimer, &QTimer::timeout, [this]() {
+		SetStatusText("Saving shapes...");
+		writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
+		SetStatusText("Saved shapes file", 2000);
+		modified = false;
+		this->setWindowTitle(filename);
+	});
+	modified = false;
 }
 
 MainWindow::~MainWindow()
@@ -55,8 +71,38 @@ void MainWindow::SetStatusText(const QString &str, int timeout)
 	ui->statusBar->showMessage(str, timeout);
 }
 
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+	if (!modified) {
+		event->accept();
+	}
+	else {
+		QMessageBox* warn = new QMessageBox(
+		            QMessageBox::Warning,
+		            "Unsaved Changes",
+		            "You have unsaved changes, do you wish to quit anyway?",
+		            QMessageBox::Save | QMessageBox::Cancel | QMessageBox::Yes,
+		            this
+		);
+		warn->exec();
+		switch (warn->result()) {
+		case QMessageBox::Save:
+			writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
+			event->accept();
+			break;
+		case QMessageBox::Cancel:
+			event->ignore();
+			break;
+		case QMessageBox::Yes:
+			event->accept();
+			break;
+		}
+	}
+}
+
 void MainWindow::on_ShapeList_currentIndexChanged(int index)
 {
+	disconnect(ui->PropTree, &QTreeWidget::itemChanged, nullptr, nullptr);
 	QTreeWidgetItem* old = ui->PropTree->topLevelItem(0);
 	if (old) {
 		ui->PropTree->removeItemWidget(old, 0);
@@ -81,11 +127,18 @@ void MainWindow::on_ShapeList_currentIndexChanged(int index)
 	ui->canvas->setSelected(index);
 	
 	ui->PropTree->update();
+	
+	connect(ui->PropTree, &QTreeWidget::itemChanged, this, &MainWindow::onDataChanged);
 }
 
-void MainWindow::on_PropTree_itemChanged(QTreeWidgetItem*, int)
+void MainWindow::onDataChanged()
 {
 	ui->canvas->update();
+	modified = true;
+	this->setWindowTitle(QString{"%1*"}.arg(filename));
+	// [Optional] Save on change
+	// Delayed to prevent spam-writes, will write file after two seconds without updates
+	//saveTimer.start(2000);
 }
 
 void MainWindow::on_remove_clicked()
@@ -97,4 +150,14 @@ void MainWindow::on_remove_clicked()
 	ui->ShapeList->update();
 	
 	on_ShapeList_currentIndexChanged(index);
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+	saveTimer.start(0);
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+	this->close();
 }

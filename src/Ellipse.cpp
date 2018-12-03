@@ -65,8 +65,8 @@ double Ellipse::getArea() const
 QRect Ellipse::getRect() const
 {
 	QRect rect{0, 0, w, h};
-	rect.moveCenter(getPos() - QPoint{1, 1});
-	return rect;
+	rect.moveCenter(getPos());
+	return rect.marginsAdded(QMargins{1, 0, -1, -1});
 }
 
 int Ellipse::getWidth() const
