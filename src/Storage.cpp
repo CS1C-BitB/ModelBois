@@ -1,6 +1,7 @@
 #include "Storage.h"
 
 Storage::Storage()
+    : model{&shapes}
 { }
 
 Storage::~Storage()

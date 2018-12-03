@@ -6,10 +6,14 @@
 #include <QFont>
 #include <QString>
 
+extern const QMap<Qt::AlignmentFlag, QString> ALIGNMENT_NAMES;
+extern const QMap<QFont::Style, QString> FONT_STYLE_NAMES;
+extern const QMap<QFont::Weight, QString> FONT_WEIGHT_NAMES;
+
 class Text : public Shape
 {
 public:
-	Text(QString str = "", const QFont &font = {}, const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
+	Text(QString str = "", const QFont &font = {}, int w = -1, int h = -1, Qt::AlignmentFlag align = Qt::AlignCenter, const QPoint &pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
 	Text(const Text &copy);
 	Text(Text &&move) noexcept;
 	~Text() override;
@@ -29,9 +33,23 @@ public:
 	const QFont& getFont() const;
 	void setFont(QFont);
 	
+	QRect getRect() const override;
+	void setRect(const QRect&);
+	
+	int getWidth() const;
+	void setWidth(int);
+	
+	int getHeight() const;
+	void setHeight(int);
+	
+	Qt::AlignmentFlag getAlign() const;
+	void setAlign(Qt::AlignmentFlag);
+	
 private:
-	QFont font;
 	QString str;
+	QFont font;
+	int w = -1, h = -1;
+	Qt::AlignmentFlag align = Qt::AlignCenter;
 };
 
 #endif // TEXT_H

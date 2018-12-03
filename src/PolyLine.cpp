@@ -4,27 +4,10 @@
 #include <utility>
 #include <utility>
 
-static QPoint center(std::vector<QPoint> &points, const QPoint &offset)
-{
-	QPoint mid;
-	for (QPoint &p : points) {
-		mid += p + offset;
-	}
-	if (!points.empty()) {
-		mid /= points.size();
-	}
-	
-	for (QPoint &p : points) {
-		p += offset - mid;
-	}
-	
-	return mid;
-}
-
 PolyLine::PolyLine(std::vector<QPoint> points, const QBrush &brush, const QPen &pen, id_t id)
     : Shape{QPoint{}, brush, pen, id}, points{std::move(points)}
 {
-	setPos(center(this->points, getPos()));
+	setCenter();
 }
 
 PolyLine::PolyLine(const PolyLine &copy) = default;
@@ -50,16 +33,9 @@ PolyLine& PolyLine::operator=(PolyLine &&other) noexcept
 
 void PolyLine::draw(QPaintDevice* device)
 {
-	QPoint corner;
-	for (auto p : points) {
-		corner.setX(std::min(corner.x(), p.x()));
-		corner.setY(std::min(corner.y(), p.y()));
-	}
-	auto paint = getPainter(device, corner);
+	auto paint = getPainter(device);
 	
-	for (size_t i = 0; i < points.size() - 1; ++i) {
-		paint->drawLine(points[i], points[i + 1]);
-	}
+	paint->drawPolyline(points.data(), points.size());
 }
 
 ShapeType PolyLine::getType() const
@@ -71,6 +47,18 @@ double PolyLine::getPerimeter() const
 double PolyLine::getArea() const
 { return -1; }
 
+QRect PolyLine::getRect() const
+{
+	QRect rect{points[0] + getPos(), QSize{}};
+	for (auto p : points) {
+		rect.setLeft(  std::min(p.x() + getPos().x(), rect.left()));
+		rect.setRight( std::max(p.x() + getPos().x(), rect.right()));
+		rect.setTop(   std::min(p.y() + getPos().y(), rect.top()));
+		rect.setBottom(std::max(p.y() + getPos().y(), rect.bottom()));
+	}
+	return rect;
+}
+
 std::size_t PolyLine::getCount() const
 { return points.size(); }
 
@@ -80,18 +68,45 @@ QPoint PolyLine::getPoint(std::size_t i) const
 void PolyLine::setPoint(std::size_t i, const QPoint &point)
 {
 	points[i] = point - getPos();
-	setPos(center(points, getPos()));
+	setCenter();
+}
+
+void PolyLine::insert(size_t before, const QPoint &point)
+{
+	points.insert(points.begin() + before, point - getPos());
+	setCenter();
 }
 
 void PolyLine::pushPoint(const QPoint &point)
 {
 	points.push_back(point - getPos());
-	setPos(center(points, getPos()));
+	setCenter();
+}
+
+void PolyLine::erase(size_t i)
+{
+	points.erase(points.begin() + i);
+	setCenter();
 }
 
 void PolyLine::clearPoints()
 {
 	points.clear();
-	setPos(center(points, getPos()));
+	setCenter();
+}
+
+PolyLine::PolyLine(id_t id)
+    : Shape{id}
+{ }
+
+void PolyLine::setCenter()
+{
+	QPoint old = getPos();
+	setPos(getRect().center());
+	QPoint offset = old - getPos();
+	
+	for (auto& p : points) {
+		p += offset;
+	}
 }
 

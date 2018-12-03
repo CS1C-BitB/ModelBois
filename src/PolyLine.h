@@ -21,14 +21,19 @@ public:
 	ShapeType getType() const override;
 	double getPerimeter() const override;
 	double getArea() const override;
+	QRect getRect() const override;
 	
 	std::size_t getCount() const;
 	QPoint getPoint(std::size_t i) const;
 	void setPoint(std::size_t i, const QPoint &point);
+	void insert(size_t before, const QPoint &point);
 	void pushPoint(const QPoint &point);
+	void erase(size_t i);
 	void clearPoints();
 	
-private:
+protected:
+	PolyLine(id_t id);
+	void setCenter();
 	std::vector<QPoint> points;
 };
 

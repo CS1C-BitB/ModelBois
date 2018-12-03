@@ -4,33 +4,14 @@
 #include <cmath>
 #include <utility>
 
-static QPoint center(std::vector<QPoint> &points, const QPoint &offset)
-{
-	QPoint mid;
-	for (QPoint &p : points) {
-		mid += p + offset;
-	}
-	if (!points.empty()) {
-		mid /= points.size();
-	}
-	
-	for (QPoint &p : points) {
-		p += offset - mid;
-	}
-	
-	return mid;
-}
-
 Polygon::Polygon(std::vector<QPoint> points, const QBrush &brush, const QPen &pen, id_t id)
-    : Shape{QPoint{}, brush, pen, id}, points{std::move(points)}
-{
-	setPos(center(this->points, getPos()));
-}
+    : PolyLine{std::move(points), brush, pen, id}
+{ }
 
 Polygon::Polygon(const Polygon &copy) = default;
 
 Polygon::Polygon(Polygon &&move) noexcept
-    : Shape{id_t(-1)}
+    : PolyLine{id_t(-1)}
 {
 	swap(move);
 	std::swap(points, move.points);
@@ -50,12 +31,7 @@ Polygon& Polygon::operator=(Polygon &&other) noexcept
 
 void Polygon::draw(QPaintDevice* device)
 {
-	QPoint corner;
-	for (auto p : points) {
-		corner.setX(std::min(corner.x(), p.x()));
-		corner.setY(std::min(corner.y(), p.y()));
-	}
-	auto paint = getPainter(device, corner);
+	auto paint = getPainter(device);
 	
 	paint->drawPolygon(points.data(), points.size());
 }
@@ -89,29 +65,5 @@ double Polygon::getArea() const
 	}
 	
 	return area / 2;
-}
-
-std::size_t Polygon::getCount() const
-{ return points.size(); }
-
-QPoint Polygon::getPoint(std::size_t i) const
-{ return points[i] + getPos(); }
-
-void Polygon::setPoint(std::size_t i, const QPoint &point)
-{
-	points[i] = point - getPos();
-	setPos(center(points, getPos()));
-}
-
-void Polygon::pushPoint(const QPoint &point)
-{
-	points.push_back(point - getPos());
-	setPos(center(points, getPos()));
-}
-
-void Polygon::clearPoints()
-{
-	points.clear();
-	setPos(center(points, getPos()));
 }
 

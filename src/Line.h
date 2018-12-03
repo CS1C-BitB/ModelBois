@@ -19,6 +19,7 @@ public:
 	ShapeType getType() const override;
 	double getPerimeter() const override;
 	double getArea() const override;
+	QRect getRect() const override;
 	
 	QPoint getStart() const;
 	QPoint getEnd() const;

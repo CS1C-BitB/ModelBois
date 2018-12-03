@@ -16,12 +16,16 @@ public:
 signals:
 	
 public slots:
+	void setSelected(int);
 	
 protected:
 	void paintEvent(QPaintEvent *event) override;
+	void mousePressEvent(QMouseEvent *event) override;
 	
 private:
 	const vector_t* shapes;
+	const QImage target;
+	int selected;
 
 };
 

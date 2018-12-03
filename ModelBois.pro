@@ -40,7 +40,12 @@ SOURCES += \
     src/Text.cpp \
     src/Canvas.cpp \
     src/Storage.cpp \
-    test/testShapes.cpp
+    src/ShapeListModel.cpp \
+    src/PropertyDelegate.cpp \
+    src/PropertyItem.cpp \
+    test/testShapes.cpp \
+    src/ListButtons.cpp \
+    src/PosButton.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -53,13 +58,24 @@ HEADERS += \
     src/Text.h \
     src/Canvas.h \
     src/Storage.h \
-    test/Tests.h
+    src/ShapeListModel.h \
+    src/PropertyDelegate.h \
+    src/PropertyItem.h \
+    src/Shapes.h \
+    test/Tests.h \
+    src/ListButtons.h \
+    src/PosButton.h
 
 FORMS += \
-    src/MainWindow.ui
+    src/MainWindow.ui \
+    src/ListButtons.ui \
+    src/PosButton.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res/icons.qrc
 

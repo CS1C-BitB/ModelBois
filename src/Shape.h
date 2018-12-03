@@ -8,14 +8,27 @@
 
 #include <memory>
 
-enum class ShapeType {
+enum ShapeType {
 	LINE,
+	LineType = LINE,
 	POLYLINE,
+	PolylineType = POLYLINE,
 	POLYGON,
+	PolygonType = POLYGON,
 	RECTANGLE,
+	RectangleType = RECTANGLE,
 	ELLIPSE,
-	TEXT
+	EllipseType = ELLIPSE,
+	TEXT,
+	TextType = TEXT
 };
+
+extern const QMap<QString, QColor> COLOR_NAMES;
+extern const QMap<ShapeType, QString> SHAPE_NAMES;
+extern const QMap<Qt::BrushStyle, QString> BRUSH_STYLE_NAMES;
+extern const QMap<Qt::PenStyle, QString> PEN_STYLE_NAMES;
+extern const QMap<Qt::PenCapStyle, QString> PEN_CAP_STYLE_NAMES;
+extern const QMap<Qt::PenJoinStyle, QString> PEN_JOIN_STYLE_NAMES;
 
 class Shape
 {
@@ -62,6 +75,12 @@ public:
 	virtual double getArea() const = 0;
 	
 	/**
+	 * @brief getRect Gets the bounding rectangle of the shape.
+	 * @return Bounding rectangle.
+	 */
+	virtual QRect getRect() const = 0;
+	
+	/**
 	 * @brief getPos Gets the position of the shape.
 	 * @return Position
 	 * 
@@ -87,10 +106,12 @@ public:
 	void setBrush(const QBrush&);
 	void setPen(const QPen&);
 	
+	static bool hasFill(ShapeType);
+	
 protected:
 	Shape(id_t id);
 	void swap(Shape &other) noexcept;
-	std::unique_ptr<QPainter> getPainter(QPaintDevice* device, QPoint corner) const;
+	std::unique_ptr<QPainter> getPainter(QPaintDevice* device) const;
 	
 private:
 	QPoint pos;
