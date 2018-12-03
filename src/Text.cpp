@@ -79,7 +79,7 @@ void Text::draw(QPaintDevice* device)
 }
 
 ShapeType Text::getType() const
-{ return ShapeType::TEXT; }
+{ return TextType; }
 
 double Text::getPerimeter() const
 { return -1; }

@@ -37,7 +37,7 @@ void Polygon::draw(QPaintDevice* device)
 }
 
 ShapeType Polygon::getType() const
-{ return ShapeType::POLYGON; }
+{ return PolygonType; }
 
 double Polygon::getPerimeter() const
 {

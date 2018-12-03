@@ -39,7 +39,7 @@ void Rectangle::draw(QPaintDevice* device)
 }
 
 ShapeType Rectangle::getType() const
-{ return ShapeType::RECTANGLE; }
+{ return RectangleType; }
 
 double Rectangle::getPerimeter() const
 { return std::abs(2 * w) + std::abs(2 * h); }
