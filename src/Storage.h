@@ -5,10 +5,6 @@
 
 #include "ShapeListModel.h"
 
-// TODO: custom vector
-#include <vector>
-using vector_t = std::vector<Shape*>;
-
 struct Storage
 {
 	Storage();

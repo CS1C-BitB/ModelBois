@@ -2,14 +2,11 @@
 #define SHAPELISTMODEL_H
 
 #include "Shape.h"
+#include "vector.h"
 
 #include <QAbstractListModel>
 
-#if 1
-// TODO: custom vector
-#include <vector>
-using vector_t = std::vector<Shape*>;
-#endif
+using vector_t = cs1c::vector<Shape*>;
 
 class ShapeListModel : public QAbstractListModel
 {
