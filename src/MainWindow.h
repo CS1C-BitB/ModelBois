@@ -45,6 +45,8 @@ private slots:
 	
 	void on_actionBy_Perimeter_triggered();
 	
+	void on_pushButton_clicked();
+	
 private:
 	void SaveFile();
 	void ShowReport(void (*sort)(vector_t&));

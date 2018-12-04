@@ -41,6 +41,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	store.shapes.push_back(new Rectangle{40, 50, QPoint{100, 200}, QBrush{QColor{0, 0, 255}}});
 	store.shapes.push_back(new Text{"Hello world!", QFont{}, -1, -1, Qt::AlignCenter, QPoint{400, 400}});
 	
+	store.shapes.push_back(new Ellipse{50, 25, QPoint{50, 100}, QBrush{QColor{255, 0, 0}}});
+	store.shapes.push_back(new Ellipse{50, 25, QPoint{50, 100}, QBrush{QColor{255, 0, 0}}});
+	store.shapes.push_back(new Ellipse{50, 25, QPoint{50, 200}, QBrush{QColor{255, 0, 0}}});
+	
 	ui->canvas->set_storage(&store.shapes);
 	
 	ui->ShapeList->setModel(&store.model);
@@ -170,9 +174,15 @@ void MainWindow::on_actionExit_triggered()
 void MainWindow::on_actionBy_ID_triggered()
 {
 	vector_t copy = store.shapes;
-	sortById(copy);
+	//sortById(copy);
 	std::stringstream text;
-	text << copy;
+	
+	if (copy.size()) {
+		text << copy;
+	}
+	else {
+		text << "No shapes.";
+	}
 	
 	auto* view = new DetailView(QString::fromStdString(text.str()).replace("Shape", "").replace(": ", ":\t"), this);
 	view->open();
@@ -182,15 +192,20 @@ void MainWindow::on_actionBy_ID_triggered()
 void MainWindow::on_actionBy_Area_triggered()
 {
 	vector_t copy = store.shapes;
-	sortByArea(copy);
+	//sortByArea(copy);
 	
 	QStringList text;
 	
-	for (auto* shape : copy) {
-		text << QString{"Id:\t%1"}.arg(shape->getID());
-		text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
-		text << QString{"Area:\t%1"}.arg(shape->getArea(), 0, 'f', 2);
-		text << "";
+	if (copy.size()) {
+		for (auto* shape : copy) {
+			text << QString{"Id:\t%1"}.arg(shape->getID());
+			text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
+			text << QString{"Area:\t%1"}.arg(shape->getArea(), 0, 'f', 2);
+			text << "";
+		}
+	}
+	else {
+		text << "No shapes with area.";
 	}
 	
 	auto* view = new DetailView(text.join('\n'), this);
@@ -201,15 +216,20 @@ void MainWindow::on_actionBy_Area_triggered()
 void MainWindow::on_actionBy_Perimeter_triggered()
 {
 	vector_t copy = store.shapes;
-	sortByPerimeter(copy);
+	//sortByPerimeter(copy);
 	
 	QStringList text;
 	
-	for (auto* shape : copy) {
-		text << QString{"Id:\t%1"}.arg(shape->getID());
-		text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
-		text << QString{"Perimeter:\t%1"}.arg(shape->getPerimeter(), 0, 'f', 2);
-		text << "";
+	if (copy.size()) {
+		for (auto* shape : copy) {
+			text << QString{"Id:\t%1"}.arg(shape->getID());
+			text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
+			text << QString{"Perimeter:\t%1"}.arg(shape->getPerimeter(), 0, 'f', 2);
+			text << "";
+		}
+	}
+	else {
+		text << "No shapes with perimeter.";
 	}
 	
 	auto* view = new DetailView(text.join('\n'), this);
@@ -229,3 +249,12 @@ void MainWindow::SaveFile()
 	this->setWindowTitle(filename);
 }
 
+
+void MainWindow::on_pushButton_clicked()
+{
+	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
+		store.shapes.push_back(new Ellipse{50, 25, QPoint{x, y}});
+		//disconnect(this, &MainWindow::onCanvasClick, nullptr, nullptr);
+		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+	});
+}
