@@ -7,13 +7,11 @@ class Rectangle : public Shape
 {
 public:
 	Rectangle(int width = 0, int height = 0, const QPoint& pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
-	Rectangle(const Rectangle &copy);
 	Rectangle(Rectangle &&move) noexcept;
 	~Rectangle() override;
 	
 	void draw(QPaintDevice* device) override;
 	
-	Rectangle& operator=(const Rectangle &copy);
 	Rectangle& operator=(Rectangle &&move) noexcept;
 	
 	ShapeType getType() const override;

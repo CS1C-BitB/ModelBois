@@ -10,8 +10,6 @@ PolyLine::PolyLine(std::vector<QPoint> points, const QBrush &brush, const QPen &
 	setCenter();
 }
 
-PolyLine::PolyLine(const PolyLine &copy) = default;
-
 PolyLine::PolyLine(PolyLine &&move) noexcept
     : Shape{id_t(-1)}
 {
@@ -20,8 +18,6 @@ PolyLine::PolyLine(PolyLine &&move) noexcept
 }
 
 PolyLine::~PolyLine() = default;
-
-PolyLine& PolyLine::operator=(const PolyLine &other) = default;
 
 PolyLine& PolyLine::operator=(PolyLine &&other) noexcept
 {

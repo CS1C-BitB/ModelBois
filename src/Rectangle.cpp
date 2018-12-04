@@ -6,8 +6,6 @@ Rectangle::Rectangle(int width, int height, const QPoint& pos, const QBrush &bru
     : Shape{pos, brush, pen, id}, w{width}, h{height}
 { }
 
-Rectangle::Rectangle(const Rectangle &copy) = default;
-
 Rectangle::Rectangle(Rectangle &&move) noexcept
     : Shape{id_t(-1)}, w{0}, h{0}
 {
@@ -17,8 +15,6 @@ Rectangle::Rectangle(Rectangle &&move) noexcept
 }
 
 Rectangle::~Rectangle() = default;
-
-Rectangle& Rectangle::operator=(const Rectangle &other) = default;
 
 Rectangle& Rectangle::operator=(Rectangle &&other) noexcept
 {

@@ -1,4 +1,5 @@
 
+#ifdef UNITTEST
 #include "Tests.h"
 
 #include "Ellipse.h"
@@ -246,3 +247,4 @@ int testShapes()
 	return result;
 }
 
+#endif

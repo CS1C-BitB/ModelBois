@@ -16,8 +16,6 @@ Line::Line(const QPoint &a, const QPoint &b, const QBrush &brush, const QPen &pe
 	setPos(center(A, B, getPos()));
 }
 
-Line::Line(const Line &copy) = default;
-
 Line::Line(Line &&move) noexcept
     : Shape{id_t(-1)}
 {
@@ -27,8 +25,6 @@ Line::Line(Line &&move) noexcept
 }
 
 Line::~Line() = default;
-
-Line& Line::operator=(const Line &other) = default;
 
 Line& Line::operator=(Line &&other) noexcept
 {
