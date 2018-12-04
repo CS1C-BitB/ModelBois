@@ -37,18 +37,22 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuReports">
+    <property name="title">
+     <string>Reports</string>
+    </property>
+    <addaction name="actionBy_ID"/>
+    <addaction name="actionBy_Area"/>
+    <addaction name="actionBy_Perimeter"/>
+   </widget>
    <addaction name="menuFile"/>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
+   <addaction name="menuReports"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QDockWidget" name="dockWidget_2">
+  <widget class="QDockWidget" name="PropDock">
+   <property name="windowTitle">
+    <string>Property Editor</string>
+   </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
@@ -130,6 +134,21 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionBy_ID">
+   <property name="text">
+    <string>By ID</string>
+   </property>
+  </action>
+  <action name="actionBy_Area">
+   <property name="text">
+    <string>By Area</string>
+   </property>
+  </action>
+  <action name="actionBy_Perimeter">
+   <property name="text">
+    <string>By Perimeter</string>
    </property>
   </action>
  </widget>

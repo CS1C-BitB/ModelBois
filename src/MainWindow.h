@@ -39,7 +39,16 @@ private slots:
 	
 	void on_actionExit_triggered();
 	
+	void on_actionBy_ID_triggered();
+	
+	void on_actionBy_Area_triggered();
+	
+	void on_actionBy_Perimeter_triggered();
+	
 private:
+	void SaveFile();
+	void ShowReport(void (*sort)(vector_t&));
+	
 	Storage store;
 	Ui::MainWindow *ui;
 	QTimer saveTimer;

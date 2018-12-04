@@ -22,7 +22,7 @@ void sortByArea(vector<Shape*>& shapeList) {
     vector<Shape*> sortedShapeList;
     while (shapeList.size() != 0) {
         for (vector<Shape*>::iterator current = shapeList.begin(); current != shapeList.end(); current++) {
-            if ((*current)->getArea() == -1) {
+            if ((*current)->getArea() < 0) {
                 shapeList.erase(current);
             }
         }
@@ -43,7 +43,7 @@ void sortByPerimeter(vector<Shape*>& shapeList) {
     vector<Shape*> sortedShapeList;
     while (shapeList.size() != 0) {
         for (vector<Shape*>::iterator current = shapeList.begin(); current != shapeList.end(); current++) {
-            if ((*current)->getPerimeter() == -1) {
+            if ((*current)->getPerimeter() < 0) {
                 shapeList.erase(current);
             }
         }

@@ -5,15 +5,20 @@
 #include "Shapes.h"
 // /TEMP
 
+#include "DetailView.h"
 #include "PropertyItem.h"
 #include "PropertyDelegate.h"
 #include "Serializer.h"
+#include "Sort.h"
 
 #include <QCloseEvent>
 #include <QComboBox>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QStatusBar>
+
+#include <fstream>
+#include <sstream>
 
 static const char* filename = "myShapes.txt";
 
@@ -45,13 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->PropTree->setEditTriggers(QAbstractItemView::AllEditTriggers);
 	
 	saveTimer.setSingleShot(true);
-	connect(&saveTimer, &QTimer::timeout, [this]() {
-		SetStatusText("Saving shapes...");
-		writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
-		SetStatusText("Saved shapes file", 2000);
-		modified = false;
-		this->setWindowTitle(filename);
-	});
+	connect(&saveTimer, &QTimer::timeout, this, &MainWindow::SaveFile);
 	modified = false;
 }
 
@@ -87,7 +86,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
 		warn->exec();
 		switch (warn->result()) {
 		case QMessageBox::Save:
-			writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
+			SaveFile();
 			event->accept();
 			break;
 		case QMessageBox::Cancel:
@@ -167,3 +166,66 @@ void MainWindow::on_actionExit_triggered()
 {
 	this->close();
 }
+
+void MainWindow::on_actionBy_ID_triggered()
+{
+	vector_t copy = store.shapes;
+	sortById(copy);
+	std::stringstream text;
+	text << copy;
+	
+	auto* view = new DetailView(QString::fromStdString(text.str()).replace("Shape", "").replace(": ", ":\t"), this);
+	view->open();
+	connect(view, &QDialog::finished, [view]() { delete view; });
+}
+
+void MainWindow::on_actionBy_Area_triggered()
+{
+	vector_t copy = store.shapes;
+	sortByArea(copy);
+	
+	QStringList text;
+	
+	for (auto* shape : copy) {
+		text << QString{"Id:\t%1"}.arg(shape->getID());
+		text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
+		text << QString{"Area:\t%1"}.arg(shape->getArea(), 0, 'f', 2);
+		text << "";
+	}
+	
+	auto* view = new DetailView(text.join('\n'), this);
+	view->open();
+	connect(view, &QDialog::finished, [view]() { delete view; });
+}
+
+void MainWindow::on_actionBy_Perimeter_triggered()
+{
+	vector_t copy = store.shapes;
+	sortByPerimeter(copy);
+	
+	QStringList text;
+	
+	for (auto* shape : copy) {
+		text << QString{"Id:\t%1"}.arg(shape->getID());
+		text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
+		text << QString{"Perimeter:\t%1"}.arg(shape->getPerimeter(), 0, 'f', 2);
+		text << "";
+	}
+	
+	auto* view = new DetailView(text.join('\n'), this);
+	view->open();
+	connect(view, &QDialog::finished, [view]() { delete view; });
+}
+
+void MainWindow::SaveFile()
+{
+	SetStatusText("Saving shapes...");
+	{
+		std::ofstream file{filename};
+		file << store.shapes;
+	}
+	SetStatusText("Saved shapes file", 2000);
+	modified = false;
+	this->setWindowTitle(filename);
+}
+
