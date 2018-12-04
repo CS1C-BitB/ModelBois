@@ -149,7 +149,7 @@ namespace cs1c {
       \return The iterator forward a node in the vector.
     */
     template<class T>
-    typename vector<T>::iterator vector<T>::iterator::operator++(int junk) {
+    typename vector<T>::iterator vector<T>::iterator::operator++(int) {
         return moveForward();
     }
 

@@ -296,7 +296,6 @@ void MainWindow::on_actionAdd_Text_triggered()
 		
 		auto* item = ui->PropTree->topLevelItem(0)->child(1)->child(0);
 		ui->PropTree->setCurrentItem(item);
-		//PropertyItem<QString>* propitem = dynamic_cast<PropertyItem<QString>*>(item);
 		ui->PropTree->editItem(item, 1);
 	});
 }
