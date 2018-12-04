@@ -91,13 +91,6 @@ Shape::Shape(const QPoint& pos, const QBrush &brush, QPen pen, id_t id)
 	}
 }
 
-// This never happens :/
-Shape::Shape(Shape &&move) noexcept
-    : Shape{id_t(-1)}
-{
-	swap(move);
-}
-
 Shape::Shape(id_t id)
     : Shape{QPoint{}, QBrush{}, QPen{}, id}
 { }
@@ -106,6 +99,9 @@ Shape::~Shape() = default;
 
 bool Shape::operator==(const Shape &other) const
 { return id == other.id; }
+
+bool Shape::operator<(const Shape &other) const
+{ return id < other.id; }
 
 void Shape::move(int dx, int dy)
 {
