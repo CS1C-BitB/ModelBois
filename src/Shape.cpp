@@ -91,8 +91,6 @@ Shape::Shape(const QPoint& pos, const QBrush &brush, QPen pen, id_t id)
 	}
 }
 
-Shape::Shape(const Shape &copy) = default;
-
 // This never happens :/
 Shape::Shape(Shape &&move) noexcept
     : Shape{id_t(-1)}
@@ -105,8 +103,6 @@ Shape::Shape(id_t id)
 { }
 
 Shape::~Shape() = default;
-
-Shape& Shape::operator=(const Shape &copy) = default;
 
 bool Shape::operator==(const Shape &other) const
 { return id == other.id; }

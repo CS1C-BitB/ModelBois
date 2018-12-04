@@ -7,11 +7,9 @@ class Line : public Shape
 {
 public:
 	Line(const QPoint& A = {}, const QPoint& B = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
-	Line(const Line &copy);
 	Line(Line &&move) noexcept;
 	~Line() override;
 	
-	Line& operator=(const Line &copy);
 	Line& operator=(Line &&move) noexcept;
 	
 	void draw(QPaintDevice* device) override;
