@@ -338,6 +338,7 @@ void PropertyItem<QList<QPoint>>::add()
 		);
 		treeWidget()->expandItem(prop);
 		emitDataChanged();
+		dynamic_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(true);
 	});
 	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget()));
 }
