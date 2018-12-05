@@ -39,8 +39,7 @@ namespace cs1c {
         
         //! A destructor.
         template <class Type>
-        LinkedList<Type>::LinkedList() 
-          : m_listHead(new VectorNode<Type>()) {
+        LinkedList<Type>::~LinkedList() {
             delete m_listHead;
         }
 
