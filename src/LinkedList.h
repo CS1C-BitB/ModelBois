@@ -12,6 +12,7 @@ namespace cs1c {
     class LinkedList {
     public:
         LinkedList();
+        ~LinkedList();
         void insertAtTail(VectorNode<Type>* node);
         VectorNode<Type>* removeFromHead();
         bool empty() const;
@@ -34,6 +35,13 @@ namespace cs1c {
         template <class Type>
         LinkedList<Type>::LinkedList() 
           : m_listHead(new VectorNode<Type>()) {
+        }
+        
+        //! A destructor.
+        template <class Type>
+        LinkedList<Type>::LinkedList() 
+          : m_listHead(new VectorNode<Type>()) {
+            delete m_listHead;
         }
 
         //! A public member function taking one argument and returning nothing.
