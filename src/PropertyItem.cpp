@@ -532,7 +532,7 @@ PropertyItem<QFont>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_
 	            "Family",
 	            ([this]() { return getter().family(); }),
 	            ([this](QString s) { QFont f = getter(); f.setFamily(s); setter(f); }),
-	            PropString
+	            PropFont
 	);
 	new PropertyItem<int>(
 	            this,

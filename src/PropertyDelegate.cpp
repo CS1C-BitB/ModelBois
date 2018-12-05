@@ -3,6 +3,7 @@
 #include "PropertyItem.h"
 
 #include <QComboBox>
+#include <QFontComboBox>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QTreeWidget>
@@ -49,6 +50,8 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 		return createComboBox(parent, BRUSH_STYLE_NAMES.values());
 	case PropColor:
 		return createComboBox(parent, COLOR_NAMES.keys());
+	case PropFont:
+		return new QFontComboBox{parent};
 	case PropFontStyle:
 		return createComboBox(parent, FONT_STYLE_NAMES.values());
 	case PropFontWight:
