@@ -288,7 +288,7 @@ void MainWindow::on_actionAdd_Text_triggered()
 	
 	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
 		Disconnect();
-		store.shapes.push_back(new Text{"", QFont{}, 100, 24, Qt::AlignCenter, QPoint{x, y}});
+		store.shapes.push_back(new Text{"", QFont{}, -1, -1, Qt::AlignCenter, QPoint{x, y}});
 		store.model.itemsChanged();
 		onDataChanged();
 		
