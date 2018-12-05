@@ -1,14 +1,12 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-// TEMP
-#include "Shapes.h"
-// /TEMP
-
 #include "PropertyItem.h"
 #include "PropertyDelegate.h"
 #include "Serializer.h"
+#include "Shapes.h"
 
+#include <QAction>
 #include <QCloseEvent>
 #include <QComboBox>
 #include <QMessageBox>
@@ -24,8 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	this->setWindowTitle(filename);
 	
+	store.shapes.reserve(20);
+	
 	ui->statusBar->addWidget(&statusLabel);
-
+	
 	// TODO: Testing shapes, replace with file loader
 	store.shapes.push_back(new Ellipse{50, 25, QPoint{50, 100}, QBrush{QColor{255, 0, 0}}});
 	store.shapes.push_back(new Line{QPoint{100, 150}, QPoint{300, 100}});
@@ -47,13 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->PropTree->setEditTriggers(QAbstractItemView::AllEditTriggers);
 	
 	saveTimer.setSingleShot(true);
-	connect(&saveTimer, &QTimer::timeout, [this]() {
-		SetStatusText("Saving shapes...");
-		writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
-		SetStatusText("Saved shapes file", 2000);
-		modified = false;
-		this->setWindowTitle(filename);
-	});
+	connect(&saveTimer, &QTimer::timeout, this, &MainWindow::Save);
 	modified = false;
 }
 
@@ -101,7 +95,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
 		warn->exec();
 		switch (warn->result()) {
 		case QMessageBox::Save:
-			writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
+			Save();
 			event->accept();
 			break;
 		case QMessageBox::Cancel:
@@ -181,4 +175,139 @@ void MainWindow::on_actionSave_triggered()
 void MainWindow::on_actionExit_triggered()
 {
 	this->close();
+}
+
+void MainWindow::on_actionAdd_Ellipse_triggered()
+{
+	Disconnect();
+	SetCanvasCursor(Qt::CrossCursor);
+	SetStatusText("Click to add an ellipse");
+	
+	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
+		Disconnect();
+		store.shapes.push_back(new Ellipse{50, 25, QPoint{x, y}});
+		store.model.itemsChanged();
+		onDataChanged();
+		
+		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+	});
+}
+
+void MainWindow::on_actionAdd_Line_triggered()
+{
+	Disconnect();
+	SetCanvasCursor(Qt::CrossCursor);
+	SetStatusText("Click the starting point for the line");
+	
+	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
+		auto* line = new Line{QPoint{x, y}, QPoint{x, y}};
+		store.shapes.push_back(line);
+		store.model.itemsChanged();
+		onDataChanged();
+		
+		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+		
+		disconnect(this, &MainWindow::onCanvasClick, nullptr, nullptr);
+		SetStatusText("Click the ending point for the line");
+		connect(this, &MainWindow::onCanvasClick, [this, line](int x, int y) {
+			Disconnect();
+			
+			line->setEnd(QPoint{x, y});
+			onDataChanged();
+		});
+	});
+}
+
+void MainWindow::on_actionAdd_Polygon_triggered()
+{
+	Disconnect();
+	SetCanvasCursor(Qt::CrossCursor);
+	SetStatusText("Click to add points");
+	
+	Polygon* polygon = new Polygon{};
+	
+	store.shapes.push_back(polygon);
+	store.model.itemsChanged();
+	onDataChanged();
+	
+	ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+	
+	// Use existing point adding logic
+	auto* item = ui->PropTree->topLevelItem(0)->child(3)->child(0);
+	auto* propitem = dynamic_cast<PropertyItem<QList<QPoint>>*>(item);
+	propitem->add();
+}
+
+void MainWindow::on_actionAdd_Polyline_triggered()
+{
+	Disconnect();
+	SetCanvasCursor(Qt::CrossCursor);
+	SetStatusText("Click to add points");
+	
+	PolyLine* polyline = new PolyLine{};
+	
+	store.shapes.push_back(polyline);
+	store.model.itemsChanged();
+	onDataChanged();
+	
+	ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+	
+	// Use existing point adding logic
+	auto* item = ui->PropTree->topLevelItem(0)->child(2)->child(0);
+	auto* propitem = dynamic_cast<PropertyItem<QList<QPoint>>*>(item);
+	propitem->add();
+}
+
+void MainWindow::on_actionAdd_Rectangle_triggered()
+{
+	Disconnect();
+	SetCanvasCursor(Qt::CrossCursor);
+	SetStatusText("Click to add a rectangle");
+	
+	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
+		Disconnect();
+		store.shapes.push_back(new Rectangle{50, 25, QPoint{x, y}});
+		store.model.itemsChanged();
+		onDataChanged();
+		
+		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+	});
+}
+
+void MainWindow::on_actionAdd_Text_triggered()
+{
+	Disconnect();
+	SetCanvasCursor(Qt::CrossCursor);
+	SetStatusText("Click to add a text box");
+	
+	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
+		Disconnect();
+		store.shapes.push_back(new Text{"", QFont{}, 100, 24, Qt::AlignCenter, QPoint{x, y}});
+		store.model.itemsChanged();
+		onDataChanged();
+		
+		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+		
+		auto* item = ui->PropTree->topLevelItem(0)->child(1)->child(0);
+		ui->PropTree->setCurrentItem(item);
+		//PropertyItem<QString>* propitem = dynamic_cast<PropertyItem<QString>*>(item);
+		ui->PropTree->editItem(item, 1);
+	});
+}
+
+void MainWindow::Disconnect()
+{
+	QObject::disconnect(this, &MainWindow::onCanvasClick, nullptr, nullptr);
+	SetCanvasCursor(Qt::ArrowCursor);
+	SetStatusText("");
+}
+
+void MainWindow::Save()
+{
+	SetStatusText("Saving shapes...");
+	writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
+	SetStatusText("");
+	SetStatusText("Saved shapes file", 2000);
+	modified = false;
+	this->setWindowTitle(filename);
 }

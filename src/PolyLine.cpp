@@ -49,7 +49,7 @@ double PolyLine::getArea() const
 
 QRect PolyLine::getRect() const
 {
-	QRect rect{points[0] + getPos(), QSize{}};
+	QRect rect{(points.empty() ? QPoint{} : points[0]) + getPos(), QSize{}};
 	for (auto p : points) {
 		rect.setLeft(  std::min(p.x() + getPos().x(), rect.left()));
 		rect.setRight( std::max(p.x() + getPos().x(), rect.right()));

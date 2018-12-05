@@ -3,6 +3,7 @@
 
 #include "Storage.h"
 
+#include <QLabel>
 #include <QMainWindow>
 #include <QTimer>
 #include <QTreeWidgetItem>
@@ -39,9 +40,25 @@ private slots:
 	
 	void on_actionExit_triggered();
 	
+	void on_actionAdd_Ellipse_triggered();
+	
+	void on_actionAdd_Line_triggered();
+	
+	void on_actionAdd_Polygon_triggered();
+	
+	void on_actionAdd_Polyline_triggered();
+	
+	void on_actionAdd_Rectangle_triggered();
+	
+	void on_actionAdd_Text_triggered();
+	
 private:
+	void Disconnect();
+	void Save();
+	
 	Storage store;
 	Ui::MainWindow *ui;
+	QLabel statusLabel;
 	QTimer saveTimer;
 	bool modified;
 };
