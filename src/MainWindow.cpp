@@ -109,23 +109,13 @@ void MainWindow::on_ShapeList_currentIndexChanged(int index)
 		delete old;
 	}
 	
-	if (store.shapes.size() == 0) {
-		ui->ShapeList->setEnabled(false);
-		ui->remove->setEnabled(false);
-		// TODO: Re-enable on add
-	}
-	else if (index >= store.shapes.size()) {
-		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
-		return;
-	}
-	else {
+	if (index < store.shapes.size()) {
 		Shape* s = store.shapes[index];
 		new PropertyItem<Shape>(ui->PropTree->invisibleRootItem(), *s);
 		ui->PropTree->expandAll();
 	}
 	
 	ui->canvas->setSelected(index);
-	
 	ui->PropTree->update();
 	
 	connect(ui->PropTree, &QTreeWidget::itemChanged, this, &MainWindow::onDataChanged);
@@ -151,11 +141,22 @@ void MainWindow::on_remove_clicked()
 	delete *it;
 	
 	store.shapes.erase(it);
+	store.model.itemsChanged();
 	
-	ui->canvas->update();
-	ui->ShapeList->update();
+	onDataChanged();
 	
-	on_ShapeList_currentIndexChanged(index);
+	if (store.shapes.size() == 0) {
+		ui->ShapeList->setEnabled(false);
+		ui->remove->setEnabled(false);
+		// TODO: Re-enable on add
+		on_ShapeList_currentIndexChanged(0);
+	}
+	else if (index >= store.shapes.size()) {
+		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+	}
+	else {
+		ui->ShapeList->setCurrentIndex(index);
+	}
 }
 
 void MainWindow::on_actionSave_triggered()

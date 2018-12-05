@@ -27,3 +27,8 @@ QVariant ShapeListModel::data(const QModelIndex &index, int role) const
 	}
 }
 
+void ShapeListModel::itemsChanged()
+{
+	this->endResetModel();
+}
+
