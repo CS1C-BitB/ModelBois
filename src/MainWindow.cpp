@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	this->setWindowTitle(filename);
 	
+	ui->statusBar->addWidget(&statusLabel);
+
 	// TODO: Testing shapes, replace with file loader
 	store.shapes.push_back(new Ellipse{50, 25, QPoint{50, 100}, QBrush{QColor{255, 0, 0}}});
 	store.shapes.push_back(new Line{QPoint{100, 150}, QPoint{300, 100}});
@@ -68,7 +70,19 @@ void MainWindow::SetCanvasCursor(const QCursor &c)
 
 void MainWindow::SetStatusText(const QString &str, int timeout)
 {
-	ui->statusBar->showMessage(str, timeout);
+	if (timeout == 0) {
+		ui->statusBar->clearMessage();
+		statusLabel.setText(str);
+		if (str.isEmpty()) {
+			statusLabel.hide();
+		}
+		else {
+			statusLabel.show();
+		}
+	}
+	else {
+		ui->statusBar->showMessage(str, timeout);
+	}
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
