@@ -225,15 +225,12 @@ PropertyItem<Text>::PropertyItem(QTreeWidgetItem* parent, Text& text)
  * 
  *****************************************************************************/
 
-void Disconnect(MainWindow* window, QTreeWidget* tree, QWidget* button)
+void Disconnect(MainWindow* window, QTreeWidget* tree)
 {
 	QObject::disconnect(window, &MainWindow::onCanvasClick, nullptr, nullptr);
 	QObject::disconnect(tree, &QTreeWidget::currentItemChanged, nullptr, nullptr);
 	window->SetCanvasCursor(Qt::ArrowCursor);
-	if (button) {
-		button->setStatusTip(button->toolTip());
-		window->SetStatusText("");
-	}
+	window->SetStatusText("");
 }
 
 PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter_in)
@@ -255,21 +252,19 @@ PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
 	
 	auto* buttonWidget = new PosButton();
-	auto* button = buttonWidget->findChild<QWidget*>("button");
-	QObject::connect(buttonWidget, &PosButton::clicked, [this, window, button]() {
+	QObject::connect(buttonWidget, &PosButton::clicked, [this, window]() {
 		treeWidget()->setCurrentItem(this);
 		// Set pointer
 		window->SetCanvasCursor(Qt::CrossCursor);
-		button->setStatusTip("");
 		window->SetStatusText("Click to set position");
 		// Set setter
-		QObject::connect(window, &MainWindow::onCanvasClick, [this, window, button](int x, int y) {
+		QObject::connect(window, &MainWindow::onCanvasClick, [this, window](int x, int y) {
 			setter(QPoint{x, y});
 			emitDataChanged();
 			// Unset setter
-			Disconnect(window, treeWidget(), button);
+			Disconnect(window, treeWidget());
 		});
-		QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget(), button));
+		QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget()));
 	});
 	treeWidget()->setItemWidget(this, 1, buttonWidget);
 }
@@ -325,12 +320,10 @@ PropertyItem<QList<QPoint>>::PropertyItem(QTreeWidgetItem* parent, QString name,
 void PropertyItem<QList<QPoint>>::add()
 {
 	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
-	auto* button = treeWidget()->itemWidget(this, 1)->findChild<QWidget*>("add");
 	treeWidget()->setCurrentItem(this);
 	
 	// Set pointer
 	window->SetCanvasCursor(Qt::CrossCursor);
-	button->setStatusTip("");
 	window->SetStatusText("Click to add points");
 	
 	// Set setter
@@ -345,15 +338,16 @@ void PropertyItem<QList<QPoint>>::add()
 		);
 		treeWidget()->expandItem(prop);
 		emitDataChanged();
+		dynamic_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(true);
 	});
-	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget(), button));
+	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget()));
 }
 
 void PropertyItem<QList<QPoint>>::remove()
 {
 	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
 	
-	Disconnect(window, treeWidget(), nullptr);
+	Disconnect(window, treeWidget());
 	
 	size_t i = get_size() - 1;
 	erase(i);
@@ -538,7 +532,7 @@ PropertyItem<QFont>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_
 	            "Family",
 	            ([this]() { return getter().family(); }),
 	            ([this](QString s) { QFont f = getter(); f.setFamily(s); setter(f); }),
-	            PropString
+	            PropFont
 	);
 	new PropertyItem<int>(
 	            this,

@@ -7,8 +7,6 @@ Ellipse::Ellipse(int width, int height, const QPoint& pos, const QBrush &brush, 
     : Shape{pos, brush, pen, id}, w{width}, h{height}
 { }
 
-Ellipse::Ellipse(const Ellipse &copy) = default;
-
 Ellipse::Ellipse(Ellipse &&move) noexcept
     : Shape{id_t(-1)}, w{0}, h{0}
 {
@@ -18,8 +16,6 @@ Ellipse::Ellipse(Ellipse &&move) noexcept
 }
 
 Ellipse::~Ellipse() = default;
-
-Ellipse& Ellipse::operator=(const Ellipse &other) = default;
 
 Ellipse& Ellipse::operator=(Ellipse &&other) noexcept
 {

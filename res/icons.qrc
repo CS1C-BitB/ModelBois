@@ -2,5 +2,12 @@
     <qresource prefix="/icons">
         <file>target.png</file>
         <file>target_small.png</file>
+        <file>add_ellipse.png</file>
+        <file>add_line.png</file>
+        <file>add_polygon.png</file>
+        <file>add_polyline.png</file>
+        <file>add_rectangle.png</file>
+        <file>add_text.png</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

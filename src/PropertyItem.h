@@ -14,6 +14,7 @@ enum PropEditType {
 	PropAlignment,
 	PropBrushStyle,
 	PropColor,
+	PropFont,
 	PropFontStyle,
 	PropFontWight,
 	PropPenStyle,
