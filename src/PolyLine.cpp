@@ -10,8 +10,6 @@ PolyLine::PolyLine(std::vector<QPoint> points, const QBrush &brush, const QPen &
 	setCenter();
 }
 
-PolyLine::PolyLine(const PolyLine &copy) = default;
-
 PolyLine::PolyLine(PolyLine &&move) noexcept
     : Shape{id_t(-1)}
 {
@@ -20,8 +18,6 @@ PolyLine::PolyLine(PolyLine &&move) noexcept
 }
 
 PolyLine::~PolyLine() = default;
-
-PolyLine& PolyLine::operator=(const PolyLine &other) = default;
 
 PolyLine& PolyLine::operator=(PolyLine &&other) noexcept
 {
@@ -49,7 +45,8 @@ double PolyLine::getArea() const
 
 QRect PolyLine::getRect() const
 {
-	QRect rect{points[0] + getPos(), QSize{}};
+	QPoint start = (points.empty() ? QPoint{} : points[0]) + getPos();
+	QRect rect{start, start};
 	for (auto p : points) {
 		rect.setLeft(  std::min(p.x() + getPos().x(), rect.left()));
 		rect.setRight( std::max(p.x() + getPos().x(), rect.right()));

@@ -87,31 +87,12 @@ bool compare(const Text &first, const Text &second)
 	       && first.getString() == second.getString();
 }
 
-template<class Shape_T>
-int testCopyMove(Shape_T &shape)
-{
-	int result = 0;
-	auto s2 = shape;
-	
-	TEST(compare(shape, s2));
-	
-	auto s3 = std::move(shape);
-	
-	TEST(compare(s2, s3));
-	TEST(!compare(s3, shape));
-	
-	shape = std::move(s2);
-	return result;
-}
-
 int testShapes()
 {
 	int result = 0;
 	std::printf("Testing shapes...\n");
 	{
 		Ellipse elli {10, 5};
-		
-		RUN_TEST(testCopyMove(elli));
 		
 		COMPARE(elli.getID(), 1);
 		
@@ -121,8 +102,6 @@ int testShapes()
 	
 	{
 		Line line {QPoint{1, 2}, QPoint{3, 4}};
-		
-		RUN_TEST(testCopyMove(line));
 		
 		COMPARE(line.getID(), 2);
 		
@@ -150,8 +129,6 @@ int testShapes()
 		const int high = 2, low = 0;
 		Polygon poly {std::vector<QPoint>{QPoint{low, low}, QPoint{high, low}, QPoint{high, high}, QPoint{low, high}}};
 		
-		RUN_TEST(testCopyMove(poly));
-		
 		COMPARE(poly.getID(), 3);
 		
 		COMPARE(poly.getCount(), 4);
@@ -167,7 +144,7 @@ int testShapes()
 		
 		COMPARE(poly.getPoint(0), (QPoint{-1, -1}));
 		COMPARE(poly.getPoint(3), (QPoint{-1, 1}));
-		/*
+		
 		poly.clearPoints();
 		COMPARE(poly.getPos(), (QPoint{}));
 		
@@ -181,14 +158,11 @@ int testShapes()
 		COMPARE(poly.getPos(), (QPoint{1, 1}));
 		COMPARE(poly.getPoint(0), (QPoint{0, 0}));
 		COMPARE(poly.getPoint(3), (QPoint{0, 2}));
-		*/
 	}
 	
 	{
 		const int high = 2, low = 0;
 		PolyLine poly {std::vector<QPoint>{QPoint{low, low}, QPoint{high, low}, QPoint{high, high}, QPoint{low, high}}};
-		
-		RUN_TEST(testCopyMove(poly));
 		
 		COMPARE(poly.getID(), 4);
 		
@@ -224,8 +198,6 @@ int testShapes()
 	{
 		Rectangle rect {10, 5};
 		
-		RUN_TEST(testCopyMove(rect));
-		
 		COMPARE(rect.getID(), 5);
 		
 		COMPARE_WITHIN(rect.getArea(), 50.0, .0001);
@@ -234,8 +206,6 @@ int testShapes()
 	
 	{
 		Text text{"Hello world!"};
-		
-		RUN_TEST(testCopyMove(text));
 		
 		COMPARE(text.getID(), 6);
 		

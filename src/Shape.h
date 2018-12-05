@@ -30,23 +30,13 @@ public:
 	using id_t = unsigned int;
 	
 	Shape(const QPoint &pos = {}, const QBrush &brush = {}, QPen pen = {}, id_t id = 0);
-	/**
-	 * @brief Shape Creates a copy of a given shape.
-	 * @param copy Shape to copy.
-	 */
-	Shape(const Shape &copy);
-	/**
-	 * @brief Shape Moves a given shape.
-	 * @param move Shape to move from.
-	 * 
-	 * Moved from object is left in a invalid state.
-	 */
-	Shape(Shape &&move) noexcept;
+	Shape(const Shape&) = delete;
 	virtual ~Shape();
 	
-	Shape& operator=(const Shape &copy);
+	Shape& operator=(const Shape&) = delete;
 	
 	bool operator==(const Shape &other) const;
+	bool operator<(const Shape &other) const;
 	
 	virtual void draw(QPaintDevice* device) = 0;
 	/**

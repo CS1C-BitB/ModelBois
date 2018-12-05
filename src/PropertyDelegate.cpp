@@ -3,6 +3,7 @@
 #include "PropertyItem.h"
 
 #include <QComboBox>
+#include <QFontComboBox>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QTreeWidget>
@@ -15,6 +16,13 @@ PropertyDelegate::PropertyDelegate(QObject *parent)
 
 //const char* QOBJ_PROP_NAME = "DataType";
 
+QWidget* createComboBox(QWidget* parent, const QStringList &source) {
+	QComboBox* editor = new QComboBox{parent};
+	editor->insertItems(0, source);
+	editor->setEditable(false);
+	return editor;
+}
+
 QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex& index) const
 {
 	if (index.column() == 0) {
@@ -22,16 +30,8 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 	}
 	
 	auto* tree = dynamic_cast<QTreeWidget*>(parent->parent());
-	QTreeWidgetItem* item = tree->currentItem();
+	auto* item = tree->currentItem();
 	int type = item->type();
-	
-#define TEXT_SELECTION(source) do { \
-	QComboBox* editor = new QComboBox{parent}; \
-	QStringList strings = source; \
-	editor->insertItems(0, strings); \
-	editor->setEditable(false); \
-	return editor; \
-} while (0)
 	
 	switch (type) {
 	case PropInt: {
@@ -45,29 +45,23 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 		return editor;
 	}
 	case PropAlignment:
-		TEXT_SELECTION(ALIGNMENT_NAMES.values());
-		break;
+		return createComboBox(parent, ALIGNMENT_NAMES.values());
 	case PropBrushStyle:
-		TEXT_SELECTION(BRUSH_STYLE_NAMES.values());
-		break;
+		return createComboBox(parent, BRUSH_STYLE_NAMES.values());
 	case PropColor:
-		TEXT_SELECTION(COLOR_NAMES.keys());
-		break;
+		return createComboBox(parent, COLOR_NAMES.keys());
+	case PropFont:
+		return new QFontComboBox{parent};
 	case PropFontStyle:
-		TEXT_SELECTION(FONT_STYLE_NAMES.values());
-		break;
+		return createComboBox(parent, FONT_STYLE_NAMES.values());
 	case PropFontWight:
-		TEXT_SELECTION(FONT_WEIGHT_NAMES.values());
-		break;
+		return createComboBox(parent, FONT_WEIGHT_NAMES.values());
 	case PropPenStyle:
-		TEXT_SELECTION(PEN_STYLE_NAMES.values());
-		break;
+		return createComboBox(parent, PEN_STYLE_NAMES.values());
 	case PropPenCapStyle:
-		TEXT_SELECTION(PEN_CAP_STYLE_NAMES.values());
-		break;
+		return createComboBox(parent, PEN_CAP_STYLE_NAMES.values());
 	case PropPenJoinStyle:
-		TEXT_SELECTION(PEN_JOIN_STYLE_NAMES.values());
-		break;
+		return createComboBox(parent, PEN_JOIN_STYLE_NAMES.values());
 	}
 	
 	return nullptr;

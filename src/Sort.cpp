@@ -8,7 +8,7 @@ void sortById(vector<Shape*>& shapeList) {
     while (shapeList.size() != 0) {
         vector<Shape*>::iterator smallestValueIter = shapeList.begin();
         for (vector<Shape*>::iterator current = shapeList.begin(); current != shapeList.end(); current++) {
-            if ((*current)->getID() < (*smallestValueIter)->getID()) {
+            if ((**current) < (**smallestValueIter)) {
                 smallestValueIter = current;
             }
         }

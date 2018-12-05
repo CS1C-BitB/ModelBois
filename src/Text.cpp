@@ -38,8 +38,6 @@ Text::Text(QString str, const QFont &font, int w, int h, Qt::AlignmentFlag align
     : Shape{pos, brush, pen, id}, str{std::move(str)}, font{font}, w{w}, h{h}, align{align}
 { }
 
-Text::Text(const Text &copy) = default;
-
 Text::Text(Text &&move) noexcept
     : Shape{id_t(-1)}
 {
@@ -52,8 +50,6 @@ Text::Text(Text &&move) noexcept
 }
 
 Text::~Text() = default;
-
-Text& Text::operator=(const Text &other) = default;
 
 Text& Text::operator=(Text &&other) noexcept
 {

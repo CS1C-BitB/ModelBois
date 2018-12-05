@@ -8,8 +8,6 @@ Polygon::Polygon(std::vector<QPoint> points, const QBrush &brush, const QPen &pe
     : PolyLine{std::move(points), brush, pen, id}
 { }
 
-Polygon::Polygon(const Polygon &copy) = default;
-
 Polygon::Polygon(Polygon &&move) noexcept
     : PolyLine{id_t(-1)}
 {
@@ -19,11 +17,9 @@ Polygon::Polygon(Polygon &&move) noexcept
 
 Polygon::~Polygon() = default;
 
-Polygon& Polygon::operator=(const Polygon &other) = default;
-
 Polygon& Polygon::operator=(Polygon &&other) noexcept
 {
-	Polygon move{other};
+	Polygon move{std::move(other)};
 	swap(move);
 	std::swap(points, move.points);
 	return *this;
