@@ -134,6 +134,9 @@ void MainWindow::onDataChanged()
 	ui->canvas->update();
 	modified = true;
 	this->setWindowTitle(QString{"%1*"}.arg(filename));
+	
+	ui->ShapeList->setEnabled(store.shapes.size());
+	ui->remove->setEnabled(store.shapes.size());
 	// [Optional] Save on change
 	// Delayed to prevent spam-writes, will write file after two seconds without updates
 	//saveTimer.start(2000);
@@ -154,9 +157,6 @@ void MainWindow::on_remove_clicked()
 	onDataChanged();
 	
 	if (store.shapes.size() == 0) {
-		ui->ShapeList->setEnabled(false);
-		ui->remove->setEnabled(false);
-		// TODO: Re-enable on add
 		on_ShapeList_currentIndexChanged(0);
 	}
 	else if (index >= store.shapes.size()) {
