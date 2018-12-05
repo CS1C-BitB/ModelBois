@@ -222,40 +222,46 @@ void MainWindow::on_actionAdd_Polygon_triggered()
 {
 	Disconnect();
 	SetCanvasCursor(Qt::CrossCursor);
-	SetStatusText("Click to add points");
+	SetStatusText("Click the first point for the polygon");
 	
-	Polygon* polygon = new Polygon{};
-	
-	store.shapes.push_back(polygon);
-	store.model.itemsChanged();
-	onDataChanged();
-	
-	ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
-	
-	// Use existing point adding logic
-	auto* item = ui->PropTree->topLevelItem(0)->child(3)->child(0);
-	auto* propitem = dynamic_cast<PropertyItem<QList<QPoint>>*>(item);
-	propitem->add();
+	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
+		Disconnect();
+		auto* poly = new Polygon{{QPoint{x, y}}};
+		
+		store.shapes.push_back(poly);
+		store.model.itemsChanged();
+		onDataChanged();
+		
+		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+		
+		// Use existing point adding logic
+		auto* item = ui->PropTree->topLevelItem(0)->child(3)->child(0);
+		auto* propitem = dynamic_cast<PropertyItem<QList<QPoint>>*>(item);
+		propitem->add();
+	});
 }
 
 void MainWindow::on_actionAdd_Polyline_triggered()
 {
 	Disconnect();
 	SetCanvasCursor(Qt::CrossCursor);
-	SetStatusText("Click to add points");
+	SetStatusText("Click the first point for the polyline");
 	
-	PolyLine* polyline = new PolyLine{};
-	
-	store.shapes.push_back(polyline);
-	store.model.itemsChanged();
-	onDataChanged();
-	
-	ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
-	
-	// Use existing point adding logic
-	auto* item = ui->PropTree->topLevelItem(0)->child(2)->child(0);
-	auto* propitem = dynamic_cast<PropertyItem<QList<QPoint>>*>(item);
-	propitem->add();
+	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
+		Disconnect();
+		auto* poly = new PolyLine{{QPoint{x, y}}};
+		
+		store.shapes.push_back(poly);
+		store.model.itemsChanged();
+		onDataChanged();
+		
+		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+		
+		// Use existing point adding logic
+		auto* item = ui->PropTree->topLevelItem(0)->child(2)->child(0);
+		auto* propitem = dynamic_cast<PropertyItem<QList<QPoint>>*>(item);
+		propitem->add();
+	});
 }
 
 void MainWindow::on_actionAdd_Rectangle_triggered()
