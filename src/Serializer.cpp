@@ -5,7 +5,7 @@ std::ostream& operator<<(std::ostream& out, const QString &str)
 	return out << str.toStdString();
 }
 
-std::ostream& operator<<(std::ostream& out, /*const*/ vector_t &shapes)
+std::ostream& operator<<(std::ostream& out, const vector_t &shapes)
 {
 	for (Shape* shape : shapes) {
 		out << "ShapeId: " << shape->getID() << "\n";

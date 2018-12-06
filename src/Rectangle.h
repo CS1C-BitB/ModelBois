@@ -11,7 +11,7 @@ public:
 	Rectangle(Rectangle &&move) noexcept;
 	~Rectangle() override;
 	
-	void draw(QPaintDevice* device) override;
+	void draw(QPaintDevice* device) const override;
 	
 	Rectangle& operator=(Rectangle &&move) noexcept;
 	

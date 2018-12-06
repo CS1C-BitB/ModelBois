@@ -38,7 +38,7 @@ public:
 	bool operator==(const Shape &other) const;
 	bool operator<(const Shape &other) const;
 	
-	virtual void draw(QPaintDevice* device) = 0;
+	virtual void draw(QPaintDevice* device) const = 0;
 	/**
 	 * @brief move Moves the shape by a given offset.
 	 * @param dx Change in x.

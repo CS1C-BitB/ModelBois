@@ -26,7 +26,7 @@ Ellipse& Ellipse::operator=(Ellipse &&other) noexcept
 	return *this;
 }
 
-void Ellipse::draw(QPaintDevice* device)
+void Ellipse::draw(QPaintDevice* device) const
 {
 	auto paint = getPainter(device);
 	

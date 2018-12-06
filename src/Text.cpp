@@ -63,7 +63,7 @@ Text& Text::operator=(Text &&other) noexcept
 	return *this;
 }
 
-void Text::draw(QPaintDevice* device)
+void Text::draw(QPaintDevice* device) const
 {
 	auto paint = getPainter(device);
 	QRect rect = getRect();

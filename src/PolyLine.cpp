@@ -27,7 +27,7 @@ PolyLine& PolyLine::operator=(PolyLine &&other) noexcept
 	return *this;
 }
 
-void PolyLine::draw(QPaintDevice* device)
+void PolyLine::draw(QPaintDevice* device) const
 {
 	auto paint = getPainter(device);
 	

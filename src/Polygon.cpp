@@ -25,7 +25,7 @@ Polygon& Polygon::operator=(Polygon &&other) noexcept
 	return *this;
 }
 
-void Polygon::draw(QPaintDevice* device)
+void Polygon::draw(QPaintDevice* device) const
 {
 	auto paint = getPainter(device);
 	

@@ -1,6 +1,6 @@
 #include "ShapeListModel.h"
 
-ShapeListModel::ShapeListModel(vector_t* list)
+ShapeListModel::ShapeListModel(const vector_t* list)
     : list{list} { }
 
 int ShapeListModel::rowCount(const QModelIndex &) const
@@ -16,7 +16,7 @@ QVariant ShapeListModel::data(const QModelIndex &index, int role) const
 	if (index.row() >= static_cast<int>(list->size()))
 		return "None";
 	
-	Shape* s = (*list)[static_cast<size_t>(index.row())];
+	const Shape* s = (*list)[static_cast<size_t>(index.row())];
 	
 	switch (role) {
 	case Qt::DisplayRole:

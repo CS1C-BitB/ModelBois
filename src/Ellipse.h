@@ -12,7 +12,7 @@ public:
 	
 	Ellipse& operator=(Ellipse &&move) noexcept;
 	
-	void draw(QPaintDevice* device) override;
+	void draw(QPaintDevice* device) const override;
 	
 	ShapeType getType() const override;
 	double getPerimeter() const override;
