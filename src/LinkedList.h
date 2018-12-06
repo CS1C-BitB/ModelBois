@@ -12,8 +12,10 @@ namespace cs1c {
     class LinkedList {
     public:
         LinkedList();
+        ~LinkedList();
         void insertAtTail(VectorNode<Type>* node);
         VectorNode<Type>* removeFromHead();
+        void remove(VectorNode<Type>* node);
         bool empty() const;
         VectorNode<Type>* head() const;
         VectorNode<Type>* tail() const;
@@ -34,6 +36,12 @@ namespace cs1c {
         template <class Type>
         LinkedList<Type>::LinkedList() 
           : m_listHead(new VectorNode<Type>()) {
+        }
+        
+        //! A destructor.
+        template <class Type>
+        LinkedList<Type>::~LinkedList() {
+            delete m_listHead;
         }
 
         //! A public member function taking one argument and returning nothing.
@@ -68,6 +76,23 @@ namespace cs1c {
             nodeToRemove->previous = nodeToRemove;
 
             return nodeToRemove;
+        }
+
+        //! A public member function taking one arguments and returning nothing.
+        /*! 
+           Removes the specified from the linked list.
+           \param nodeToRemove Node to remove.
+        */
+        template <class Type>
+        void LinkedList<Type>::remove(VectorNode<Type>* nodeToRemove) {
+            VectorNode<Type>* nextNode = nodeToRemove->next;
+            VectorNode<Type>* previousNode = nodeToRemove->previous;
+
+            previousNode->next = nextNode;
+            nextNode->previous = previousNode;
+
+            nodeToRemove->next = nodeToRemove;
+            nodeToRemove->previous = nodeToRemove;
         }
 
         //! A public member function taking zero arguments and returning a bool.
