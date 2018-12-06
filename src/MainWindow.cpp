@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include "About.h"
 #include "DetailView.h"
 #include "fileparser.h"
 #include "login.h"
@@ -317,7 +318,7 @@ void MainWindow::on_actionBy_ID_triggered()
 	std::stringstream text;
 	text << copy;
 	
-	auto* view = new DetailView(QString::fromStdString(text.str()).replace("Shape", "").replace(": ", ":\t"), this);
+	auto* view = new DetailView(QString::fromStdString(text.str()).replace(": ", ":\t"), this);
 	view->open();
 }
 
@@ -367,6 +368,11 @@ void MainWindow::on_actionLogin_triggered()
 void MainWindow::on_actionLog_Out_triggered()
 {
 	SetAdmin(false);
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+	(new About(this))->show();
 }
 
 void MainWindow::Disconnect()
