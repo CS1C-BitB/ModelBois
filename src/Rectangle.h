@@ -7,6 +7,7 @@ class Rectangle : public Shape
 {
 public:
 	Rectangle(int width = 0, int height = 0, const QPoint& pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
+	Rectangle(const QRect &rect, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
 	Rectangle(Rectangle &&move) noexcept;
 	~Rectangle() override;
 	

@@ -1,79 +1,84 @@
 ShapeId: 1
-ShapeType: Ellipse
-ShapeDimensions: 25, 88, 25, 50
-PenColor: black
-PenWidth: 1
-PenStyle: SolidLine
-PenCapStyle: SquareCap
-PenJoinStyle: BevelJoin
-BrushColor: red
-BrushStyle: SolidPattern
+ShapeType: Line
+ShapeDimensions: 20, 90, 100, 20
+PenColor: blue
+PenWidth: 2
+PenStyle: DashDotLine
+PenCapStyle: FlatCap
+PenJoinStyle: MiterJoin
 
 ShapeId: 2
-ShapeType: Line
-ShapeDimensions: 100, 150, 300, 100
-PenColor: black
-PenWidth: 1
+ShapeType: Polyline
+ShapeDimensions: 460, 90, 470, 20, 530, 40, 540, 80
+PenColor: green
+PenWidth: 6
 PenStyle: SolidLine
-PenCapStyle: SquareCap
-PenJoinStyle: BevelJoin
-BrushColor: black
-BrushStyle: NoBrush
+PenCapStyle: FlatCap
+PenJoinStyle: MiterJoin
 
 ShapeId: 3
 ShapeType: Polygon
-ShapeDimensions: 400, 200, 450, 200, 500, 300, 400, 300
-PenColor: black
-PenWidth: 1
-PenStyle: SolidLine
-PenCapStyle: SquareCap
-PenJoinStyle: BevelJoin
-BrushColor: green
+ShapeDimensions: 900, 90, 910, 20, 970, 40, 980, 80
+PenColor: cyan
+PenWidth: 6
+PenStyle: DashDotDotLine
+PenCapStyle: FlatCap
+PenJoinStyle: MiterJoin
+BrushColor: yellow
 BrushStyle: SolidPattern
 
 ShapeId: 4
-ShapeType: Polyline
-ShapeDimensions: 600, 200, 650, 200, 700, 300, 600, 300
-PenColor: black
-PenWidth: 1
-PenStyle: SolidLine
-PenCapStyle: SquareCap
-PenJoinStyle: BevelJoin
-BrushColor: black
-BrushStyle: NoBrush
+ShapeType: Rectangle
+ShapeDimensions: 20, 200, 170, 100
+PenColor: blue
+PenWidth: 0
+PenStyle: DashLine
+PenCapStyle: RoundCap
+PenJoinStyle: RoundJoin
+BrushColor: red
+BrushStyle: VerPattern
 
 ShapeId: 5
-ShapeType: Rectangle
-ShapeDimensions: 80, 175, 50, 40
-PenColor: black
-PenWidth: 1
+ShapeType: Square
+ShapeDimensions: 250, 150, 200
+PenColor: red
+PenWidth: 0
 PenStyle: SolidLine
-PenCapStyle: SquareCap
-PenJoinStyle: BevelJoin
+PenCapStyle: RoundCap
+PenJoinStyle: RoundJoin
 BrushColor: blue
-BrushStyle: SolidPattern
+BrushStyle: HorPattern
 
 ShapeId: 6
-ShapeType: Text
-ShapeDimensions: 361, 392, 17, 80
-BrushColor: black
+ShapeType: Ellipse
+ShapeDimensions: 520, 200, 170, 100
+PenColor: black
+PenWidth: 12
+PenStyle: SolidLine
+PenCapStyle: FlatCap
+PenJoinStyle: MiterJoin
+BrushColor: white
 BrushStyle: NoBrush
-TextString: Hello world!
-TextColor: black
-TextAlignment: AlignCenter
-TextPointSize: 13
-TextFontFamily: .SF NS Text
-TextFontStyle: StyleNormal
-TextFontWeight: Normal
 
 ShapeId: 7
-ShapeType: Ellipse
-ShapeDimensions: 295, 76, 25, 50
+ShapeType: Circle
+ShapeDimensions: 750, 150, 200
 PenColor: black
-PenWidth: 1
+PenWidth: 12
 PenStyle: SolidLine
-PenCapStyle: SquareCap
-PenJoinStyle: BevelJoin
-BrushColor: black
-BrushStyle: NoBrush
+PenCapStyle: FlatCap
+PenJoinStyle: MiterJoin
+BrushColor: magenta
+BrushStyle: SolidPattern
+
+ShapeId: 8
+ShapeType: Text
+ShapeDimensions: 250, 425, 500, 50
+TextString: Class Project 2 - 2D Graphics Modeler
+TextColor: blue
+TextAlignment: AlignCenter
+TextPointSize: 10
+TextFontFamily: Comic Sans MS
+TextFontStyle: StyleNormal
+TextFontWeight: Normal
 

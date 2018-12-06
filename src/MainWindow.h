@@ -58,14 +58,20 @@ private slots:
 	
 	void on_actionBy_Perimeter_triggered();
 	
+	void on_actionLogin_triggered();
+	
+	void on_actionLog_Out_triggered();
+	
 private:
 	void Disconnect();
 	void Save();
+	void SetAdmin(bool);
 	
 	Storage store;
 	Ui::MainWindow *ui;
 	QLabel statusLabel;
 	QTimer saveTimer;
+	QList<QObject*> adminOnly;
 	bool modified;
 };
 

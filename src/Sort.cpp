@@ -12,7 +12,7 @@ bool compareArea(Shape* left, Shape* right) {
 bool comparePerimeter(Shape* left, Shape* right) {
     return ((*left).getPerimeter() < (*right).getPerimeter());
 }
-    
+
 bool excludeInvalidArea(Shape* shape) {
     return ((*shape).getArea() < 0);
 }
@@ -25,7 +25,7 @@ bool excludeInvalidID(Shape* /*shape*/) {
     return false;  // No value for ID is considered invalid
 }
 
-void selection_sort(vector<Shape*>& shapeList, std::function<bool(Shape*, Shape*)> compare, std::function<bool(Shape*)> excludeFilter) {
+void selection_sort(vector<Shape*>& shapeList, const std::function<bool(Shape*, Shape*)>& compare, const std::function<bool(Shape*)>& excludeFilter) {
     vector<Shape*> sortedShapeList;
     while (shapeList.size() != 0) {
         vector<Shape*>::iterator leastIter = shapeList.begin();
