@@ -1,6 +1,4 @@
-#include "Shape.h"
-#include "vector.h"
-#include <functional>
+#include "Sort.h"
 using cs1c::vector;
 
 bool compareID(Shape* left, Shape* right) {

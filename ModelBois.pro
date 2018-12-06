@@ -46,7 +46,8 @@ SOURCES += \
     test/testShapes.cpp \
     src/ListButtons.cpp \
     src/PosButton.cpp \
-    src/Sort.cpp
+    src/Sort.cpp \
+    src/DetailView.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -69,12 +70,15 @@ HEADERS += \
     src/Serializer.h \
     src/LinkedList.h \
     src/VectorNode.h \
-    src/vector.h
+    src/vector.h \
+    src/Sort.h \
+    src/DetailView.h
 
 FORMS += \
     src/MainWindow.ui \
     src/ListButtons.ui \
-    src/PosButton.ui
+    src/PosButton.ui \
+    src/DetailView.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
