@@ -3,6 +3,7 @@
 
 #include "DetailView.h"
 #include "fileparser.h"
+#include "login.h"
 #include "PropertyItem.h"
 #include "PropertyDelegate.h"
 #include "Serializer.h"
@@ -28,19 +29,21 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	this->setWindowTitle(filename);
 	
-	ui->statusBar->addWidget(&statusLabel);
+	adminOnly = {
+	    ui->actionAdd_Ellipse,
+	    ui->actionAdd_Line,
+	    ui->actionAdd_Polygon,
+	    ui->actionAdd_Polyline,
+	    ui->actionAdd_Rectangle,
+	    ui->actionAdd_Text,
+	    ui->actionSave,
+	    ui->PropTree,
+	    ui->remove
+	};
 	
-	// TODO: Testing shapes, replace with file loader
-//	store.shapes.push_back(new Ellipse{50, 25, QPoint{50, 100}, QBrush{QColor{255, 0, 0}}});
-//	store.shapes.push_back(new Line{QPoint{100, 150}, QPoint{300, 100}});
-//	store.shapes.push_back(new Polygon{std::vector<QPoint>{
-//	                                 QPoint{400, 200}, QPoint{450, 200}, QPoint{500, 300}, QPoint{400, 300}
-//	                             }, QBrush{QColor{0, 255, 0}}});
-//	store.shapes.push_back(new PolyLine{std::vector<QPoint>{
-//	                                 QPoint{600, 200}, QPoint{650, 200}, QPoint{700, 300}, QPoint{600, 300}
-//	                             }});
-//	store.shapes.push_back(new Rectangle{40, 50, QPoint{100, 200}, QBrush{QColor{0, 0, 255}}});
-//	store.shapes.push_back(new Text{"Hello world!", QFont{}, QPoint{400, 400}});
+	SetAdmin(false);
+	
+	ui->statusBar->addWidget(&statusLabel);
 	
 	store.shapes = LoadFile();
 
@@ -353,6 +356,18 @@ void MainWindow::on_actionBy_Perimeter_triggered()
 	view->open();
 }
 
+void MainWindow::on_actionLogin_triggered()
+{
+	Login* login = new Login(this);
+	connect(login, &QDialog::accepted, std::bind(&MainWindow::SetAdmin, this, true));
+	login->show();
+}
+
+void MainWindow::on_actionLog_Out_triggered()
+{
+	SetAdmin(false);
+}
+
 void MainWindow::Disconnect()
 {
 	QObject::disconnect(this, &MainWindow::onCanvasClick, nullptr, nullptr);
@@ -371,5 +386,19 @@ void MainWindow::Save()
 	SetStatusText("Saved shapes file", 2000);
 	modified = false;
 	this->setWindowTitle(filename);
+}
+
+void MainWindow::SetAdmin(bool val)
+{
+	for (auto* o : adminOnly) {
+		if (auto* w = dynamic_cast<QWidget*>(o)) {
+			w->setEnabled(val);
+		}
+		else if (auto* a = dynamic_cast<QAction*>(o)) {
+			a->setEnabled(val);
+		}
+	}
+	ui->actionLogin->setEnabled(!val);
+	ui->actionLog_Out->setEnabled(val);
 }
 

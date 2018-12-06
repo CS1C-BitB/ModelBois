@@ -88,6 +88,9 @@
     <addaction name="actionAdd_Polyline"/>
     <addaction name="actionAdd_Rectangle"/>
     <addaction name="actionAdd_Text"/>
+    <addaction name="separator"/>
+    <addaction name="actionLogin"/>
+    <addaction name="actionLog_Out"/>
    </widget>
    <widget class="QMenu" name="menuReports">
     <property name="title">
@@ -295,6 +298,16 @@
   <action name="actionBy_Perimeter">
    <property name="text">
     <string>By Perimeter</string>
+   </property>
+  </action>
+  <action name="actionLogin">
+   <property name="text">
+    <string>Log In</string>
+   </property>
+  </action>
+  <action name="actionLog_Out">
+   <property name="text">
+    <string>Log Out</string>
    </property>
   </action>
  </widget>

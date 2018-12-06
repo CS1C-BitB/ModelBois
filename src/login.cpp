@@ -24,8 +24,7 @@ void Login::on_pushButton_login_clicked()
 
     if(username == QString("admin") && password == QString("password"))
     {
-        QMessageBox::information(this, "Login", "Signed-in!");
-        hide();
+        accept();
     }
     else
     {
