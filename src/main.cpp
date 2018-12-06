@@ -1,3 +1,4 @@
+
 #include "MainWindow.h"
 #include <QApplication>
 
@@ -36,3 +37,20 @@ int main(int argc, char *argv[])
 }
 
 #endif
+
+// This was used to test the file parser
+#if 0
+#include "fileparser.h"
+
+int main()
+{
+    std::vector<Shape*> shape = LoadFile();
+    std::cout << "SIZE: " << shape.size() << std::endl;
+
+    std::cout << std::endl;
+
+    return 0;
+}
+#endif
+
+

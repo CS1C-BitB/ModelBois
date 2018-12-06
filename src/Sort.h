@@ -13,6 +13,6 @@ bool excludeInvalidArea(Shape* shape);
 bool excludeInvalidPerimeter(Shape* shape);
 bool excludeInvalidID(Shape* shape);
 
-void selection_sort(cs1c::vector<Shape*>& shapeList, std::function<bool(Shape*, Shape*)> compare, std::function<bool(Shape*)> excludeFilter);
+void selection_sort(cs1c::vector<Shape*>& shapeList, const std::function<bool(Shape*, Shape*)>& compare, const std::function<bool(Shape*)>& excludeFilter);
 
 #endif // SORT_H

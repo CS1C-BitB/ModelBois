@@ -1,7 +1,7 @@
 # C++ objects and libs
 *.slo
 *.lo
-*.o
+*.o*
 *.a
 *.la
 *.lai
@@ -20,10 +20,10 @@ object_script.*.Debug
 *.qbs.user
 *.qbs.user.*
 *.moc
-moc_*.cpp
-moc_*.h
+moc_*.cpp*
+moc_*.h*
 qrc_*.cpp
-ui_*.h
+ui_*.h*
 *.qmlc
 *.jsc
 Makefile*
@@ -43,4 +43,6 @@ target_wrapper.*
 # QtCreator CMake
 CMakeLists.txt.user*
 
-.DS_Store
+*.DS_Store*
+*.app
+*.app/*
