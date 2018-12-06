@@ -9,5 +9,7 @@
         <file>add_rectangle.png</file>
         <file>add_text.png</file>
     </qresource>
-    <qresource prefix="/"/>
+    <qresource prefix="/">
+        <file>BoysInTheBack.png</file>
+    </qresource>
 </RCC>

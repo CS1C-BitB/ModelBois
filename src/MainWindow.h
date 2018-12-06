@@ -62,6 +62,8 @@ private slots:
 	
 	void on_actionLog_Out_triggered();
 	
+	void on_actionAbout_triggered();
+	
 private:
 	void Disconnect();
 	void Save();

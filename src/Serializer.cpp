@@ -75,7 +75,6 @@ std::ostream& operator<<(std::ostream& out, /*const*/ vector_t &shapes)
 			out << "TextString: " << cast->getString() << "\n";
 			out << "TextColor: " << COLOR_NAMES.key(cast->getPen().color()) << "\n";
 			out << "TextAlignment: " << ALIGNMENT_NAMES[cast->getAlign()] << "\n";
-			auto align = cast->getAlign();
 			out << "TextPointSize: " << font.pointSize() << "\n";
 			out << "TextFontFamily: " << font.family() << "\n";
 			out << "TextFontStyle: " << FONT_STYLE_NAMES[font.style()] << "\n";
