@@ -22,8 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	this->setWindowTitle(filename);
 	
-	store.shapes.reserve(20);
-	
 	ui->statusBar->addWidget(&statusLabel);
 	
 	// TODO: Testing shapes, replace with file loader
