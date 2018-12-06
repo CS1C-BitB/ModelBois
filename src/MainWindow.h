@@ -52,6 +52,12 @@ private slots:
 	
 	void on_actionAdd_Text_triggered();
 	
+	void on_actionBy_ID_triggered();
+	
+	void on_actionBy_Area_triggered();
+	
+	void on_actionBy_Perimeter_triggered();
+	
 private:
 	void Disconnect();
 	void Save();
