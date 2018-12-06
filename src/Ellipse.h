@@ -7,6 +7,7 @@ class Ellipse : public Shape
 {
 public:
 	Ellipse(int width = 0, int height = 0, const QPoint& pos = {}, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
+	Ellipse(const QRect &rect, const QBrush &brush = {}, const QPen &pen = {}, id_t id = 0);
 	Ellipse(Ellipse &&move) noexcept;
 	~Ellipse() override;
 	
@@ -24,6 +25,7 @@ public:
 	
 	void setWidth(int w);
 	void setHeight(int h);
+	void setRect(const QRect& rect);
 	
 private:
 	int w{0}, h{0};

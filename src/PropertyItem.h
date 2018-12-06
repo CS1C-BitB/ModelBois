@@ -102,7 +102,6 @@ private: \
 };
 
 NO_DATA_PROP_ITEM(Shape)
-NO_DATA_PROP_ITEM(Ellipse)
 NO_DATA_PROP_ITEM(Line)
 NO_DATA_PROP_ITEM(Polygon)
 NO_DATA_PROP_ITEM(PolyLine)

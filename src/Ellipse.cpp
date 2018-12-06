@@ -7,6 +7,10 @@ Ellipse::Ellipse(int width, int height, const QPoint& pos, const QBrush &brush, 
     : Shape{pos, brush, pen, id}, w{width}, h{height}
 { }
 
+Ellipse::Ellipse(const QRect &rect, const QBrush &brush, const QPen &pen, id_t id)
+    : Shape{rect.center(), brush, pen, id}, w{rect.width()}, h{rect.height()}
+{ }
+
 Ellipse::Ellipse(Ellipse &&move) noexcept
     : Shape{id_t(-1)}, w{0}, h{0}
 {
@@ -62,7 +66,7 @@ QRect Ellipse::getRect() const
 {
 	QRect rect{0, 0, w, h};
 	rect.moveCenter(getPos());
-	return rect.marginsAdded(QMargins{1, 0, -1, -1});
+	return rect;
 }
 
 int Ellipse::getWidth() const
@@ -76,3 +80,10 @@ void Ellipse::setWidth(int width)
 
 void Ellipse::setHeight(int height)
 { h = height; }
+
+void Ellipse::setRect(const QRect &rect)
+{
+	setPos(rect.center());
+	w = rect.width();
+	h = rect.height();
+}

@@ -42,7 +42,11 @@ PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
 #define TRY_CAST(type, var) auto* var = dynamic_cast<type*>(&s)
 	
 	if (TRY_CAST(Ellipse, ellipse)) {
-		new PropertyItem<Ellipse>(this, *ellipse);
+		new PropertyItem<QRect>(this,
+		                        "Ellipse",
+		                        std::bind(&Ellipse::getRect, ellipse),
+		                        std::bind(&Ellipse::setRect, ellipse, _1)
+		);
 	}
 	else if (TRY_CAST(Line, line)) {
 		new PropertyItem<Line>(this, *line);
@@ -66,29 +70,6 @@ PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
 #undef TRY_CAST
 	
 	treeWidget()->setCurrentItem(this);
-}
-
-/******************************************************************************
- * 
- * Ellipse specialization
- * 
- *****************************************************************************/
-
-PropertyItem<Ellipse>::PropertyItem(QTreeWidgetItem* parent, Ellipse& ellipse)
-    : QTreeWidgetItem(parent, PropNone), name{"Ellipse"}
-{
-	new PropertyItem<int>(
-	            this,
-	            "Width",
-	            std::bind(&Ellipse::getWidth, &ellipse),
-	            std::bind(&Ellipse::setWidth, &ellipse, _1)
-	);
-	new PropertyItem<int>(
-	            this,
-	            "Height",
-	            std::bind(&Ellipse::getHeight, &ellipse),
-	            std::bind(&Ellipse::setHeight, &ellipse, _1)
-	);
 }
 
 /******************************************************************************
@@ -396,7 +377,7 @@ QVariant PropertyItem<QRect>::data(int column, int role) const
 		}
 		else {
 			QRect r = getter();
-			return QString{"[(%1, %2), %3 x %4]"}.arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
+			return QString{"[(%1, %2), %3x%4]"}.arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
 		}
 	}
 	
