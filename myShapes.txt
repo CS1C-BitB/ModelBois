@@ -1,0 +1,79 @@
+ShapeId: 1
+ShapeType: Ellipse
+ShapeDimensions: 25, 88, 25, 50
+PenColor: black
+PenWidth: 1
+PenStyle: SolidLine
+PenCapStyle: SquareCap
+PenJoinStyle: BevelJoin
+BrushColor: red
+BrushStyle: SolidPattern
+
+ShapeId: 2
+ShapeType: Line
+ShapeDimensions: 100, 150, 300, 100
+PenColor: black
+PenWidth: 1
+PenStyle: SolidLine
+PenCapStyle: SquareCap
+PenJoinStyle: BevelJoin
+BrushColor: black
+BrushStyle: NoBrush
+
+ShapeId: 3
+ShapeType: Polygon
+ShapeDimensions: 400, 200, 450, 200, 500, 300, 400, 300
+PenColor: black
+PenWidth: 1
+PenStyle: SolidLine
+PenCapStyle: SquareCap
+PenJoinStyle: BevelJoin
+BrushColor: green
+BrushStyle: SolidPattern
+
+ShapeId: 4
+ShapeType: Polyline
+ShapeDimensions: 600, 200, 650, 200, 700, 300, 600, 300
+PenColor: black
+PenWidth: 1
+PenStyle: SolidLine
+PenCapStyle: SquareCap
+PenJoinStyle: BevelJoin
+BrushColor: black
+BrushStyle: NoBrush
+
+ShapeId: 5
+ShapeType: Rectangle
+ShapeDimensions: 80, 175, 50, 40
+PenColor: black
+PenWidth: 1
+PenStyle: SolidLine
+PenCapStyle: SquareCap
+PenJoinStyle: BevelJoin
+BrushColor: blue
+BrushStyle: SolidPattern
+
+ShapeId: 6
+ShapeType: Text
+ShapeDimensions: 361, 392, 17, 80
+BrushColor: black
+BrushStyle: NoBrush
+TextString: Hello world!
+TextColor: black
+TextAlignment: AlignCenter
+TextPointSize: 13
+TextFontFamily: .SF NS Text
+TextFontStyle: StyleNormal
+TextFontWeight: Normal
+
+ShapeId: 7
+ShapeType: Ellipse
+ShapeDimensions: 295, 76, 25, 50
+PenColor: black
+PenWidth: 1
+PenStyle: SolidLine
+PenCapStyle: SquareCap
+PenJoinStyle: BevelJoin
+BrushColor: black
+BrushStyle: NoBrush
+
