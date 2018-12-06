@@ -15,12 +15,12 @@ Shape* ReadEllipse(std::ifstream&, int id);
 Shape* ReadCircle(std::ifstream&, int id);
 Shape* ReadText(std::ifstream&, int id);
 
-Qt::GlobalColor  getColor(const std::string);
-Qt::PenStyle     getPenStyle(const std::string);
-Qt::PenCapStyle  getCapStyle(const std::string);
-Qt::PenJoinStyle getPenJoinStyle(const std::string);
-Qt::BrushStyle   getBrushStyle(const std::string);
-QFont::Weight    getFontWeight(const std::string);
+Qt::GlobalColor  getColor(const std::string&);
+Qt::PenStyle     getPenStyle(const std::string&);
+Qt::PenCapStyle  getCapStyle(const std::string&);
+Qt::PenJoinStyle getPenJoinStyle(const std::string&);
+Qt::BrushStyle   getBrushStyle(const std::string&);
+QFont::Weight    getFontWeight(const std::string&);
 
 const QMap<ShapeNames, std::string> INPUT_SHAPE_NAMES {
 	{LINE, "Line"},
@@ -159,7 +159,7 @@ Shape* ReadPolyLine( std::ifstream& inFile, int id)
 		inFile >> x;
 		inFile.get();
 		inFile >> y;
-		points.push_back(QPoint{x, y});
+		points.emplace_back(x, y);
 	}
 	while (inFile.peek() == ',');
 
@@ -206,7 +206,7 @@ Shape* ReadPolygon(std::ifstream& inFile, int id)
 		inFile >> x;
 		inFile.get();
 		inFile >> y;
-		points.push_back(QPoint{x, y});
+		points.emplace_back(x, y);
 	}
 	while (inFile.peek() == ',');
 
@@ -572,7 +572,7 @@ TextFontStyle: FlatCap
 TextFontWeight: Normal
 #endif
 
-Qt::GlobalColor getColor(const std::string color)
+Qt::GlobalColor getColor(const std::string& color)
 {
     switch(color[1])
     {
@@ -631,7 +631,7 @@ Qt::GlobalColor getColor(const std::string color)
     }
 }
 
-Qt::PenStyle getPenStyle(const std::string style)
+Qt::PenStyle getPenStyle(const std::string& style)
 {
     if(style == " SolidLine")
     {
@@ -670,7 +670,7 @@ Qt::PenStyle getPenStyle(const std::string style)
     }
 }
 
-Qt::PenCapStyle getCapStyle(std::string capStyle)
+Qt::PenCapStyle getCapStyle(const std::string& capStyle)
 {
     switch(capStyle[1])
     {
@@ -689,7 +689,7 @@ Qt::PenCapStyle getCapStyle(std::string capStyle)
     }
 }
 
-Qt::PenJoinStyle getPenJoinStyle(const std::string joinStyle)
+Qt::PenJoinStyle getPenJoinStyle(const std::string& joinStyle)
 {
     switch(joinStyle[1])
     {
@@ -705,7 +705,7 @@ Qt::PenJoinStyle getPenJoinStyle(const std::string joinStyle)
     }
 }
 
-Qt::BrushStyle   getBrushStyle(const std::string brushStyle)
+Qt::BrushStyle   getBrushStyle(const std::string& brushStyle)
 {
     switch(brushStyle[1])
     {
@@ -750,7 +750,7 @@ Qt::BrushStyle   getBrushStyle(const std::string brushStyle)
     }
 }
 
-QFont::Weight getFontWeight(const std::string fontWeight)
+QFont::Weight getFontWeight(const std::string& fontWeight)
 {
     switch(fontWeight[1])
     {
