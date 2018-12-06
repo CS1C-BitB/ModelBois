@@ -21,26 +21,59 @@ namespace cs1c {
         class iterator {
             friend class vector;
         public:
-            // Public Member Functions
             iterator(vector* sourceVector, VectorNode<T>* vectorNode, int index);
             T& operator*();
             iterator operator++();
-            iterator operator++(int junk);
+            iterator operator++(int);
             bool operator==(const iterator& rhs);
             bool operator!=(const iterator& rhs);
-
-            iterator& operator=(const iterator& rhs) {
-                if (this != &rhs) {
-                    m_sourceVector = rhs.m_sourceVector;
-                    m_nodeList = rhs.m_nodeList;
-                    m_vectorNode = rhs.m_vectorNode;
-                    m_index = rhs.m_index;
-                }
-                return *this;
-            }
+            iterator& operator=(const iterator& rhs);
 
         private:
             iterator moveForward();
+            
+            //! A private variable.
+            /*!
+              Source vector.
+            */
+            vector*         m_sourceVector;
+            
+            //! A private variable.
+            /*!
+              Linked list containing nodes.
+            */
+            LinkedList<T>&  m_nodeList;
+            
+            //! A private variable.
+            /*!
+              Vector node.
+            */
+            VectorNode<T>*  m_vectorNode;
+            
+            //! A private variable.
+            /*!
+              Index of iterator.
+            */
+            int             m_index;
+        }; //END - class iterator
+        
+        //!  A const_iterator class. 
+        /*!
+          An iterator which approximates the stl iterator.
+        */
+        class const_iterator {
+            friend class vector;
+        public:
+            const_iterator(vector* sourceVector, VectorNode<T>* vectorNode, int index);
+            T& operator*() const;
+            const_iterator operator++();
+            const_iterator operator++(int);
+            bool operator==(const const_iterator& rhs) const;
+            bool operator!=(const const_iterator& rhs) const;
+            const_iterator& operator=(const const_iterator& rhs);
+
+        private:
+            const_iterator moveForward();
             
             //! A private variable.
             /*!
@@ -84,9 +117,9 @@ namespace cs1c {
 		iterator erase(iterator pos);
 
         iterator begin();
-        //const iterator begin() const;
+        const_iterator begin() const;
         iterator end();
-        //const iterator end() const;
+        const_iterator end() const;
         iterator insert(iterator position, const T& value);
 
     private:
@@ -145,11 +178,11 @@ namespace cs1c {
 
     //! An overloaded operator taking one argument and returning an iterator.
     /*!
-      \param  junk An integer.
+      \param  An integer.
       \return The iterator forward a node in the vector.
     */
     template<class T>
-    typename vector<T>::iterator vector<T>::iterator::operator++(int junk) {
+    typename vector<T>::iterator vector<T>::iterator::operator++(int) {
         return moveForward();
     }
 
@@ -173,6 +206,22 @@ namespace cs1c {
     bool vector<T>::iterator::operator!=(const iterator& rhs) { 
         return ((m_vectorNode != rhs.m_vectorNode)
                 || (m_index != rhs.m_index));
+    }
+    
+    //! An overloaded operator taking one argument and returning an iterator.
+    /*!
+      \param  rhs Iterator on the right hand side of the operator.
+      \return Iterator that has been assigned copied values.
+    */
+    template<class T>
+    typename vector<T>::iterator& vector<T>::iterator::operator=(const iterator& rhs) {
+    if (this != &rhs) {
+        m_sourceVector = rhs.m_sourceVector;
+        m_nodeList = rhs.m_nodeList;
+        m_vectorNode = rhs.m_vectorNode;
+        m_index = rhs.m_index;
+    }
+    return *this;
     }
 
     //! A private member function taking zero arguments and returning nothing.
@@ -198,6 +247,110 @@ namespace cs1c {
         }
         return *this;
     }
+    
+    /*********************************************************************************************/
+    //! A constructor taking three arguments.
+    /*!
+      Initializes the iterator with specified values.
+      \param sourceVector a vector pointer.
+      \param vectorNode   a VectorNode pointer.
+      \param index        an integer representing the index.
+    */
+    template<class T>
+    vector<T>::const_iterator::const_iterator(vector* sourceVector, VectorNode<T>* vectorNode, int index)
+      : m_sourceVector(sourceVector), m_nodeList{sourceVector->m_nodeList}, m_vectorNode{vectorNode}, m_index{index} {
+    }
+    
+    //! An overloaded operator taking zero arguments and returning a reference to a datatype.
+    /*!
+      \return The value in the vectorNode's arrayOfObjects.
+    */
+    template<class T>
+    T& vector<T>::const_iterator::operator*() const {
+        return m_vectorNode->arrayOfObjects[m_index];
+    }
+
+    //! An overloaded operator taking zero arguments and returning a const_iterator.
+    /*!
+      \return The const_iterator forward a node in the vector.
+    */
+    template<class T>
+    typename vector<T>::const_iterator vector<T>::const_iterator::operator++() {
+        return moveForward();
+    }
+
+    //! An overloaded operator taking one argument and returning a const_iterator.
+    /*!
+      \param  An integer.
+      \return The const_iterator forward a node in the vector.
+    */
+    template<class T>
+    typename vector<T>::const_iterator vector<T>::const_iterator::operator++(int) {
+        return moveForward();
+    }
+
+    //! An overloaded operator taking one argument and returning a bool.
+    /*!
+      \param  rhs Const_iterator on the right hand side of the operator.
+      \return True if the two const_iterators are the same, false if they are different.
+    */
+    template<class T>
+    bool vector<T>::const_iterator::operator==(const const_iterator& rhs) const { 
+        return ((m_vectorNode == rhs.m_vectorNode)
+                && (m_index == rhs.m_index));
+    }
+
+    //! An overloaded operator taking one argument and returning a bool.
+    /*!
+      \param  rhs Iterator on the right hand side of the operator.
+      \return True if the two const_iterators are different, false if they are the same.
+    */
+    template<class T>
+    bool vector<T>::const_iterator::operator!=(const const_iterator& rhs) const{ 
+        return ((m_vectorNode != rhs.m_vectorNode)
+                || (m_index != rhs.m_index));
+    }
+    
+    //! An overloaded operator taking one argument and returning an iterator.
+    /*!
+      \param  rhs Const_iterator on the right hand side of the operator.
+      \return Const_iterator that has been assigned copied values.
+    */
+    template<class T>
+    typename vector<T>::const_iterator& vector<T>::const_iterator::operator=(const const_iterator& rhs) {
+    if (this != &rhs) {
+        m_sourceVector = rhs.m_sourceVector;
+        m_nodeList = rhs.m_nodeList;
+        m_vectorNode = rhs.m_vectorNode;
+        m_index = rhs.m_index;
+    }
+    return *this;
+    }
+
+    //! A private member function taking zero arguments and returning nothing.
+    /*!
+      Moves the const_iterator forward a node in the vector.
+    */
+    template<class T>
+    typename vector<T>::const_iterator vector<T>::const_iterator::moveForward() {
+        int availableNodeSize = std::min(m_vectorNode->size, m_sourceVector->m_size - (m_vectorNode->runningCapacity - m_vectorNode->size));
+        // If there is no more valid data in this node (we indexed through all the entries or the
+        // size is less than the capacity for this node), attempt to go to the next node.
+        if (++m_index >= availableNodeSize) {
+            // If the vector's size is greater than the running capacity (the maximum size of the
+            // vector at the end of the node), then we have another node with valid entries.
+            if (m_sourceVector->m_size > m_vectorNode->runningCapacity) {
+                m_vectorNode = m_vectorNode->next;
+            }
+            // No more valid nodes, so set the iterator to null to indicate the end.
+            else {
+                m_vectorNode = nullptr;
+            }
+            m_index = 0;
+        }
+        return *this;
+    }
+    /*********************************************************************************************/
    
     //! A default constructor.
     /*! 
@@ -410,9 +563,8 @@ namespace cs1c {
     /*!
      \return Element to the first object in the vector.
     */
-	/*
     template<class T>
-    const typename vector<T>::iterator vector<T>::begin() const {
+    typename vector<T>::const_iterator vector<T>::begin() const {
         if (!m_nodeList.empty()) {
             VectorNode<T>* firstNode = m_nodeList.head();
             return iterator(this, firstNode, 0);
@@ -420,7 +572,7 @@ namespace cs1c {
         else {
             return iterator(this, nullptr, 0);
         }
-    }*/
+    }
 
     //! A public member function taking zero arguments and returning an iterator.
     /*!
@@ -434,11 +586,11 @@ namespace cs1c {
     //! A public member function taking zero arguments and returning a constant iterator.
     /*!
      \return Element to one past the last element of the vector.
-    *//*
+    */
     template<class T>
-    const typename vector<T>::iterator vector<T>::end() const {
+    typename vector<T>::const_iterator vector<T>::end() const {
         return iterator(this, nullptr, 0);        
-    }*/
+    }
 
     //! A public member function taking two arguments and returning an iterator.
     /*!
@@ -491,86 +643,38 @@ namespace cs1c {
     */
     template<class T>
     typename vector<T>::iterator vector<T>::erase(iterator position) {
-        m_size--;
-        m_capacity--;
         VectorNode<T>* vectorNode = position.m_vectorNode;
         int removeIndex = position.m_index;
-        int oldNodeSize = vectorNode->size;
-        int newNodeSize = oldNodeSize - 1;
-        int availableNodeSize = std::min(vectorNode->size, m_size - (vectorNode->runningCapacity - vectorNode->size)) - 1;
+        int oldSize = vectorNode->size;
+        int newSize = oldSize - 1;
+        T* oldArrayOfObjects = vectorNode->arrayOfObjects;
+        T* newArrayOfObjects = new T[newSize];
 
-        // If the node that is having an entry erased and still has other entries, just delete the entry.
-        if (newNodeSize > 0) {
-            T* oldArrayOfObjects = vectorNode->arrayOfObjects;
-            T* newArrayOfObjects = new T[newNodeSize];
-    
-            for (int index = 0; index < oldNodeSize; index++) {
-                if (index < removeIndex) {
-                    newArrayOfObjects[index] = oldArrayOfObjects[index]; 
-                }
-                else if (index > removeIndex) {
-                    newArrayOfObjects[index - 1] = oldArrayOfObjects[index]; 
-                }
+        for (int index = 0; index < oldSize; index++) {
+            if (index < removeIndex) {
+                newArrayOfObjects[index] = oldArrayOfObjects[index]; 
             }
-    
-            vectorNode->arrayOfObjects = newArrayOfObjects;
-            vectorNode->size = newNodeSize;
-            
-            while (vectorNode != m_nodeList.end()) {
-                vectorNode->runningCapacity--;
-                vectorNode = vectorNode->next;
-            }        
-    
-            delete[] oldArrayOfObjects;
-            if (removeIndex >= newNodeSize) {
-                removeIndex--;
-            }
-
-            // If the node has reserved capacity, but no available size, return the end iterator.
-            if (availableNodeSize == 0) {
-                return iterator(this, nullptr, 0);
-            }
-            // If the last item in the node was erased, got to the next node if there is
-            else if (removeIndex >= newNodeSize) {
-                if (vectorNode->runningCapacity < m_size) {
-                    return iterator(this, vectorNode->next, 0);
-                }
-                else {
-                    return iterator(this, nullptr, 0);
-                }
-            }
-            return iterator(this, vectorNode, removeIndex);
-        }
-        // If the node no longer has entries, delete the entire node.
-        else {
-            VectorNode<T>* nextNode = vectorNode->next;
-
-            // Update the running capacity of all the nodes
-
-            VectorNode<T>* adjustNode = vectorNode;
-            while (adjustNode != m_nodeList.end()) {
-                adjustNode->runningCapacity--;
-                adjustNode = adjustNode->next;
-            } 
-
-            int remainingSize = m_size - vectorNode->runningCapacity;
-            // Delete the node.
-            m_nodeList.remove(vectorNode);
-            delete[] vectorNode->arrayOfObjects;
-            delete vectorNode;
-            vectorNode = nullptr;
-
-            // If there are no more nodes after the deleted one or there are nodes but they contain
-            // unallocated capacity, return the null iterator indicating there is nothing after the
-            // deleted item.
-            if ((nextNode == m_nodeList.end()) || (remainingSize == 0)) {
-                return iterator(this, nullptr, 0);
-            }
-            // If there is more valid entries, return the first entry of node after the one deleted.
-            else {
-                return iterator(this, nextNode, 0);
+            else if (index > removeIndex) {
+                newArrayOfObjects[index - 1] = oldArrayOfObjects[index]; 
             }
         }
+
+        vectorNode->arrayOfObjects = newArrayOfObjects;
+        vectorNode->size = newSize;
+        
+        while (vectorNode != m_nodeList.end()) {
+            vectorNode->runningCapacity--;
+            vectorNode = vectorNode->next;
+        }        
+
+        delete[] oldArrayOfObjects;
+        if (removeIndex >= newSize) {
+            removeIndex--;
+        }
+        m_size--;
+        m_capacity--;
+
+        return iterator(this, vectorNode, removeIndex);
     }
 
     //! A private member function taking one argument and returning a reference to a datatype.
