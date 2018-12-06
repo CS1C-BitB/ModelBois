@@ -12,7 +12,7 @@ bool compareArea(Shape* left, Shape* right) {
 bool comparePerimeter(Shape* left, Shape* right) {
     return ((*left).getPerimeter() < (*right).getPerimeter());
 }
-    
+
 bool excludeInvalidArea(Shape* shape) {
     return ((*shape).getArea() < 0);
 }

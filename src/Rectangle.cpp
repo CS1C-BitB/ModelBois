@@ -8,9 +8,7 @@ Rectangle::Rectangle(int width, int height, const QPoint& pos, const QBrush &bru
 
 Rectangle::Rectangle(const QRect &rect, const QBrush &brush, const QPen &pen, id_t id)
     : Shape{rect.center(), brush, pen, id}, w{rect.width()}, h{rect.height()}
-{
-	
-}
+{ }
 
 Rectangle::Rectangle(Rectangle &&move) noexcept
     : Shape{id_t(-1)}, w{0}, h{0}

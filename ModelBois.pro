@@ -87,12 +87,17 @@ FORMS += \
     src/login.ui
 
 # Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+#qnx: target.path = /tmp/$${TARGET}/bin
+#else: unix:!android: target.path = /opt/$${TARGET}/bin
+#!isEmpty(target.path): INSTALLS += target
+
+shapefile.files = myShapes.txt
+shapefile.path = $$OUT_PWD
+
+INSTALLS += shapefile
 
 RESOURCES += \
     res/icons.qrc
 
 DISTFILES += \
-    ModelBois/myshapes.txt
+    ModelBois/myShapes.txt

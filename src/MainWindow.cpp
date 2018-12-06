@@ -29,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	this->setWindowTitle(filename);
 	
+	ui->statusBar->addWidget(&statusLabel);
+	
 	adminOnly = {
 	    ui->actionAdd_Ellipse,
 	    ui->actionAdd_Line,
@@ -43,13 +45,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	
 	SetAdmin(false);
 	
-	ui->statusBar->addWidget(&statusLabel);
-	
 	store.shapes = LoadFile();
 
 	ui->canvas->set_storage(&store.shapes);
 
 	ui->ShapeList->setModel(&store.model);
+	ui->ShapeList->setEnabled(store.shapes.size());
 	
 	ui->PropTree->setHeaderLabels({"Property", "Value"});
 	ui->PropTree->setItemDelegate(new PropertyDelegate());
