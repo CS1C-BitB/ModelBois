@@ -71,6 +71,7 @@ std::ostream& operator<<(std::ostream& out, /*const*/ vector_t &shapes)
 			out << "PenJoinStyle: " << PEN_JOIN_STYLE_NAMES[pen.joinStyle()] << "\n";
 		}
 		
+		if (Shape::hasFill(shape->getType()))
 		{
 			const QBrush &brush = shape->getBrush();
 			out << "BrushColor: " << COLOR_NAMES.key(brush.color()) << "\n";
