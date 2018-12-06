@@ -149,34 +149,20 @@ Shape* ReadLine(std::ifstream &inFile, int id)
 
 Shape* ReadPolyLine( std::ifstream& inFile, int id)
 {
-    int x, y, x2, y2, x3, y3, x4, y4, width;
+    int width;
     std::string color, style, cap, join;
+	std::vector<QPoint> points;
 
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
-    inFile >> x;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> y;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> x2;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> y2;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> x3;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> y3;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> x4;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> y4;
-
-//    std::cout << "Points: " << x << ' ' << y << ' ' << x2 << ' ' << y2
-//              << ' '        << x3 << ' ' << y3 << ' ' << x4 << ' ' << y4 << std::endl;
-    QPoint p1(x, y), p2(x2, y2), p3(x3, y3), p4(x4, y4);
-    std::vector<QPoint> points;
-    points.push_back(p1);
-    points.push_back(p2);
-    points.push_back(p3);
-    points.push_back(p4);
+	inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
+	do {
+		int x, y;
+		inFile.get();
+		inFile >> x;
+		inFile.get();
+		inFile >> y;
+		points.push_back(QPoint{x, y});
+	}
+	while (inFile.peek() == ',');
 
     // PEN COLOR
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -210,34 +196,20 @@ Shape* ReadPolyLine( std::ifstream& inFile, int id)
 
 Shape* ReadPolygon(std::ifstream& inFile, int id)
 {
-    int x, y, x2, y2, x3, y3, x4, y4, width;
+    int width;
     std::string color, style, cap, join, brushStyle, brushColor;
+	std::vector<QPoint> points;
 
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
-    inFile >> x;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> y;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> x2;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> y2;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> x3;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> y3;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> x4;
-    inFile.ignore(std::numeric_limits<std::streamsize>::max(), ',');
-    inFile >> y4;
-
-//    std::cout << "Points: " << x << ' ' << y << ' ' << x2 << ' ' << y2
-//              << ' '        << x3 << ' ' << y3 << ' ' << x4 << ' ' << y4 << std::endl;
-    QPoint p1(x, y), p2(x2, y2), p3(x3, y3), p4(x4, y4);
-    std::vector<QPoint> points;
-    points.push_back(p1);
-    points.push_back(p2);
-    points.push_back(p3);
-    points.push_back(p4);
+	inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
+	do {
+		int x, y;
+		inFile.get();
+		inFile >> x;
+		inFile.get();
+		inFile >> y;
+		points.push_back(QPoint{x, y});
+	}
+	while (inFile.peek() == ',');
 
     // PEN COLOR
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -336,7 +308,7 @@ Shape* ReadRectangle(std::ifstream& inFile, int id)
     QBrush pColor(lineColor);
     QPen   pen(pColor, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    Rectangle *rectangle = new Rectangle(w, l, point, brush, pen, id);
+	Rectangle *rectangle = new Rectangle(QRect{point, QSize{l, w}}, brush, pen, id);
     return rectangle;
 }
 
@@ -395,7 +367,7 @@ Shape* ReadSquare(std::ifstream& inFile, int id)
     QBrush pColor(lineColor);
     QPen   pen(pColor, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    Rectangle* square = new Rectangle(l, l, point, brush, pen, id);
+	Rectangle* square = new Rectangle(QRect{point, QSize{l, l}}, brush, pen, id);
     return square;
 }
 
@@ -418,7 +390,7 @@ Shape* ReadEllipse(std::ifstream& inFile, int id)
     inFile >> b;
 
 //    std::cout << " Semi A: " << a << " Semi B: " << b << std::endl;
-    QPoint point(x, y);
+    QPoint point(x + a, y + b);
 
     // PEN COLOR
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -456,7 +428,7 @@ Shape* ReadEllipse(std::ifstream& inFile, int id)
     QBrush pColor(lineColor);
     QPen   pen(pColor, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    Ellipse *ellipse = new Ellipse(a, b, point, brush, pen, id);
+    Ellipse *ellipse = new Ellipse(a * 2, b * 2, point, brush, pen, id);
     return ellipse;
 }
 
@@ -477,7 +449,7 @@ Shape* ReadCircle(std::ifstream& inFile, int id)
     inFile >> r;
 
 //    std::cout << " Radius: " << r << std::endl;
-    QPoint point(x, y);
+    QPoint point(x + r, y + r);
 
     // PEN COLOR
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -515,7 +487,7 @@ Shape* ReadCircle(std::ifstream& inFile, int id)
     QBrush pColor(lineColor);
     QPen   pen(pColor, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    Ellipse *circle = new Ellipse(r, r, point, brush, pen, id);
+    Ellipse *circle = new Ellipse(r * 2, r * 2, point, brush, pen, id);
     return circle;
 }
 
@@ -582,6 +554,9 @@ Shape* ReadText(std::ifstream& inFile, int id)
 
 
 	Text *text = new Text(txtStr, font, l, w, ALIGNMENT_NAMES.key(QString::fromStdString(textAlign)), point, brush, pen, id);
+	QRect rect = text->getRect();
+	rect.moveTopLeft(point);
+	text->setRect(rect);
     return text;
 }
 
