@@ -8,6 +8,11 @@
 
 using vector_t = cs1c::vector<Shape*>;
 
+/**
+ * @brief A ShapeListModel class
+ *
+ * This class is used to
+ */
 class ShapeListModel : public QAbstractListModel
 {
 	Q_OBJECT

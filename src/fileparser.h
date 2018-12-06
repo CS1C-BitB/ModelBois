@@ -30,6 +30,10 @@ enum ShapeNames
 
 extern const QMap<ShapeNames, std::string> INPUT_SHAPE_NAMES;
 
+/**
+ * @brief LoadFile
+ * @return vector which contains all of the loaded shapes
+ */
 cs1c::vector<Shape*> LoadFile();
 
 
