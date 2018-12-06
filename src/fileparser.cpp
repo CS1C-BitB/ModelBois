@@ -6,8 +6,6 @@
 #include <QFont>
 #include <QMap>
 
-const int SHAPES_IN_FILE = 8;
-
 Shape* ReadLine(std::ifstream&, int id);
 Shape* ReadPolyLine( std::ifstream&, int id);
 Shape* ReadPolygon(std::ifstream&, int id);
@@ -43,10 +41,9 @@ cs1c::vector<Shape*> LoadFile()
 
     cs1c::vector<Shape*> myShapes;
     int id;
-    std::string sName;
 
 
-    while(inFile && myShapes.size() < SHAPES_IN_FILE)
+    while(inFile)
     {
 		std::string typeStr;
 		ShapeNames type;
@@ -59,8 +56,10 @@ cs1c::vector<Shape*> LoadFile()
 		inFile >> typeStr;
 		type = INPUT_SHAPE_NAMES.key(typeStr);
 
-        //if(inFile.eof())
-        //{ break;}
+		if(inFile.eof()) {
+			break;
+		}
+        
 
         switch(type)
         {
@@ -525,7 +524,7 @@ Shape* ReadText(std::ifstream& inFile, int id)
 
     // TEXT ALLIGN
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
-    getline(inFile, textAlign);
+    inFile >> textAlign;
 //    std::cout << "Text Align: " << textAlign << std::endl;
 
     // TEXT POINT SIZE
@@ -548,12 +547,12 @@ Shape* ReadText(std::ifstream& inFile, int id)
 
     QBrush brush(textColor);
     QPen   pen(textColor);
-    QFont  font(famStr, pointSize, getFontWeight(weight), false);
+    QFont  font(famStr.trimmed(), pointSize, getFontWeight(weight), false);
     pen.setCapStyle(getCapStyle(fontStyle));
 
 
 
-	Text *text = new Text(txtStr, font, l, w, ALIGNMENT_NAMES.key(QString::fromStdString(textAlign)), point, brush, pen, id);
+	Text *text = new Text(txtStr.trimmed(), font, l, w, ALIGNMENT_NAMES.key(QString::fromStdString(textAlign)), point, brush, pen, id);
 	QRect rect = text->getRect();
 	rect.moveTopLeft(point);
 	text->setRect(rect);

@@ -49,7 +49,8 @@ SOURCES += \
     src/Sort.cpp \
     src/DetailView.cpp \
     src/fileparser.cpp \
-    src/login.cpp
+    src/login.cpp \
+    src/Serializer.cpp
 
 HEADERS += \
     src/MainWindow.h \
