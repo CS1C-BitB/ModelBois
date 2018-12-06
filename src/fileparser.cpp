@@ -389,7 +389,7 @@ Shape* ReadEllipse(std::ifstream& inFile, int id)
     inFile >> b;
 
 //    std::cout << " Semi A: " << a << " Semi B: " << b << std::endl;
-    QPoint point(x + a, y + b);
+    QPoint point(x, y);
 
     // PEN COLOR
     inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
@@ -427,7 +427,7 @@ Shape* ReadEllipse(std::ifstream& inFile, int id)
     QBrush pColor(lineColor);
     QPen   pen(pColor, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    Ellipse *ellipse = new Ellipse(a * 2, b * 2, point, brush, pen, id);
+	Ellipse *ellipse = new Ellipse(QRect{point, QSize{a, b} * 2}, brush, pen, id);
     return ellipse;
 }
 

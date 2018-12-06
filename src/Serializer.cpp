@@ -43,10 +43,8 @@ std::ostream& operator<<(std::ostream& out, const vector_t &shapes)
 			out << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << "\n";
 		}
 		else if (TRY_CAST(Ellipse)) {
-			QPoint center = cast->getPos();
-			int w = cast->getWidth();
-			int h = cast->getHeight();
-			out << (center.x() - (w / 2)) << ", " << (center.y() - (h / 2)) << ", " << (w / 2) << ", " << (h / 2) << "\n";
+			QRect rect = cast->getRect();
+			out << rect.x() << ", " << rect.y() << ", " << (rect.width() / 2) << ", " << (rect.height() / 2) << "\n";
 		}
 		else if (TRY_CAST(Text)) {
 			QRect rect = cast->getRect();
