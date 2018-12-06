@@ -312,7 +312,6 @@ void MainWindow::on_actionBy_ID_triggered()
 	
 	auto* view = new DetailView(QString::fromStdString(text.str()).replace("Shape", "").replace(": ", ":\t"), this);
 	view->open();
-	connect(view, &QDialog::finished, [view]() { delete view; });
 }
 
 void MainWindow::on_actionBy_Area_triggered()
@@ -331,7 +330,6 @@ void MainWindow::on_actionBy_Area_triggered()
 	
 	auto* view = new DetailView(text.join('\n'), this);
 	view->open();
-	connect(view, &QDialog::finished, [view]() { delete view; });
 }
 
 void MainWindow::on_actionBy_Perimeter_triggered()
@@ -350,7 +348,6 @@ void MainWindow::on_actionBy_Perimeter_triggered()
 	
 	auto* view = new DetailView(text.join('\n'), this);
 	view->open();
-	connect(view, &QDialog::finished, [view]() { delete view; });
 }
 
 void MainWindow::Disconnect()
