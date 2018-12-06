@@ -13,7 +13,7 @@ class ShapeListModel : public QAbstractListModel
 	Q_OBJECT
 	
 public:
-	ShapeListModel(vector_t* list);
+	ShapeListModel(const vector_t* list);
 	
 	int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -22,7 +22,7 @@ public slots:
 	void itemsChanged();
 	
 private:
-	vector_t* list;
+	const vector_t* list;
 };
 
 #endif // SHAPELISTMODEL_H

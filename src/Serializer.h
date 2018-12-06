@@ -6,6 +6,6 @@
 
 #include <ostream>
 
-std::ostream& operator<<(std::ostream& out, /*const*/ vector_t &shapes);
+std::ostream& operator<<(std::ostream& out, const vector_t &shapes);
 
 #endif // SERIALIZER_H

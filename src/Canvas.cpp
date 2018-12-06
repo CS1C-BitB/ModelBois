@@ -11,7 +11,7 @@ Canvas::Canvas(QWidget *parent)
 	setAutoFillBackground(true);
 }
 
-void Canvas::set_storage(vector_t* vec)
+void Canvas::set_storage(const vector_t* vec)
 {
 	shapes = vec;
 }
@@ -26,7 +26,7 @@ void Canvas::paintEvent(QPaintEvent */*event*/)
 {
 	static QPoint offset{target.size().width() / 2, target.size().height() / 2};
 	if (shapes && shapes->size()) {
-		for (Shape* shape : *shapes) {
+		for (const Shape* shape : *shapes) {
 			shape->draw(this);
 		}
 	}

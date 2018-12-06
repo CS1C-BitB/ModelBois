@@ -64,7 +64,7 @@ namespace cs1c {
         class const_iterator {
             friend class vector;
         public:
-            const_iterator(vector* sourceVector, VectorNode<T>* vectorNode, int index);
+            const_iterator(const vector* sourceVector, const VectorNode<T>* vectorNode, int index);
             T& operator*() const;
             const_iterator operator++();
             const_iterator operator++(int);
@@ -79,19 +79,19 @@ namespace cs1c {
             /*!
               Source vector.
             */
-            vector*         m_sourceVector;
+            const vector*         m_sourceVector;
             
             //! A private variable.
             /*!
               Linked list containing nodes.
             */
-            LinkedList<T>&  m_nodeList;
+            const LinkedList<T>&  m_nodeList;
             
             //! A private variable.
             /*!
               Vector node.
             */
-            VectorNode<T>*  m_vectorNode;
+            const VectorNode<T>*  m_vectorNode;
             
             //! A private variable.
             /*!
@@ -257,7 +257,7 @@ namespace cs1c {
       \param index        an integer representing the index.
     */
     template<class T>
-    vector<T>::const_iterator::const_iterator(vector* sourceVector, VectorNode<T>* vectorNode, int index)
+    vector<T>::const_iterator::const_iterator(const vector* sourceVector, const VectorNode<T>* vectorNode, int index)
       : m_sourceVector(sourceVector), m_nodeList{sourceVector->m_nodeList}, m_vectorNode{vectorNode}, m_index{index} {
     }
     
@@ -567,10 +567,10 @@ namespace cs1c {
     typename vector<T>::const_iterator vector<T>::begin() const {
         if (!m_nodeList.empty()) {
             VectorNode<T>* firstNode = m_nodeList.head();
-            return iterator(this, firstNode, 0);
+            return const_iterator(this, firstNode, 0);
         }
         else {
-            return iterator(this, nullptr, 0);
+            return const_iterator(this, nullptr, 0);
         }
     }
 
@@ -589,7 +589,7 @@ namespace cs1c {
     */
     template<class T>
     typename vector<T>::const_iterator vector<T>::end() const {
-        return iterator(this, nullptr, 0);        
+        return const_iterator(this, nullptr, 0);        
     }
 
     //! A public member function taking two arguments and returning an iterator.

@@ -29,7 +29,7 @@ Rectangle& Rectangle::operator=(Rectangle &&other) noexcept
 	return *this;
 }
 
-void Rectangle::draw(QPaintDevice* device)
+void Rectangle::draw(QPaintDevice* device) const
 {
 	auto paint = getPainter(device);
 	QRect rect = getRect();

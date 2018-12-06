@@ -35,7 +35,7 @@ Line& Line::operator=(Line &&other) noexcept
 	return *this;
 }
 
-void Line::draw(QPaintDevice* device)
+void Line::draw(QPaintDevice* device) const
 {
 	auto paint = getPainter(device);
 	
