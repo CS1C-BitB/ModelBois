@@ -25,6 +25,7 @@ public:
 	
 	void setWidth(int w);
 	void setHeight(int h);
+	void setRect(const QRect&);
 	
 private:
 	int w{0}, h{0};

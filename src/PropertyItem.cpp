@@ -54,7 +54,11 @@ PropertyItem<Shape>::PropertyItem(QTreeWidgetItem* parent, Shape& s)
 		new PropertyItem<PolyLine>(this, *poly);
 	}
 	else if (TRY_CAST(Rectangle, rect)) {
-		new PropertyItem<Rectangle>(this, *rect);
+		new PropertyItem<QRect>(this,
+		                        "Rectangle",
+		                        std::bind(&Rectangle::getRect, rect),
+		                        std::bind(&Rectangle::setRect, rect, _1)
+		);
 	}
 	else if (TRY_CAST(Text, text)) {
 		new PropertyItem<Text>(this, *text);
@@ -149,29 +153,6 @@ PropertyItem<PolyLine>::PropertyItem(QTreeWidgetItem* parent, PolyLine& poly)
 	            std::bind(&PolyLine::setPoint, &poly, _1, _2),
 	            std::bind(&PolyLine::insert, &poly, _1, _2),
 	            std::bind(&PolyLine::erase, &poly, _1)
-	);
-}
-
-/******************************************************************************
- * 
- * Rectangle specialization
- * 
- *****************************************************************************/
-
-PropertyItem<Rectangle>::PropertyItem(QTreeWidgetItem* parent, Rectangle& rect)
-    : QTreeWidgetItem(parent, PropNone), name{"Rectangle"}
-{
-	new PropertyItem<int>(
-	            this,
-	            "Width",
-	            std::bind(&Rectangle::getWidth, &rect),
-	            std::bind(&Rectangle::setWidth, &rect, _1)
-	);
-	new PropertyItem<int>(
-	            this,
-	            "Height",
-	            std::bind(&Rectangle::getHeight, &rect),
-	            std::bind(&Rectangle::setHeight, &rect, _1)
 	);
 }
 

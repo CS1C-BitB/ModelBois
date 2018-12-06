@@ -66,3 +66,10 @@ void Rectangle::setWidth(int width)
 void Rectangle::setHeight(int height)
 { h = height; }
 
+void Rectangle::setRect(const QRect &rect)
+{
+	setPos(rect.center());
+	w = rect.width();
+	h = rect.height();
+}
+
