@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <map>
 #include <vector>
 #include "Shape.h"      /* used for shape */
 #include "Line.h"       /* used for line */
@@ -26,6 +27,8 @@ enum ShapeNames
     CIRCLE    = 7,
     TEXT      = 8
 };
+
+extern const QMap<ShapeNames, std::string> INPUT_SHAPE_NAMES;
 
 cs1c::vector<Shape*> LoadFile();
 

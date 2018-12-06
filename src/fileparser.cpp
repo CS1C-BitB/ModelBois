@@ -8,14 +8,14 @@
 
 const int SHAPES_IN_FILE = 8;
 
-Shape* ReadLine(std::ifstream&);
-Shape* ReadPolyLine( std::ifstream&);
-Shape* ReadPolygon(std::ifstream&);
-Shape* ReadRectangle(std::ifstream&);
-Shape* ReadSquare(std::ifstream&);
-Shape* ReadEllipse(std::ifstream&);
-Shape* ReadCircle(std::ifstream&);
-Shape* ReadText(std::ifstream&);
+Shape* ReadLine(std::ifstream&, int id);
+Shape* ReadPolyLine( std::ifstream&, int id);
+Shape* ReadPolygon(std::ifstream&, int id);
+Shape* ReadRectangle(std::ifstream&, int id);
+Shape* ReadSquare(std::ifstream&, int id);
+Shape* ReadEllipse(std::ifstream&, int id);
+Shape* ReadCircle(std::ifstream&, int id);
+Shape* ReadText(std::ifstream&, int id);
 
 Qt::GlobalColor  getColor(const std::string);
 Qt::PenStyle     getPenStyle(const std::string);
@@ -24,6 +24,16 @@ Qt::PenJoinStyle getPenJoinStyle(const std::string);
 Qt::BrushStyle   getBrushStyle(const std::string);
 QFont::Weight    getFontWeight(const std::string);
 
+const QMap<ShapeNames, std::string> INPUT_SHAPE_NAMES {
+	{LINE, "Line"},
+	{POLYLINE, "Polyline"},
+	{POLYGON, "Polygon"},
+	{RECTANGLE, "Rectangle"},
+	{SQUARE, "Square"},
+	{ELLIPSE, "Ellipse"},
+	{CIRCLE, "Circle"},
+	{TEXT, "Text"},
+};
 
 cs1c::vector<Shape*> LoadFile()
 {
@@ -38,58 +48,46 @@ cs1c::vector<Shape*> LoadFile()
 
     while(inFile && myShapes.size() < SHAPES_IN_FILE)
     {
+		std::string typeStr;
+		ShapeNames type;
         // takes us to the first data point
 //        std::cout << std::endl;
         inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
         inFile >> id;
 //        std::cout << "ID " << id << std::endl;
         inFile.ignore(std::numeric_limits<std::streamsize>::max(), ':');
+		inFile >> typeStr;
+		type = INPUT_SHAPE_NAMES.key(typeStr);
 
         //if(inFile.eof())
         //{ break;}
 
-        switch(id)
+        switch(type)
         {
         case LINE:
-            getline(inFile, sName);
-//            std::cout << "Name:" << sName << std::endl;
             // parse the line part of the file
-            myShapes.push_back(ReadLine(inFile));
+            myShapes.push_back(ReadLine(inFile, id));
             break;
         case POLYLINE:
-            getline(inFile, sName);
-//            std::cout << "Name:" << sName << std::endl;
-            myShapes.push_back(ReadPolyLine(inFile));
+            myShapes.push_back(ReadPolyLine(inFile, id));
             break;
         case POLYGON:
-            getline(inFile, sName);
-//            std::cout << "Name:" << sName << std::endl;
-            myShapes.push_back(ReadPolygon(inFile));
+            myShapes.push_back(ReadPolygon(inFile, id));
             break;
         case RECTANGLE:
-            getline(inFile, sName);
-//            std::cout << "Name:" << sName << std::endl;
-            myShapes.push_back(ReadRectangle(inFile));
+            myShapes.push_back(ReadRectangle(inFile, id));
             break;
         case SQUARE:
-            getline(inFile, sName);
-//            std::cout << "Name:" << sName << std::endl;
-             myShapes.push_back(ReadSquare(inFile));
+             myShapes.push_back(ReadSquare(inFile, id));
             break;
         case ELLIPSE:
-            getline(inFile, sName);
-//            std::cout << "Name:" << sName << std::endl;
-             myShapes.push_back(ReadEllipse(inFile));
+             myShapes.push_back(ReadEllipse(inFile, id));
             break;
         case CIRCLE:
-            getline(inFile, sName);
-//            std::cout << "Name:" << sName << std::endl;
-            myShapes.push_back(ReadCircle(inFile));
+            myShapes.push_back(ReadCircle(inFile, id));
             break;
         case TEXT:
-            getline(inFile, sName);
-//            std::cout << "Name:" << sName << std::endl;
-            myShapes.push_back(ReadText(inFile));
+            myShapes.push_back(ReadText(inFile, id));
             break;
         default:
             std::cout << "error";
@@ -101,7 +99,7 @@ cs1c::vector<Shape*> LoadFile()
     return myShapes;
 }
 
-Shape* ReadLine(std::ifstream &inFile)
+Shape* ReadLine(std::ifstream &inFile, int id)
 {
     int x, y, x2, y2, width;
     std::string color, style, cap, join;
@@ -145,11 +143,11 @@ Shape* ReadLine(std::ifstream &inFile)
     QBrush brush(lineColor);
     QPen   pen(brush, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    Line *line = new Line(front, end, brush, pen, 1);
+    Line *line = new Line(front, end, brush, pen, id);
     return line;
 }
 
-Shape* ReadPolyLine( std::ifstream& inFile)
+Shape* ReadPolyLine( std::ifstream& inFile, int id)
 {
     int x, y, x2, y2, x3, y3, x4, y4, width;
     std::string color, style, cap, join;
@@ -206,11 +204,11 @@ Shape* ReadPolyLine( std::ifstream& inFile)
     QBrush brush(lineColor);
     QPen   pen(brush, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    PolyLine *polyLine = new PolyLine(points, brush, pen, 2);
+    PolyLine *polyLine = new PolyLine(points, brush, pen, id);
     return polyLine;
 }
 
-Shape* ReadPolygon(std::ifstream& inFile)
+Shape* ReadPolygon(std::ifstream& inFile, int id)
 {
     int x, y, x2, y2, x3, y3, x4, y4, width;
     std::string color, style, cap, join, brushStyle, brushColor;
@@ -277,11 +275,11 @@ Shape* ReadPolygon(std::ifstream& inFile)
     QBrush pColor(lineColor);
     QPen   pen(pColor, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    Polygon *polygon = new Polygon(points, brush, pen, 3);
+    Polygon *polygon = new Polygon(points, brush, pen, id);
     return polygon;
 }
 
-Shape* ReadRectangle(std::ifstream& inFile)
+Shape* ReadRectangle(std::ifstream& inFile, int id)
 {
     int x, y, width;
     int l, w;
@@ -338,12 +336,11 @@ Shape* ReadRectangle(std::ifstream& inFile)
     QBrush pColor(lineColor);
     QPen   pen(pColor, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    Rectangle *rectangle = new Rectangle(w, l, point, brush, pen, 4);
+    Rectangle *rectangle = new Rectangle(w, l, point, brush, pen, id);
     return rectangle;
 }
 
-
-Shape* ReadSquare(std::ifstream& inFile)
+Shape* ReadSquare(std::ifstream& inFile, int id)
 {
     int x, y, width;
     int l;
@@ -398,11 +395,11 @@ Shape* ReadSquare(std::ifstream& inFile)
     QBrush pColor(lineColor);
     QPen   pen(pColor, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    Rectangle* square = new Rectangle(l, l, point, brush, pen, 5);
+    Rectangle* square = new Rectangle(l, l, point, brush, pen, id);
     return square;
 }
 
-Shape* ReadEllipse(std::ifstream& inFile)
+Shape* ReadEllipse(std::ifstream& inFile, int id)
 {
     int x, y, width;
     int a, b;
@@ -459,11 +456,11 @@ Shape* ReadEllipse(std::ifstream& inFile)
     QBrush pColor(lineColor);
     QPen   pen(pColor, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    Ellipse *ellipse = new Ellipse(a, b, point, brush, pen, 6);
+    Ellipse *ellipse = new Ellipse(a, b, point, brush, pen, id);
     return ellipse;
 }
 
-Shape* ReadCircle(std::ifstream& inFile)
+Shape* ReadCircle(std::ifstream& inFile, int id)
 {
     int x, y, width;
     int r;
@@ -518,11 +515,11 @@ Shape* ReadCircle(std::ifstream& inFile)
     QBrush pColor(lineColor);
     QPen   pen(pColor, width, getPenStyle(style), getCapStyle(cap), getPenJoinStyle(join));
 
-    Ellipse *circle = new Ellipse(r, r, point, brush, pen, 7);
+    Ellipse *circle = new Ellipse(r, r, point, brush, pen, id);
     return circle;
 }
 
-Shape* ReadText(std::ifstream& inFile)
+Shape* ReadText(std::ifstream& inFile, int id)
 {
     int x, y, pointSize;
     id_t l, w;
@@ -584,7 +581,7 @@ Shape* ReadText(std::ifstream& inFile)
 
 
 
-	Text *text = new Text(txtStr, font, l, w, ALIGNMENT_NAMES.key(QString::fromStdString(textAlign)), point, brush, pen, 8);
+	Text *text = new Text(txtStr, font, l, w, ALIGNMENT_NAMES.key(QString::fromStdString(textAlign)), point, brush, pen, id);
     return text;
 }
 
