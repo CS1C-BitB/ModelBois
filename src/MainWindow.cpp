@@ -1,10 +1,12 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include "DetailView.h"
 #include "PropertyItem.h"
 #include "PropertyDelegate.h"
 #include "Serializer.h"
 #include "Shapes.h"
+#include "Sort.h"
 
 #include <QAction>
 #include <QCloseEvent>
@@ -12,6 +14,9 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QStatusBar>
+
+#include <fstream>
+#include <sstream>
 
 static const char* filename = "myShapes.txt";
 
@@ -21,8 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 	this->setWindowTitle(filename);
-	
-    store.shapes.reserve(50);
 	
 	ui->statusBar->addWidget(&statusLabel);
 	
@@ -300,6 +303,56 @@ void MainWindow::on_actionAdd_Text_triggered()
 	});
 }
 
+void MainWindow::on_actionBy_ID_triggered()
+{
+	vector_t copy = store.shapes;
+	selection_sort(copy, &compareID, &excludeInvalidID);
+	std::stringstream text;
+	text << copy;
+	
+	auto* view = new DetailView(QString::fromStdString(text.str()).replace("Shape", "").replace(": ", ":\t"), this);
+	view->open();
+	connect(view, &QDialog::finished, [view]() { delete view; });
+}
+
+void MainWindow::on_actionBy_Area_triggered()
+{
+	vector_t copy = store.shapes;
+	selection_sort(copy, &compareArea, &excludeInvalidArea);
+	
+	QStringList text;
+	
+	for (auto* shape : copy) {
+		text << QString{"Id:\t%1"}.arg(shape->getID());
+		text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
+		text << QString{"Area:\t%1"}.arg(shape->getArea(), 0, 'f', 2);
+		text << "";
+	}
+	
+	auto* view = new DetailView(text.join('\n'), this);
+	view->open();
+	connect(view, &QDialog::finished, [view]() { delete view; });
+}
+
+void MainWindow::on_actionBy_Perimeter_triggered()
+{
+	vector_t copy = store.shapes;
+	selection_sort(copy, &comparePerimeter, &excludeInvalidPerimeter);
+	
+	QStringList text;
+	
+	for (auto* shape : copy) {
+		text << QString{"Id:\t%1"}.arg(shape->getID());
+		text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
+		text << QString{"Perimeter:\t%1"}.arg(shape->getPerimeter(), 0, 'f', 2);
+		text << "";
+	}
+	
+	auto* view = new DetailView(text.join('\n'), this);
+	view->open();
+	connect(view, &QDialog::finished, [view]() { delete view; });
+}
+
 void MainWindow::Disconnect()
 {
 	QObject::disconnect(this, &MainWindow::onCanvasClick, nullptr, nullptr);
@@ -310,9 +363,13 @@ void MainWindow::Disconnect()
 void MainWindow::Save()
 {
 	SetStatusText("Saving shapes...");
-	writeShapesFile(filename, store.shapes.begin(), store.shapes.end());
+	{
+		std::ofstream file{filename};
+		file << store.shapes;
+	}
 	SetStatusText("");
 	SetStatusText("Saved shapes file", 2000);
 	modified = false;
 	this->setWindowTitle(filename);
 }
+

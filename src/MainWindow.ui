@@ -48,8 +48,17 @@
     <addaction name="actionAdd_Rectangle"/>
     <addaction name="actionAdd_Text"/>
    </widget>
+   <widget class="QMenu" name="menuReports">
+    <property name="title">
+     <string>Reports</string>
+    </property>
+    <addaction name="actionBy_ID"/>
+    <addaction name="actionBy_Area"/>
+    <addaction name="actionBy_Perimeter"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuReports"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -230,6 +239,21 @@
    </property>
    <property name="statusTip">
     <string>Add a text box</string>
+   </property>
+  </action>
+  <action name="actionBy_ID">
+   <property name="text">
+    <string>By ID</string>
+   </property>
+  </action>
+  <action name="actionBy_Area">
+   <property name="text">
+    <string>By Area</string>
+   </property>
+  </action>
+  <action name="actionBy_Perimeter">
+   <property name="text">
+    <string>By Perimeter</string>
    </property>
   </action>
  </widget>
