@@ -550,7 +550,7 @@ namespace cs1c {
     */
     template<class T>
     typename vector<T>::iterator vector<T>::begin() {
-        if (!m_nodeList.empty()) {
+        if (m_size) {
             VectorNode<T>* firstNode = m_nodeList.head();
             return iterator(this, firstNode, 0);
         }
@@ -565,7 +565,7 @@ namespace cs1c {
     */
     template<class T>
     typename vector<T>::const_iterator vector<T>::begin() const {
-        if (!m_nodeList.empty()) {
+        if (m_size) {
             VectorNode<T>* firstNode = m_nodeList.head();
             return const_iterator(this, firstNode, 0);
         }

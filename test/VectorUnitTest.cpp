@@ -484,6 +484,56 @@ TEST(Vector_Unit_Test, Single_Node_Insert_Test) {
     }
 }
 
+TEST(Vector_Unit_Test, Basic_Usage_Test) {
+    const int SIZE = 10;
+    cs1c::vector<int> list;
+    
+    for (int i = 0; i < SIZE; ++i) {
+        list.push_back(i);
+    }
+    
+    int size = 0;
+    for (auto i : list) {
+        ASSERT_EQ(size, i);
+        ++size;
+    }
+    
+    ASSERT_EQ(SIZE, size);
+    ASSERT_EQ(SIZE, list.size());
+}
+
+TEST(Vector_Unit_Test, Reserve_Test) {
+    const int CAPACITY = 10;
+    cs1c::vector<int> list;
+    
+    list.reserve(CAPACITY);
+    
+    int size = 0;
+    for (auto i : list) {
+        ASSERT_EQ(size, i);
+        ++size;
+    }
+    
+    ASSERT_EQ(0, size);
+    ASSERT_EQ(0, list.size());
+}
+
+TEST(Vector_Unit_Test, Erase_Test) {
+    cs1c::vector<int> list;
+    
+    list.push_back(0);
+    list.erase(list.begin());
+    
+    int size = 0;
+    for (auto i : list) {
+        ASSERT_EQ(size, i);
+        ++size;
+    }
+    
+    ASSERT_EQ(0, size);
+    ASSERT_EQ(0, list.size());
+}
+
 int main(int argc, char** argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
