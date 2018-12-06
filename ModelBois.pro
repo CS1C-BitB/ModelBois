@@ -50,7 +50,8 @@ SOURCES += \
     src/DetailView.cpp \
     src/fileparser.cpp \
     src/login.cpp \
-    src/Serializer.cpp
+    src/Serializer.cpp \
+    src/About.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -77,14 +78,16 @@ HEADERS += \
     src/Sort.h \
     src/DetailView.h \
     src/fileparser.h \
-    src/login.h
+    src/login.h \
+    src/About.h
 
 FORMS += \
     src/MainWindow.ui \
     src/ListButtons.ui \
     src/PosButton.ui \
     src/DetailView.ui \
-    src/login.ui
+    src/login.ui \
+    src/About.ui
 
 # Default rules for deployment.
 #qnx: target.path = /tmp/$${TARGET}/bin
