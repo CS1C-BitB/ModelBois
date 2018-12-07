@@ -19,7 +19,7 @@ class DetailView : public QDialog
 public:
 	/**
 	 * @brief Constructor
-	 * @param text
+	 * @param text, string to be used in the detailed view window
 	 * @param parent
 	 */
 	explicit DetailView(const QString &text, QWidget *parent = nullptr);

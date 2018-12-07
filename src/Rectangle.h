@@ -4,7 +4,7 @@
 #include "Shape.h"
 
 /**
- * @brief A Rectangle class
+ * @brief Rectangle class
  *
  * This class represents a rectangle, which is derived from shape. This class can be used for any object
  * in which is intended to emulate the behavior or properties of a rectangle

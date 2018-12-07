@@ -2,7 +2,7 @@
 #define VECTOR_NODE_H
 
 namespace cs1c {
-    //!  A VectorNode class. 
+    //!  VectorNode class.
     /*!
        A templated VectorNode class that works with vector.
     */

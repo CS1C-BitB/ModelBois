@@ -13,7 +13,7 @@ class MainWindow;
 }
 
 /**
- * @brief The MainWindow class
+ * @brief MainWindow class
  *
  * This class represents all the objects and actions that are exhibited by the main window
  * This window is where the render area is container, where we add and remove shapes and

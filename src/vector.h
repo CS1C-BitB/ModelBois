@@ -6,7 +6,7 @@
 #include <algorithm>
 
 namespace cs1c {
-    //!  A vector class. 
+    //!  vector class.
     /*!
        A templated vector which approximates the stl vector.
     */
