@@ -4,7 +4,7 @@
 #include "Shape.h"
 
 /**
- * @brief A Line class
+ * @brief Line class
  *
  * This class is used to represent objects that require the functionality of a line
  */

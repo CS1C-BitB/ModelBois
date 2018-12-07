@@ -7,7 +7,7 @@
 
 
 /**
- * @brief A PolyLine class
+ * @brief PolyLine class
  *
  * This class represents a polyline and should be used for any objects which want represent a polyline
  * This class is derived from shape

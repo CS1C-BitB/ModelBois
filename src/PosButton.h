@@ -8,7 +8,7 @@ class PosButton;
 }
 
 /**
- * @brief A PosButton class
+ * @brief PosButton class
  *
  * This class represents objects which are used for position buttons
  */

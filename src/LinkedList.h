@@ -4,7 +4,7 @@
 #include "VectorNode.h"
 
 namespace cs1c {
-    //!  A LinkedList class. 
+    //!  LinkedList class.
     /*!
        A templated LinkedList class which implements a circular doubly linked list.
     */

@@ -6,7 +6,7 @@
 #include <QWidget>
 
 /**
- * @brief A Canvas class
+ * @brief Canvas class
  *
  * This class represents the canvas which is used as a render area to display objects
  */

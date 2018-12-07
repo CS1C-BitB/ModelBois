@@ -15,10 +15,14 @@
 #include "Text.h"       /* used for text objects */
 #include "vector.h"
 
-
+/**
+ * @brief The ShapeNames enum
+ *
+ * Stores all the types of shapes that can be used with this program
+ */
 enum ShapeNames
 {
-    LINE      = 1,
+    LINE      = 1, /** \enum LINE */
     POLYLINE  = 2,
     POLYGON   = 3,
     RECTANGLE = 4,

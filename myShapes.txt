@@ -39,8 +39,8 @@ BrushColor: red
 BrushStyle: VerPattern
 
 ShapeId: 5
-ShapeType: Square
-ShapeDimensions: 250, 150, 200
+ShapeType: Rectangle
+ShapeDimensions: 250, 150, 200, 200
 PenColor: red
 PenWidth: 0
 PenStyle: SolidLine
@@ -61,8 +61,8 @@ BrushColor: white
 BrushStyle: NoBrush
 
 ShapeId: 7
-ShapeType: Circle
-ShapeDimensions: 750, 150, 200
+ShapeType: Ellipse
+ShapeDimensions: 750, 150, 200, 200
 PenColor: black
 PenWidth: 12
 PenStyle: SolidLine
@@ -79,5 +79,37 @@ TextColor: blue
 TextAlignment: AlignCenter
 TextPointSize: 10
 TextFontFamily: Comic Sans MS
-TextFontStyle: FlatCap
+TextFontStyle: StyleNormal
 TextFontWeight: Normal
+
+ShapeId: 9
+ShapeType: Line
+ShapeDimensions: 383, 565, 657, 558
+PenColor: black
+PenWidth: 1
+PenStyle: SolidLine
+PenCapStyle: SquareCap
+PenJoinStyle: BevelJoin
+
+ShapeId: 10
+ShapeType: Polygon
+ShapeDimensions: 109, 459, 89, 614, 237, 599
+PenColor: magenta
+PenWidth: 1
+PenStyle: SolidLine
+PenCapStyle: SquareCap
+PenJoinStyle: BevelJoin
+BrushColor: black
+BrushStyle: NoBrush
+
+ShapeId: 11
+ShapeType: Rectangle
+ShapeDimensions: 626, 103, 50, 25
+PenColor: black
+PenWidth: 1
+PenStyle: SolidLine
+PenCapStyle: SquareCap
+PenJoinStyle: BevelJoin
+BrushColor: black
+BrushStyle: Dense6Pattern
+

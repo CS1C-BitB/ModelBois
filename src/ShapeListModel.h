@@ -8,20 +8,39 @@
 
 using vector_t = cs1c::vector<Shape*>;
 
+// used to provides shape interface and drop down list
+
 /**
- * @brief A ShapeListModel class
+ * @brief ShapeListModel class
  *
- * This class is used to
+ * This class allows the user to interface with the shapes. It provides a drop
+ * down menu of all the shapes that are currently in the editor. You are allowed
+ * to select each individual shape using this interface.
  */
 class ShapeListModel : public QAbstractListModel
 {
 	Q_OBJECT
 	
 public:
+    /**
+     * @brief Constructor
+     * @param list, all the shapes that are currently being rendered are stored here
+     */
 	ShapeListModel(vector_t* list);
 	
+    /**
+     * @brief rowCount
+     * @param parent
+     * @return number of rows
+     */
 	int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    /**
+     * @brief data
+     * @param index
+     * @param role
+     * @return qvariant type
+     */
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 	
 public slots:
 	void itemsChanged();

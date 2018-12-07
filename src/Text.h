@@ -13,7 +13,7 @@ extern const QMap<QFont::Weight, QString> FONT_WEIGHT_NAMES;
 
 
 /**
- * @brief A Text class
+ * @brief Text class
  *
  * This class represents a text box, derived from shape
  */

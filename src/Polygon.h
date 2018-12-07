@@ -4,7 +4,7 @@
 #include "PolyLine.h"
 
 /**
- * @brief A Polygon class
+ * @brief Polygon class
  *
  * This class represents a polygon, which is derived from polyline. A polygon is any
  * object with at least three sides and three angles

@@ -32,7 +32,7 @@ extern const QMap<Qt::PenCapStyle, QString> PEN_CAP_STYLE_NAMES;
 extern const QMap<Qt::PenJoinStyle, QString> PEN_JOIN_STYLE_NAMES;
 
 /**
- * @brief A Shape class.
+ * @brief Shape class.
  *
  * This is an abstract base class in which all shapes get their basic functionality
  */
