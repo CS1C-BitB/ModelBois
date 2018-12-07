@@ -96,11 +96,15 @@ void MainWindow::closeEvent(QCloseEvent* event)
 		event->accept();
 	}
 	else {
+		QMessageBox::StandardButtons buttons = QMessageBox::Cancel | QMessageBox::Yes;
+		if (ui->actionSave->isEnabled()) {
+			buttons |= QMessageBox::Save;
+		}
 		QMessageBox* warn = new QMessageBox(
 		            QMessageBox::Warning,
 		            "Unsaved Changes",
 		            "You have unsaved changes, do you wish to quit anyway?",
-		            QMessageBox::Save | QMessageBox::Cancel | QMessageBox::Yes,
+		            buttons,
 		            this
 		);
 		warn->exec();
@@ -384,6 +388,9 @@ void MainWindow::Disconnect()
 
 void MainWindow::Save()
 {
+	if (!ui->actionSave->isEnabled()) {
+		return;
+	}
 	SetStatusText("Saving shapes...");
 	{
 		std::ofstream file{filename};
@@ -407,5 +414,6 @@ void MainWindow::SetAdmin(bool val)
 	}
 	ui->actionLogin->setEnabled(!val);
 	ui->actionLog_Out->setEnabled(val);
+	Disconnect();
 }
 
