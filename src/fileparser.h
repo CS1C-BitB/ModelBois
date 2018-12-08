@@ -15,10 +15,14 @@
 #include "Text.h"       /* used for text objects */
 #include "vector.h"
 
-
+/**
+ * @brief The ShapeNames enum
+ *
+ * Stores all the types of shapes that can be used with this program
+ */
 enum ShapeNames
 {
-    LINE      = 1,
+    LINE      = 1, /** \enum LINE */
     POLYLINE  = 2,
     POLYGON   = 3,
     RECTANGLE = 4,
@@ -30,6 +34,10 @@ enum ShapeNames
 
 extern const QMap<ShapeNames, std::string> INPUT_SHAPE_NAMES;
 
+/**
+ * @brief LoadFile
+ * @return vector which contains all of the loaded shapes
+ */
 cs1c::vector<Shape*> LoadFile();
 
 
