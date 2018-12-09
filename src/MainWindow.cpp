@@ -306,10 +306,13 @@ void MainWindow::on_actionAdd_Text_triggered()
 	});
 }
 
+#define ALL(item) item.begin(), item.end()
+
 void MainWindow::on_actionBy_ID_triggered()
 {
-	vector_t copy = store.shapes;
-	selection_sort(copy, &compareID, &excludeInvalidID);
+	vector_t copy(store.shapes.size());
+	auto end = copy_if(ALL(store.shapes), copy.begin(), validID);
+	selection_sort(copy.begin(), end, compareID);
 	std::stringstream text;
 	text << copy;
 	
@@ -319,12 +322,14 @@ void MainWindow::on_actionBy_ID_triggered()
 
 void MainWindow::on_actionBy_Area_triggered()
 {
-	vector_t copy = store.shapes;
-	selection_sort(copy, &compareArea, &excludeInvalidArea);
+	vector_t copy(store.shapes.size());
+	auto end = copy_if(ALL(store.shapes), copy.begin(), validArea);
+	selection_sort(copy.begin(), end, compareArea);
 	
 	QStringList text;
 	
-	for (auto* shape : copy) {
+	for (auto it = copy.begin(); it != end; ++it) {
+		Shape* shape = *it;
 		text << QString{"Id:\t%1"}.arg(shape->getID());
 		text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
 		text << QString{"Area:\t%1"}.arg(shape->getArea(), 0, 'f', 2);
@@ -337,12 +342,14 @@ void MainWindow::on_actionBy_Area_triggered()
 
 void MainWindow::on_actionBy_Perimeter_triggered()
 {
-	vector_t copy = store.shapes;
-	selection_sort(copy, &comparePerimeter, &excludeInvalidPerimeter);
+	vector_t copy(store.shapes.size());
+	auto end = copy_if(ALL(store.shapes), copy.begin(), validPerimeter);
+	selection_sort(copy.begin(), end, comparePerimeter);
 	
 	QStringList text;
 	
-	for (auto* shape : copy) {
+	for (auto it = copy.begin(); it != end; ++it) {
+		Shape* shape = *it;
 		text << QString{"Id:\t%1"}.arg(shape->getID());
 		text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
 		text << QString{"Perimeter:\t%1"}.arg(shape->getPerimeter(), 0, 'f', 2);
@@ -353,9 +360,11 @@ void MainWindow::on_actionBy_Perimeter_triggered()
 	view->open();
 }
 
+#undef ALL
+
 void MainWindow::on_actionLogin_triggered()
 {
-	Login* login = new Login(this);
+	auto* login = new Login(this);
 	connect(login, &QDialog::accepted, std::bind(&MainWindow::SetAdmin, this, true));
 	login->show();
 }
