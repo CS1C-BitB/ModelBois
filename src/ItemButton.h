@@ -17,12 +17,11 @@ class ItemButton : public QWidget
 	Q_OBJECT
 	
 public:
-
 	/**
 	 * @brief PosButton
 	 * @param parent
 	 */
-	explicit ItemButton(const QIcon &icon, const QString &tip, QWidget *parent = nullptr);
+	explicit ItemButton(const QList<QPair<QIcon, QString>> &buttons, QWidget *parent = nullptr);
 
 	/**
 	 * @brief Destructor
@@ -33,7 +32,7 @@ signals:
 	/**
 	 * @brief the position buttons register a click by the user
 	 */
-	void clicked();
+	void clicked(int i);
 	
 private:
 	Ui::ItemButton *ui;

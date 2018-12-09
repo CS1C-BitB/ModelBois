@@ -4,6 +4,7 @@
 #include "About.h"
 #include "DetailView.h"
 #include "fileparser.h"
+#include "ItemButton.h"
 #include "login.h"
 #include "PropertyItem.h"
 #include "PropertyDelegate.h"
@@ -198,14 +199,9 @@ void MainWindow::on_actionAdd_Ellipse_triggered()
 	SetCanvasCursor(Qt::CrossCursor);
 	SetStatusText("Click to add an ellipse");
 	
-	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
-		Disconnect();
-		store.shapes.push_back(new Ellipse{50, 25, QPoint{x, y}});
-		store.model.itemsChanged();
-		onDataChanged();
-		
-		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
-	});
+	using namespace std::placeholders;
+	
+	connect(this, &MainWindow::onCanvasClick, std::bind(&MainWindow::AddRect<Ellipse>, this, _1, _2));
 }
 
 void MainWindow::on_actionAdd_Line_triggered()
@@ -285,14 +281,9 @@ void MainWindow::on_actionAdd_Rectangle_triggered()
 	SetCanvasCursor(Qt::CrossCursor);
 	SetStatusText("Click to add a rectangle");
 	
-	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
-		Disconnect();
-		store.shapes.push_back(new Rectangle{50, 25, QPoint{x, y}});
-		store.model.itemsChanged();
-		onDataChanged();
-		
-		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
-	});
+	using namespace std::placeholders;
+	
+	connect(this, &MainWindow::onCanvasClick, std::bind(&MainWindow::AddRect<Rectangle>, this, _1, _2));
 }
 
 void MainWindow::on_actionAdd_Text_triggered()
@@ -377,6 +368,25 @@ void MainWindow::on_actionLog_Out_triggered()
 void MainWindow::on_actionAbout_triggered()
 {
 	(new About(this))->show();
+}
+
+template<class RectType>
+void MainWindow::AddRect(int x, int y)
+{
+	Disconnect();
+	SetCanvasCursor(Qt::CrossCursor);
+	SetStatusText("Click to set size");
+	auto* rect = new RectType{QRect{x, y, 0, 0}};
+	store.shapes.push_back(rect);
+	store.model.itemsChanged();
+	onDataChanged();
+	
+	ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+	
+	// Use existing size setter
+	auto* item = ui->PropTree->topLevelItem(0)->child(3);
+	auto* widget = dynamic_cast<ItemButton*>(ui->PropTree->itemWidget(item, 1));
+	widget->clicked(1);
 }
 
 void MainWindow::Disconnect()

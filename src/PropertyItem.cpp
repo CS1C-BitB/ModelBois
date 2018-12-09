@@ -213,7 +213,7 @@ PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 	
 	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
 	
-	auto* buttonWidget = new ItemButton(QIcon{":/icons/target.png"}, "Set position with mouse");
+	auto* buttonWidget = new ItemButton({{QIcon{":/icons/target.png"}, "Set position with mouse"}});
 	QObject::connect(buttonWidget, &ItemButton::clicked, [this, window]() {
 		treeWidget()->setCurrentItem(this);
 		// Set pointer
@@ -366,6 +366,47 @@ PropertyItem<QRect>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_
 	            [this]() -> int { return getter().height(); },
 	            [this](int x) { auto v = getter(); v.setHeight(x); setter(v); }
 	);
+	
+	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
+	
+	auto* buttons = new ItemButton{{
+	        {QIcon{":/icons/corner.png"}, "Move the upper-left corner with the mouse (size stays the same)"},
+	        {QIcon{":/icons/size.png"}, "Set the bottom-right corner with the mouse (changes size)"}
+	}};
+	QObject::connect(buttons, &ItemButton::clicked, [this, window](int i) {
+		window->SetCanvasCursor(Qt::CrossCursor);
+		switch (i) {
+		case 0:
+			treeWidget()->setCurrentItem(this->child(0));
+			// Set pointer
+			window->SetStatusText("Click to move the top-left corner");
+			// Set setter
+			QObject::connect(window, &MainWindow::onCanvasClick, [this, window](int x, int y) {
+				QRect r = getter();
+				r.moveTopLeft(QPoint{x, y});
+				setter(r);
+				emitDataChanged();
+				// Unset setter
+				Disconnect(window, treeWidget());
+			});
+			break;
+		case 1:
+			treeWidget()->setCurrentItem(this->child(2));
+			// Set pointer
+			window->SetStatusText("Click to set the bottom-right corner");
+			// Set setter
+			QObject::connect(window, &MainWindow::onCanvasClick, [this, window](int x, int y) {
+				QRect r = getter();
+				r.setBottomRight(QPoint{x, y});
+				setter(r.normalized());
+				emitDataChanged();
+				// Unset setter
+				Disconnect(window, treeWidget());
+			});
+		}
+		QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget()));
+	});
+	treeWidget()->setItemWidget(this, 1, buttons);
 }
 
 QVariant PropertyItem<QRect>::data(int column, int role) const

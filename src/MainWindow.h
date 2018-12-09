@@ -151,6 +151,8 @@ private slots:
 	void on_actionAbout_triggered();
 	
 private:
+	template<class RectType>
+	void AddRect(int x, int y);
 	void Disconnect();
 	void Save();
 	void SetAdmin(bool);
