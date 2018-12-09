@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace Ui {
-class PosButton;
+class ItemButton;
 }
 
 /**
@@ -12,7 +12,7 @@ class PosButton;
  *
  * This class represents objects which are used for position buttons
  */
-class PosButton : public QWidget
+class ItemButton : public QWidget
 {
 	Q_OBJECT
 	
@@ -22,12 +22,12 @@ public:
 	 * @brief PosButton
 	 * @param parent
 	 */
-	explicit PosButton(QWidget *parent = nullptr);
+	explicit ItemButton(const QIcon &icon, const QString &tip, QWidget *parent = nullptr);
 
 	/**
 	 * @brief Destructor
 	 */
-	~PosButton();
+	~ItemButton();
 	
 signals:
 	/**
@@ -36,7 +36,7 @@ signals:
 	void clicked();
 	
 private:
-	Ui::PosButton *ui;
+	Ui::ItemButton *ui;
 };
 
 #endif // POSBUTTON_H

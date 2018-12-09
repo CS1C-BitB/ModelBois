@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PosButton</class>
- <widget class="QWidget" name="PosButton">
+ <class>ItemButton</class>
+ <widget class="QWidget" name="ItemButton">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -50,25 +50,13 @@
        <height>20</height>
       </size>
      </property>
-     <property name="toolTip">
-      <string>Set position with mouse</string>
-     </property>
-     <property name="statusTip">
-      <string>Set position with mouse</string>
-     </property>
      <property name="text">
       <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../res/icons.qrc">
-       <normaloff>:/icons/target.png</normaloff>:/icons/target.png</iconset>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../res/icons.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

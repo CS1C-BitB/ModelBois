@@ -1,7 +1,7 @@
 #include "PropertyItem.h"
 
 #include "MainWindow.h"
-#include "PosButton.h"
+#include "ItemButton.h"
 #include "Shapes.h"
 
 using namespace std::placeholders;
@@ -213,8 +213,8 @@ PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 	
 	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
 	
-	auto* buttonWidget = new PosButton();
-	QObject::connect(buttonWidget, &PosButton::clicked, [this, window]() {
+	auto* buttonWidget = new ItemButton(QIcon{":/icons/target.png"}, "Set position with mouse");
+	QObject::connect(buttonWidget, &ItemButton::clicked, [this, window]() {
 		treeWidget()->setCurrentItem(this);
 		// Set pointer
 		window->SetCanvasCursor(Qt::CrossCursor);
