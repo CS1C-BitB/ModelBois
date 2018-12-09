@@ -7,11 +7,26 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>230</height>
+    <height>250</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>400</width>
+    <height>250</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>400</width>
+    <height>250</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>About</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -58,10 +73,13 @@
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;By the Boys in da Back.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/CS1C-BitB/ModelBois&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Project Page&lt;br/&gt;&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://github.com/CS1C-BitB/ModelBois/graphs/contributors&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Members&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;By the Boys in da Back. &lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/CS1C-BitB/ModelBois&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Project Page &lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Members: Chris Allan, Nicole Ballance, Tucker Harvey, Nathan Smith, Riley Kuo, and Landon Valentine &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="textFormat">
             <enum>Qt::RichText</enum>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
            </property>
            <property name="openExternalLinks">
             <bool>true</bool>
