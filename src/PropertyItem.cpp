@@ -561,7 +561,7 @@ PropertyItem<QFont>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_
 	            "Size",
 	            ([this]() { return getter().pointSize(); }),
 	            ([this](int s) { QFont f = getter(); f.setPointSize(s); setter(f); }),
-	            PropInt
+	            PropFontSize
 	);
 	new PropertyItem<QString>(
 	            this,
@@ -575,7 +575,7 @@ PropertyItem<QFont>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_
 	            "Weight",
 	            ([this]() { return FONT_WEIGHT_NAMES[static_cast<QFont::Weight>(getter().weight())]; }),
 	            ([this](QString s) { QFont f = getter(); f.setWeight(FONT_WEIGHT_NAMES.key(s)); setter(f); }),
-	            PropFontWight
+	            PropFontWeight
 	);
 }
 

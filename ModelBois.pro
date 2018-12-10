@@ -50,7 +50,8 @@ SOURCES += \
     src/login.cpp \
     src/Serializer.cpp \
     src/About.cpp \
-    src/ItemButton.cpp
+    src/ItemButton.cpp \
+    src/FontSizeComboBox.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -77,7 +78,8 @@ HEADERS += \
     src/fileparser.h \
     src/login.h \
     src/About.h \
-    src/ItemButton.h
+    src/ItemButton.h \
+    src/FontSizeComboBox.h
 
 FORMS += \
     src/MainWindow.ui \

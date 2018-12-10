@@ -1,5 +1,6 @@
 #include "PropertyDelegate.h"
 
+#include "FontSizeComboBox.h"
 #include "PropertyItem.h"
 
 #include <QComboBox>
@@ -52,9 +53,11 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 		return createComboBox(parent, COLOR_NAMES.keys());
 	case PropFont:
 		return new QFontComboBox{parent};
+	case PropFontSize:
+		return new FontSizeComboBox{parent};
 	case PropFontStyle:
 		return createComboBox(parent, FONT_STYLE_NAMES.values());
-	case PropFontWight:
+	case PropFontWeight:
 		return createComboBox(parent, FONT_WEIGHT_NAMES.values());
 	case PropPenStyle:
 		return createComboBox(parent, PEN_STYLE_NAMES.values());
@@ -81,7 +84,7 @@ void PropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 		QString value = index.model()->data(index, Qt::EditRole).toString();
 		
 		comboBox->setCurrentText(value);
-		connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
+		connect(comboBox, &QComboBox::currentTextChanged, this, std::bind(&PropertyDelegate::valueChanged, this, editor));
 	}
 	else if (TRY_CAST(QSpinBox, spinBox)) {
 		int value = index.model()->data(index, Qt::EditRole).toInt();
@@ -99,6 +102,11 @@ void PropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 
 void PropertyDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
+	if (TRY_CAST(FontSizeComboBox, sizeBox)) {
+		int value = sizeBox->value();
+		
+		model->setData(index, value, Qt::EditRole);
+	}
 	if (TRY_CAST(QComboBox, comboBox)) {
 		QString value = comboBox->currentText();
 		
