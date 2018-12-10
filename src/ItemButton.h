@@ -1,6 +1,7 @@
 #ifndef POSBUTTON_H
 #define POSBUTTON_H
 
+#include <QPushButton>
 #include <QWidget>
 
 namespace Ui {
@@ -28,6 +29,8 @@ public:
 	 */
 	~ItemButton();
 	
+	QPushButton* button(int i);
+	
 signals:
 	/**
 	 * @brief the position buttons register a click by the user
@@ -35,6 +38,7 @@ signals:
 	void clicked(int i);
 	
 private:
+	QVector<QPushButton*> buttons;
 	Ui::ItemButton *ui;
 };
 

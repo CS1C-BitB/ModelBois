@@ -272,10 +272,18 @@ PropertyItem<QList<QPoint>>::PropertyItem(QTreeWidgetItem* parent, QString name,
 		);
 	}
 	
-	auto* buttons = new ListButtons();
-	buttons->setRemoveEnabled(count != 0);
-	QObject::connect(buttons, &ListButtons::add, std::bind(&PropertyItem<QList<QPoint>>::add, this));
-	QObject::connect(buttons, &ListButtons::remove, std::bind(&PropertyItem<QList<QPoint>>::remove, this));
+	auto* buttons = new ItemButton{{
+	        {QIcon{":/icons/add.png"}, "Begin appending points"},
+	        {QIcon{":/icons/remove.png"}, "Remove last point"}
+	}};
+	
+	buttons->button(1)->setEnabled(count != 0);
+	QObject::connect(buttons, &ItemButton::clicked, [this](int i) {
+		switch (i) {
+		case 0: add(); break;
+		case 1: remove(); break;
+		}
+	});
 	treeWidget()->setItemWidget(this, 1, buttons);
 }
 
@@ -300,7 +308,7 @@ void PropertyItem<QList<QPoint>>::add()
 		);
 		treeWidget()->expandItem(prop);
 		emitDataChanged();
-		dynamic_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(true);
+		dynamic_cast<ItemButton*>(treeWidget()->itemWidget(this, 1))->button(1)->setEnabled(true);
 	});
 	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget()));
 }
@@ -314,7 +322,7 @@ void PropertyItem<QList<QPoint>>::remove()
 	size_t i = get_size() - 1;
 	erase(i);
 	removeChild(child(static_cast<int>(i)));
-	dynamic_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(i != 0);
+	dynamic_cast<ItemButton*>(treeWidget()->itemWidget(this, 1))->button(1)->setEnabled(i != 0);
 	emitDataChanged();
 }
 

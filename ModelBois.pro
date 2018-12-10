@@ -44,7 +44,6 @@ SOURCES += \
     src/PropertyDelegate.cpp \
     src/PropertyItem.cpp \
     test/testShapes.cpp \
-    src/ListButtons.cpp \
     src/Sort.cpp \
     src/DetailView.cpp \
     src/fileparser.cpp \
@@ -69,7 +68,6 @@ HEADERS += \
     src/PropertyItem.h \
     src/Shapes.h \
     test/Tests.h \
-    src/ListButtons.h \
     src/Serializer.h \
     src/LinkedList.h \
     src/VectorNode.h \
@@ -83,7 +81,6 @@ HEADERS += \
 
 FORMS += \
     src/MainWindow.ui \
-    src/ListButtons.ui \
     src/DetailView.ui \
     src/login.ui \
     src/About.ui \

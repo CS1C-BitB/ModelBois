@@ -1,7 +1,6 @@
 #ifndef PROPITEM_H
 #define PROPITEM_H
 
-#include "ListButtons.h"
 #include "Shapes.h"
 
 #include <QTreeWidgetItem>
