@@ -184,7 +184,7 @@ namespace cs1c {
     template<class T>
     typename vector<T>::iterator vector<T>::iterator::operator++(int) {
 		iterator old = *this;
-        moveForward();
+		moveForward();
 		return old;
     }
 
@@ -288,7 +288,9 @@ namespace cs1c {
     */
     template<class T>
     typename vector<T>::const_iterator vector<T>::const_iterator::operator++(int) {
-        return moveForward();
+		const_iterator old = *this;
+		moveForward();
+		return old;
     }
 
     //! An overloaded operator taking one argument and returning a bool.
