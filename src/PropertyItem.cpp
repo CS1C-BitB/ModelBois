@@ -195,6 +195,17 @@ void Disconnect(MainWindow* window, QTreeWidget* tree)
 	window->SetStatusText("");
 }
 
+MainWindow* GetWindow(QTreeWidgetItem* item)
+{
+	auto* window = item->treeWidget()->window();
+	auto* main = dynamic_cast<MainWindow*>(window);
+	if (!main) {
+		main = dynamic_cast<MainWindow*>(window->parent());
+	}
+	assert(main);
+	return main;
+}
+
 PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter_in)
     : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}, setter{std::move(setter_in)}
 {
@@ -211,7 +222,7 @@ PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 	            [this](int y) { setter(QPoint{getter().x(), y}); }
 	);
 	
-	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
+	auto* window = GetWindow(this);
 	
 	auto* buttonWidget = new ItemButton({{QIcon{":/icons/target.png"}, "Set position with mouse"}});
 	QObject::connect(buttonWidget, &ItemButton::clicked, [this, window]() {
@@ -289,7 +300,7 @@ PropertyItem<QList<QPoint>>::PropertyItem(QTreeWidgetItem* parent, QString name,
 
 void PropertyItem<QList<QPoint>>::add()
 {
-	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
+	auto* window = GetWindow(this);
 	treeWidget()->setCurrentItem(this);
 	
 	// Set pointer
@@ -315,7 +326,7 @@ void PropertyItem<QList<QPoint>>::add()
 
 void PropertyItem<QList<QPoint>>::remove()
 {
-	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
+	auto* window = GetWindow(this);
 	
 	Disconnect(window, treeWidget());
 	
@@ -375,7 +386,7 @@ PropertyItem<QRect>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_
 	            [this](int x) { auto v = getter(); v.setHeight(x); setter(v); }
 	);
 	
-	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
+	auto* window = GetWindow(this);
 	
 	auto* buttons = new ItemButton{{
 	        {QIcon{":/icons/corner.png"}, "Move the upper-left corner with the mouse (size stays the same)"},

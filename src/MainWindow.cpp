@@ -124,6 +124,13 @@ void MainWindow::closeEvent(QCloseEvent* event)
 	}
 }
 
+void MainWindow::keyPressEvent(QKeyEvent* event)
+{
+	if (event->key() == Qt::Key_Escape) {
+		Disconnect();
+	}
+}
+
 void MainWindow::on_ShapeList_currentIndexChanged(int index)
 {
 	disconnect(ui->PropTree, &QTreeWidget::itemChanged, nullptr, nullptr);

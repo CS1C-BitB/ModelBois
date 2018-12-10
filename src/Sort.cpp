@@ -1,5 +1,4 @@
 #include "Sort.h"
-using cs1c::vector;
 
 //! A function taking two arguments and returning a bool.
 /*!

@@ -33,7 +33,7 @@ public:
 	/**
 	 * @brief Destructor
 	 */
-	~MainWindow();
+	~MainWindow() override;
 	
 	/**
 	 * @brief SetCanvasCursor
@@ -51,7 +51,9 @@ protected:
 	 * @brief closeEvent
 	 * @param event
 	 */
-	void closeEvent(QCloseEvent *event);
+	void closeEvent(QCloseEvent *event) override;
+	
+	void keyPressEvent(QKeyEvent* event) override;
 	
 signals:
 	/**

@@ -71,7 +71,13 @@ QWidget* PropertyDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 
 void PropertyDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-	if (TRY_CAST(QComboBox, comboBox)) {
+	if (TRY_CAST(QFontComboBox, fontBox)) {
+		QString value = index.model()->data(index, Qt::EditRole).toString();
+		
+		fontBox->setCurrentFont(QFont{value});
+		connect(fontBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, std::bind(&PropertyDelegate::valueChanged, this, editor));
+	}
+	else if (TRY_CAST(QComboBox, comboBox)) {
 		QString value = index.model()->data(index, Qt::EditRole).toString();
 		
 		comboBox->setCurrentText(value);
