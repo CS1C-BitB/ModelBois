@@ -44,14 +44,14 @@ SOURCES += \
     src/PropertyDelegate.cpp \
     src/PropertyItem.cpp \
     test/testShapes.cpp \
-    src/ListButtons.cpp \
-    src/PosButton.cpp \
     src/Sort.cpp \
     src/DetailView.cpp \
     src/fileparser.cpp \
     src/login.cpp \
     src/Serializer.cpp \
-    src/About.cpp
+    src/About.cpp \
+    src/ItemButton.cpp \
+    src/FontSizeComboBox.cpp
 
 HEADERS += \
     src/MainWindow.h \
@@ -69,8 +69,6 @@ HEADERS += \
     src/PropertyItem.h \
     src/Shapes.h \
     test/Tests.h \
-    src/ListButtons.h \
-    src/PosButton.h \
     src/Serializer.h \
     src/LinkedList.h \
     src/VectorNode.h \
@@ -79,15 +77,16 @@ HEADERS += \
     src/DetailView.h \
     src/fileparser.h \
     src/login.h \
-    src/About.h
+    src/About.h \
+    src/ItemButton.h \
+    src/FontSizeComboBox.h
 
 FORMS += \
     src/MainWindow.ui \
-    src/ListButtons.ui \
-    src/PosButton.ui \
     src/DetailView.ui \
     src/login.ui \
-    src/About.ui
+    src/About.ui \
+    src/ItemButton.ui
 
 # Default rules for deployment.
 #qnx: target.path = /tmp/$${TARGET}/bin

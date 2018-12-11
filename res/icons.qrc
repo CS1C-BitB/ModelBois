@@ -8,6 +8,10 @@
         <file>add_polyline.png</file>
         <file>add_rectangle.png</file>
         <file>add_text.png</file>
+        <file>size.png</file>
+        <file>corner.png</file>
+        <file>add.png</file>
+        <file>remove.png</file>
     </qresource>
     <qresource prefix="/">
         <file>BoysInTheBack.png</file>

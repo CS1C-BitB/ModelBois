@@ -12,7 +12,7 @@ std::ostream& operator<<(std::ostream& out, const vector_t &shapes)
 		out << "ShapeType: " << SHAPE_NAMES[shape->getType()] << "\n";
 		out << "ShapeDimensions: ";
 		
-#define TRY_CAST(type) type* cast = dynamic_cast<type*>(shape)
+#define TRY_CAST(type) auto* cast = dynamic_cast<type*>(shape)
 		if (TRY_CAST(Line)) {
 			QPoint A = cast->getStart();
 			QPoint B = cast->getEnd();
@@ -28,23 +28,13 @@ std::ostream& operator<<(std::ostream& out, const vector_t &shapes)
 			}
 			out << "\n";
 		}
-		else if (TRY_CAST(Polygon)) {
-			for (size_t i = 0, count = cast->getCount(); i < count; ++i) {
-				QPoint p = cast->getPoint(i);
-				out << p.x() << ", " << p.y();
-				if (i != count - 1) {
-					out << ", ";
-				}
-			}
-			out << "\n";
+		else if (TRY_CAST(Ellipse)) {
+			QRect rect = cast->getRect();
+			out << rect.x() << ", " << rect.y() << ", " << (rect.width() / 2) << ", " << (rect.height() / 2) << "\n";
 		}
 		else if (TRY_CAST(Rectangle)) {
 			QRect rect = cast->getRect();
 			out << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << "\n";
-		}
-		else if (TRY_CAST(Ellipse)) {
-			QRect rect = cast->getRect();
-			out << rect.x() << ", " << rect.y() << ", " << (rect.width() / 2) << ", " << (rect.height() / 2) << "\n";
 		}
 		else if (TRY_CAST(Text)) {
 			QRect rect = cast->getRect();

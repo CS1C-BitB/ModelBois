@@ -1,7 +1,7 @@
 #include "PropertyItem.h"
 
 #include "MainWindow.h"
-#include "PosButton.h"
+#include "ItemButton.h"
 #include "Shapes.h"
 
 using namespace std::placeholders;
@@ -195,6 +195,17 @@ void Disconnect(MainWindow* window, QTreeWidget* tree)
 	window->SetStatusText("");
 }
 
+MainWindow* GetWindow(QTreeWidgetItem* item)
+{
+	auto* window = item->treeWidget()->window();
+	auto* main = dynamic_cast<MainWindow*>(window);
+	if (!main) {
+		main = dynamic_cast<MainWindow*>(window->parent());
+	}
+	assert(main);
+	return main;
+}
+
 PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_t getter_in, setter_t setter_in)
     : QTreeWidgetItem(parent, PropNone), name{std::move(name)}, getter{std::move(getter_in)}, setter{std::move(setter_in)}
 {
@@ -211,10 +222,10 @@ PropertyItem<QPoint>::PropertyItem(QTreeWidgetItem* parent, QString name, getter
 	            [this](int y) { setter(QPoint{getter().x(), y}); }
 	);
 	
-	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
+	auto* window = GetWindow(this);
 	
-	auto* buttonWidget = new PosButton();
-	QObject::connect(buttonWidget, &PosButton::clicked, [this, window]() {
+	auto* buttonWidget = new ItemButton({{QIcon{":/icons/target.png"}, "Set position with mouse"}});
+	QObject::connect(buttonWidget, &ItemButton::clicked, [this, window]() {
 		treeWidget()->setCurrentItem(this);
 		// Set pointer
 		window->SetCanvasCursor(Qt::CrossCursor);
@@ -272,16 +283,24 @@ PropertyItem<QList<QPoint>>::PropertyItem(QTreeWidgetItem* parent, QString name,
 		);
 	}
 	
-	auto* buttons = new ListButtons();
-	buttons->setRemoveEnabled(count != 0);
-	QObject::connect(buttons, &ListButtons::add, std::bind(&PropertyItem<QList<QPoint>>::add, this));
-	QObject::connect(buttons, &ListButtons::remove, std::bind(&PropertyItem<QList<QPoint>>::remove, this));
+	auto* buttons = new ItemButton{{
+	        {QIcon{":/icons/add.png"}, "Begin appending points"},
+	        {QIcon{":/icons/remove.png"}, "Remove last point"}
+	}};
+	
+	buttons->button(1)->setEnabled(count != 0);
+	QObject::connect(buttons, &ItemButton::clicked, [this](int i) {
+		switch (i) {
+		case 0: add(); break;
+		case 1: remove(); break;
+		}
+	});
 	treeWidget()->setItemWidget(this, 1, buttons);
 }
 
 void PropertyItem<QList<QPoint>>::add()
 {
-	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
+	auto* window = GetWindow(this);
 	treeWidget()->setCurrentItem(this);
 	
 	// Set pointer
@@ -300,21 +319,21 @@ void PropertyItem<QList<QPoint>>::add()
 		);
 		treeWidget()->expandItem(prop);
 		emitDataChanged();
-		dynamic_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(true);
+		dynamic_cast<ItemButton*>(treeWidget()->itemWidget(this, 1))->button(1)->setEnabled(true);
 	});
 	QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget()));
 }
 
 void PropertyItem<QList<QPoint>>::remove()
 {
-	auto* window = dynamic_cast<MainWindow*>(treeWidget()->window());
+	auto* window = GetWindow(this);
 	
 	Disconnect(window, treeWidget());
 	
 	size_t i = get_size() - 1;
 	erase(i);
 	removeChild(child(static_cast<int>(i)));
-	dynamic_cast<ListButtons*>(treeWidget()->itemWidget(this, 1))->setRemoveEnabled(i != 0);
+	dynamic_cast<ItemButton*>(treeWidget()->itemWidget(this, 1))->button(1)->setEnabled(i != 0);
 	emitDataChanged();
 }
 
@@ -366,6 +385,47 @@ PropertyItem<QRect>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_
 	            [this]() -> int { return getter().height(); },
 	            [this](int x) { auto v = getter(); v.setHeight(x); setter(v); }
 	);
+	
+	auto* window = GetWindow(this);
+	
+	auto* buttons = new ItemButton{{
+	        {QIcon{":/icons/corner.png"}, "Move the upper-left corner with the mouse (size stays the same)"},
+	        {QIcon{":/icons/size.png"}, "Set the bottom-right corner with the mouse (changes size)"}
+	}};
+	QObject::connect(buttons, &ItemButton::clicked, [this, window](int i) {
+		window->SetCanvasCursor(Qt::CrossCursor);
+		switch (i) {
+		case 0:
+			treeWidget()->setCurrentItem(this->child(0));
+			// Set pointer
+			window->SetStatusText("Click to move the top-left corner");
+			// Set setter
+			QObject::connect(window, &MainWindow::onCanvasClick, [this, window](int x, int y) {
+				QRect r = getter();
+				r.moveTopLeft(QPoint{x, y});
+				setter(r);
+				emitDataChanged();
+				// Unset setter
+				Disconnect(window, treeWidget());
+			});
+			break;
+		case 1:
+			treeWidget()->setCurrentItem(this->child(2));
+			// Set pointer
+			window->SetStatusText("Click to set the bottom-right corner");
+			// Set setter
+			QObject::connect(window, &MainWindow::onCanvasClick, [this, window](int x, int y) {
+				QRect r = getter();
+				r.setBottomRight(QPoint{x, y});
+				setter(r.normalized());
+				emitDataChanged();
+				// Unset setter
+				Disconnect(window, treeWidget());
+			});
+		}
+		QObject::connect(treeWidget(), &QTreeWidget::currentItemChanged, std::bind(&Disconnect, window, treeWidget()));
+	});
+	treeWidget()->setItemWidget(this, 1, buttons);
 }
 
 QVariant PropertyItem<QRect>::data(int column, int role) const
@@ -501,7 +561,7 @@ PropertyItem<QFont>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_
 	            "Size",
 	            ([this]() { return getter().pointSize(); }),
 	            ([this](int s) { QFont f = getter(); f.setPointSize(s); setter(f); }),
-	            PropInt
+	            PropFontSize
 	);
 	new PropertyItem<QString>(
 	            this,
@@ -515,7 +575,7 @@ PropertyItem<QFont>::PropertyItem(QTreeWidgetItem* parent, QString name, getter_
 	            "Weight",
 	            ([this]() { return FONT_WEIGHT_NAMES[static_cast<QFont::Weight>(getter().weight())]; }),
 	            ([this](QString s) { QFont f = getter(); f.setWeight(FONT_WEIGHT_NAMES.key(s)); setter(f); }),
-	            PropFontWight
+	            PropFontWeight
 	);
 }
 

@@ -1,7 +1,7 @@
 #ifndef ELLIPSE_H
 #define ELLIPSE_H
 
-#include "Shape.h"
+#include "Rectangle.h"
 
 /**
  * @brief An Ellipse class.
@@ -10,7 +10,7 @@
  * Please note -- a circle is an ellipse, any object which represents a circle should
  * use the ellipse class
  */
-class Ellipse : public Shape
+class Ellipse : public Rectangle
 {
 public:
 	/**
@@ -76,40 +76,6 @@ public:
 	 * @return The area, or a negative value if shape has no area.
 	 */
 	double getArea() const override;
-
-	/**
-	 * @brief getRect Gets the bounding rectangle of the ellipse.
-	 * @return Bounding rectangle.
-	 */
-	QRect getRect() const override;
-	
-	/**
-	 * @brief getWidth Gets the width of the ellipse
-	 * @return  width
-	 */
-	int getWidth() const;
-
-	/**
-	 * @brief getHeight Gets the height of the ellipse
-	 * @return height
-	 */
-	int getHeight() const;
-	
-	/**
-	 * @brief setWidth sets the width of ellipse
-	 * @param w value used to set the width
-	 */
-	void setWidth(int w);
-
-	/**
-	 * @brief setHeight sets the height of the ellipse
-	 * @param h value used to set the height
-	 */
-	void setHeight(int h);
-	void setRect(const QRect& rect);
-	
-private:
-	int w{0}, h{0};
 };
 
 #endif // ELLIPSE_H

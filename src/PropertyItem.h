@@ -1,7 +1,6 @@
 #ifndef PROPITEM_H
 #define PROPITEM_H
 
-#include "ListButtons.h"
 #include "Shapes.h"
 
 #include <QTreeWidgetItem>
@@ -15,8 +14,9 @@ enum PropEditType {
 	PropBrushStyle,
 	PropColor,
 	PropFont,
+	PropFontSize,
 	PropFontStyle,
-	PropFontWight,
+	PropFontWeight,
 	PropPenStyle,
 	PropPenCapStyle,
 	PropPenJoinStyle,

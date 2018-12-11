@@ -1,10 +1,11 @@
 #ifndef POSBUTTON_H
 #define POSBUTTON_H
 
+#include <QPushButton>
 #include <QWidget>
 
 namespace Ui {
-class PosButton;
+class ItemButton;
 }
 
 /**
@@ -12,31 +13,33 @@ class PosButton;
  *
  * This class represents objects which are used for position buttons
  */
-class PosButton : public QWidget
+class ItemButton : public QWidget
 {
 	Q_OBJECT
 	
 public:
-
 	/**
 	 * @brief PosButton
 	 * @param parent
 	 */
-	explicit PosButton(QWidget *parent = nullptr);
+	explicit ItemButton(const QList<QPair<QIcon, QString>> &buttons, QWidget *parent = nullptr);
 
 	/**
 	 * @brief Destructor
 	 */
-	~PosButton();
+	~ItemButton();
+	
+	QPushButton* button(int i);
 	
 signals:
 	/**
 	 * @brief the position buttons register a click by the user
 	 */
-	void clicked();
+	void clicked(int i);
 	
 private:
-	Ui::PosButton *ui;
+	QVector<QPushButton*> buttons;
+	Ui::ItemButton *ui;
 };
 
 #endif // POSBUTTON_H

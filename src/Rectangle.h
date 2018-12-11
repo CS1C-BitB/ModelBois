@@ -107,7 +107,8 @@ public:
 	void setHeight(int h);
 	void setRect(const QRect&);
 	
-private:
+protected:
+	Rectangle(id_t id);
 	int w{0}, h{0};
 };
 

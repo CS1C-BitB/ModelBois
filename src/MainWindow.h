@@ -33,7 +33,7 @@ public:
 	/**
 	 * @brief Destructor
 	 */
-	~MainWindow();
+	~MainWindow() override;
 	
 	/**
 	 * @brief SetCanvasCursor
@@ -51,7 +51,9 @@ protected:
 	 * @brief closeEvent
 	 * @param event
 	 */
-	void closeEvent(QCloseEvent *event);
+	void closeEvent(QCloseEvent *event) override;
+	
+	void keyPressEvent(QKeyEvent* event) override;
 	
 signals:
 	/**
@@ -151,6 +153,8 @@ private slots:
 	void on_actionAbout_triggered();
 	
 private:
+	template<class RectType>
+	void AddRect(int x, int y);
 	void Disconnect();
 	void Save();
 	void SetAdmin(bool);

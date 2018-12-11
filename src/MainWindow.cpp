@@ -4,6 +4,7 @@
 #include "About.h"
 #include "DetailView.h"
 #include "fileparser.h"
+#include "ItemButton.h"
 #include "login.h"
 #include "PropertyItem.h"
 #include "PropertyDelegate.h"
@@ -96,11 +97,15 @@ void MainWindow::closeEvent(QCloseEvent* event)
 		event->accept();
 	}
 	else {
+		QMessageBox::StandardButtons buttons = QMessageBox::Cancel | QMessageBox::Yes;
+		if (ui->actionSave->isEnabled()) {
+			buttons |= QMessageBox::Save;
+		}
 		QMessageBox* warn = new QMessageBox(
 		            QMessageBox::Warning,
 		            "Unsaved Changes",
 		            "You have unsaved changes, do you wish to quit anyway?",
-		            QMessageBox::Save | QMessageBox::Cancel | QMessageBox::Yes,
+		            buttons,
 		            this
 		);
 		warn->exec();
@@ -116,6 +121,13 @@ void MainWindow::closeEvent(QCloseEvent* event)
 			event->accept();
 			break;
 		}
+	}
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* event)
+{
+	if (event->key() == Qt::Key_Escape) {
+		Disconnect();
 	}
 }
 
@@ -194,14 +206,9 @@ void MainWindow::on_actionAdd_Ellipse_triggered()
 	SetCanvasCursor(Qt::CrossCursor);
 	SetStatusText("Click to add an ellipse");
 	
-	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
-		Disconnect();
-		store.shapes.push_back(new Ellipse{50, 25, QPoint{x, y}});
-		store.model.itemsChanged();
-		onDataChanged();
-		
-		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
-	});
+	using namespace std::placeholders;
+	
+	connect(this, &MainWindow::onCanvasClick, std::bind(&MainWindow::AddRect<Ellipse>, this, _1, _2));
 }
 
 void MainWindow::on_actionAdd_Line_triggered()
@@ -281,14 +288,9 @@ void MainWindow::on_actionAdd_Rectangle_triggered()
 	SetCanvasCursor(Qt::CrossCursor);
 	SetStatusText("Click to add a rectangle");
 	
-	connect(this, &MainWindow::onCanvasClick, [this](int x, int y) {
-		Disconnect();
-		store.shapes.push_back(new Rectangle{50, 25, QPoint{x, y}});
-		store.model.itemsChanged();
-		onDataChanged();
-		
-		ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
-	});
+	using namespace std::placeholders;
+	
+	connect(this, &MainWindow::onCanvasClick, std::bind(&MainWindow::AddRect<Rectangle>, this, _1, _2));
 }
 
 void MainWindow::on_actionAdd_Text_triggered()
@@ -311,10 +313,13 @@ void MainWindow::on_actionAdd_Text_triggered()
 	});
 }
 
+#define ALL(item) item.begin(), item.end()
+
 void MainWindow::on_actionBy_ID_triggered()
 {
-	vector_t copy = store.shapes;
-	selection_sort(copy, &compareID, &excludeInvalidID);
+	vector_t copy(store.shapes.size());
+	auto end = copy_if(ALL(store.shapes), copy.begin(), validID);
+	selection_sort(copy.begin(), end, compareID);
 	std::stringstream text;
 	text << copy;
 	
@@ -324,12 +329,14 @@ void MainWindow::on_actionBy_ID_triggered()
 
 void MainWindow::on_actionBy_Area_triggered()
 {
-	vector_t copy = store.shapes;
-	selection_sort(copy, &compareArea, &excludeInvalidArea);
+	vector_t copy(store.shapes.size());
+	auto end = copy_if(ALL(store.shapes), copy.begin(), validArea);
+	selection_sort(copy.begin(), end, compareArea);
 	
 	QStringList text;
 	
-	for (auto* shape : copy) {
+	for (auto it = copy.begin(); it != end; ++it) {
+		Shape* shape = *it;
 		text << QString{"Id:\t%1"}.arg(shape->getID());
 		text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
 		text << QString{"Area:\t%1"}.arg(shape->getArea(), 0, 'f', 2);
@@ -342,12 +349,14 @@ void MainWindow::on_actionBy_Area_triggered()
 
 void MainWindow::on_actionBy_Perimeter_triggered()
 {
-	vector_t copy = store.shapes;
-	selection_sort(copy, &comparePerimeter, &excludeInvalidPerimeter);
+	vector_t copy(store.shapes.size());
+	auto end = copy_if(ALL(store.shapes), copy.begin(), validPerimeter);
+	selection_sort(copy.begin(), end, comparePerimeter);
 	
 	QStringList text;
 	
-	for (auto* shape : copy) {
+	for (auto it = copy.begin(); it != end; ++it) {
+		Shape* shape = *it;
 		text << QString{"Id:\t%1"}.arg(shape->getID());
 		text << QString{"Type:\t%1"}.arg(SHAPE_NAMES[shape->getType()]);
 		text << QString{"Perimeter:\t%1"}.arg(shape->getPerimeter(), 0, 'f', 2);
@@ -358,9 +367,11 @@ void MainWindow::on_actionBy_Perimeter_triggered()
 	view->open();
 }
 
+#undef ALL
+
 void MainWindow::on_actionLogin_triggered()
 {
-	Login* login = new Login(this);
+	auto* login = new Login(this);
 	connect(login, &QDialog::accepted, std::bind(&MainWindow::SetAdmin, this, true));
 	login->show();
 }
@@ -375,6 +386,25 @@ void MainWindow::on_actionAbout_triggered()
 	(new About(this))->show();
 }
 
+template<class RectType>
+void MainWindow::AddRect(int x, int y)
+{
+	Disconnect();
+	SetCanvasCursor(Qt::CrossCursor);
+	SetStatusText("Click to set size");
+	auto* rect = new RectType{QRect{x, y, 0, 0}};
+	store.shapes.push_back(rect);
+	store.model.itemsChanged();
+	onDataChanged();
+	
+	ui->ShapeList->setCurrentIndex(store.shapes.size() - 1);
+	
+	// Use existing size setter
+	auto* item = ui->PropTree->topLevelItem(0)->child(3);
+	auto* widget = dynamic_cast<ItemButton*>(ui->PropTree->itemWidget(item, 1));
+	widget->clicked(1);
+}
+
 void MainWindow::Disconnect()
 {
 	QObject::disconnect(this, &MainWindow::onCanvasClick, nullptr, nullptr);
@@ -384,6 +414,9 @@ void MainWindow::Disconnect()
 
 void MainWindow::Save()
 {
+	if (!ui->actionSave->isEnabled()) {
+		return;
+	}
 	SetStatusText("Saving shapes...");
 	{
 		std::ofstream file{filename};
@@ -407,5 +440,6 @@ void MainWindow::SetAdmin(bool val)
 	}
 	ui->actionLogin->setEnabled(!val);
 	ui->actionLog_Out->setEnabled(val);
+	Disconnect();
 }
 

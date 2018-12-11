@@ -4,15 +4,15 @@
 #include <cmath>
 
 Ellipse::Ellipse(int width, int height, const QPoint& pos, const QBrush &brush, const QPen &pen, id_t id)
-    : Shape{pos, brush, pen, id}, w{width}, h{height}
+    : Rectangle{width, height, pos, brush, pen, id}
 { }
 
 Ellipse::Ellipse(const QRect &rect, const QBrush &brush, const QPen &pen, id_t id)
-    : Shape{rect.center(), brush, pen, id}, w{rect.width()}, h{rect.height()}
+    : Rectangle{rect, brush, pen, id}
 { }
 
 Ellipse::Ellipse(Ellipse &&move) noexcept
-    : Shape{id_t(-1)}, w{0}, h{0}
+    : Rectangle{id_t(-1)}
 {
 	swap(move);
 	std::swap(w, move.w);
@@ -33,8 +33,10 @@ Ellipse& Ellipse::operator=(Ellipse &&other) noexcept
 void Ellipse::draw(QPaintDevice* device) const
 {
 	auto paint = getPainter(device);
+	QRect rect = getRect();
+	rect.moveCenter(QPoint{});
 	
-	paint->drawEllipse(QPoint{}, w / 2, h / 2);
+	paint->drawEllipse(rect);
 }
 
 ShapeType Ellipse::getType() const
@@ -62,28 +64,3 @@ double Ellipse::getArea() const
 	return pi * a * b;
 }
 
-QRect Ellipse::getRect() const
-{
-	QRect rect{0, 0, w, h};
-	rect.moveCenter(getPos());
-	return rect;
-}
-
-int Ellipse::getWidth() const
-{ return w; }
-
-int Ellipse::getHeight() const
-{ return h; }
-
-void Ellipse::setWidth(int width)
-{ w = width; }
-
-void Ellipse::setHeight(int height)
-{ h = height; }
-
-void Ellipse::setRect(const QRect &rect)
-{
-	setPos(rect.center());
-	w = rect.width();
-	h = rect.height();
-}

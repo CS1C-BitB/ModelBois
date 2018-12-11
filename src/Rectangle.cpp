@@ -18,6 +18,10 @@ Rectangle::Rectangle(Rectangle &&move) noexcept
 	std::swap(h, move.h);
 }
 
+Rectangle::Rectangle(id_t id)
+    : Shape{id}, w{0}, h{0}
+{ }
+
 Rectangle::~Rectangle() = default;
 
 Rectangle& Rectangle::operator=(Rectangle &&other) noexcept
